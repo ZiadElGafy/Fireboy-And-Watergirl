@@ -8,7 +8,7 @@ using namespace std;
 
 void main()
 {
-	cout << "Hello World SFML" << endl;
+	cout << "Hello World SFML " << "TEST" << endl;
 
 	system("pause");
 }
