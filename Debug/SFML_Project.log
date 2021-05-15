@@ -1,0 +1,3 @@
+﻿  main.cpp
+C:\Users\heyth\Desktop\SFML\Projects\SFML_Project\SFML_Project\main.cpp(10,1): warning C4326: return type of 'main' should be 'int' instead of 'void'
+  SFML_Project.vcxproj -> C:\Users\heyth\Desktop\SFML\Projects\SFML_Project\Debug\SFML_Project.exe
