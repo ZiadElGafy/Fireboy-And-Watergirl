@@ -6,7 +6,7 @@
 #include<SFML/Network.hpp>
 using namespace std;
 
-void main()
+int main()
 {
 	cout << "Hello World SFML " << "TEST" << endl;
 
