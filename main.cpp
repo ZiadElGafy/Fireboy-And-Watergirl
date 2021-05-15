@@ -6,11 +6,9 @@
 #include<SFML/Network.hpp>
 using namespace std;
 using namespace sf;
-
 int main()
 {
-	cout << "Hello World SFML " << "TEST #3" << endl;
-
+	cout << "Hello World SFML " << "TEST #4" << endl;
 	system("pause");
 	return 0;
 }
