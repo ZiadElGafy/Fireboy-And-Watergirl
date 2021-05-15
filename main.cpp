@@ -11,4 +11,5 @@ int main()
 	cout << "Hello World SFML " << "TEST" << endl;
 
 	system("pause");
+	return 0;
 }
