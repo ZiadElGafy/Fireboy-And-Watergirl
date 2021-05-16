@@ -1,0 +1,23 @@
+"/Life/Jetbrains Toolbox/Apps/apps/CLion/ch-0/211.6693.114/bin/cmake/linux/bin/cmake" -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_COMPILER=/usr/bin/c++ -D CMAKE_CXX_COMPILER=usr/bin/g++ -G "CodeBlocks - Unix Makefiles" "/Life/CLion/CLion projects/Fireboy-And-Watergirl"
+-- The C compiler identification is GNU 9.3.0
+-- The CXX compiler identification is unknown
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /usr/bin/cc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+CMake Error at CMakeLists.txt:2 (project):
+  The CMAKE_CXX_COMPILER:
+
+    usr/bin/g++
+
+  is not a full path and was not found in the PATH.
+
+  Tell CMake where to find the compiler by setting either the environment
+  variable "CXX" or the CMake cache entry CMAKE_CXX_COMPILER to the full path
+  to the compiler, or to the compiler name if it is in the PATH.
+
+
+-- Configuring incomplete, errors occurred!
+See also "/Life/CLion/CLion projects/Fireboy-And-Watergirl/cmake-build-debug/CMakeFiles/CMakeOutput.log".
+See also "/Life/CLion/CLion projects/Fireboy-And-Watergirl/cmake-build-debug/CMakeFiles/CMakeError.log".
