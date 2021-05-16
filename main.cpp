@@ -60,12 +60,9 @@ int main()
     Vector2f vec(1280,40), vec2(40,720);
     borders[0].setSize(vec), borders[1].setSize(vec2), borders[2].setSize(vec), borders[3].setSize(vec2);
     borders[0].setPosition(0, 0), borders[1].setPosition(0, 0), borders[2].setPosition(0, 680), borders[3].setPosition(1240, 0);
-    Texture textureBackground,block;
-    textureBackground.loadFromFile( "users/pluto/Desktop/Fireboy-And-Watergirl/assets/background.png"), block.loadFromFile("users/pluto/Desktop/Fireboy-And-Watergirl/assets/block.png");
+    Texture block;
+    block.loadFromFile("assets/block.png");
     borders[0].setTexture(&block),borders[1].setTexture(&block),borders[2].setTexture(&block),borders[3].setTexture(&block);
-    Sprite spriteBackground;
-    spriteBackground.setTexture(textureBackground);
-    spriteBackground.setPosition(0,0);
     while (window.isOpen())
     {
         Event event;
@@ -79,7 +76,7 @@ int main()
             }
         }
         window.clear();
-
+        int offset = 40;
         for (int i = 0; i < H; i++)
         {
             for (int j = 0; j < W ; j++)
@@ -87,13 +84,12 @@ int main()
                 if (TileMap[i][j] == 'B') rectangle.setFillColor(Color::Blue);
                 if (TileMap[i][j] == '0')  rectangle.setFillColor(Color::Green);
                 if (TileMap[i][j] == ' ')   continue;
-                if( j == 15 || i == 8)
-                {
-                    rectangle.setPosition(1200, 640);
-                    window.draw(rectangle);
-                    continue;
-                }
-                rectangle.setPosition((j+1) * 80,(i+1) * 80) ;
+                int h = i * 80 + offset, w = j * 80 + offset;
+                if(i == 8)
+                    h -= 10;
+                if(j == 15)
+                    w -= 10;
+                rectangle.setPosition(w, h) ;
                 window.draw(rectangle);
             }
         }
