@@ -44,25 +44,26 @@ int main()
     RenderWindow window(VideoMode(1280, 720), "Fireboy and Watergirl");
     const int H = 9;
     const int W = 16;
-    String TileMap [10] =
-    {
-    "B              B",
-    "B              B",
-    "B              B",
-    "B              B",
-    "B              B",
-    "B              B",
-    "B              B",
-    "B              B",
-    "B              B",
-    };
-    RectangleShape borders[4],rectangle(Vector2f(10,10));
+    String TileMap [9] =
+            {"                ",
+             "BBB    BBBBBBBBB",
+             "                ",
+             "BBBBB      BBBBB",
+             "                ",
+             "        BBBBB   ",
+             "                ",
+             "     BBB        ",
+             "                ",
+             };
+    RectangleShape borders[4],rectangle(Vector2f(80,40));
     Vector2f vec(1280,40), vec2(40,720);
     borders[0].setSize(vec), borders[1].setSize(vec2), borders[2].setSize(vec), borders[3].setSize(vec2);
     borders[0].setPosition(0, 0), borders[1].setPosition(0, 0), borders[2].setPosition(0, 680), borders[3].setPosition(1240, 0);
-    Texture block;
+    Texture block,dirt;
     block.loadFromFile("assets/block.png");
+    dirt.loadFromFile("assets/dirt.png");
     borders[0].setTexture(&block),borders[1].setTexture(&block),borders[2].setTexture(&block),borders[3].setTexture(&block);
+    rectangle.setTexture(&dirt);
     while (window.isOpen())
     {
         Event event;
@@ -81,14 +82,12 @@ int main()
         {
             for (int j = 0; j < W ; j++)
             {
-                if (TileMap[i][j] == 'B') rectangle.setFillColor(Color::Blue);
-                if (TileMap[i][j] == '0')  rectangle.setFillColor(Color::Green);
                 if (TileMap[i][j] == ' ')   continue;
                 int h = i * 80 + offset, w = j * 80 + offset;
                 if(i == 8)
-                    h -= 10;
+                    h -= offset;
                 if(j == 15)
-                    w -= 10;
+                    w -= offset;
                 rectangle.setPosition(w, h) ;
                 window.draw(rectangle);
             }
