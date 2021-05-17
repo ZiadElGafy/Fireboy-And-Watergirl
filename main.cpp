@@ -184,6 +184,7 @@ int main()
 
     bool gameStarted = false;
     bool paused = false;
+
     // Main game loop
     while (window.isOpen())
     {
@@ -292,7 +293,6 @@ int main()
 
         if (gameStarted && !paused)
         {
-
             // Render level
             int offset = 40;
             for (int l = 0; l < 1; l++)
@@ -338,20 +338,27 @@ int main()
 
             // Render border
             for (int i = 0; i < 4; i++) window.draw(spriteBorder[i]);
-            float fposx = fireBoy.getPosition().x, fposy = fireBoy.getPosition().y;
-            float wposx = waterGirl.getPosition().x, wposy = waterGirl.getPosition().y;
-            if(fposx >= 1160 && fposy >= 560 && wposx >= 1160 && wposy >= 560)
+
+            // Level ending
+            float fireBoyPositionX = fireBoy.getPosition().x, fireBoyPositionY = fireBoy.getPosition().y;
+            float waterGirlPositionX = waterGirl.getPosition().x, waterGirlPositionY = waterGirl.getPosition().y;
+
+            if(fireBoyPositionX >= 1160 && fireBoyPositionY >= 560 && waterGirlPositionX >= 1160 && waterGirlPositionY >= 560)
             {
                 gameStarted = false;
-                fireBoy.setPosition({ 41.f, 599.f }), waterGirl.setPosition({ 41.f, 599.f });
+                fireBoy.setPosition({ 41.f, 599.f});
+                waterGirl.setPosition({ 41.f, 599.f});
             }
         }
         else
         {
+            // Render text title
             window.draw(textTitle);
             if(!gameStarted)
+                // Render text start
                 window.draw(textStart);
             if(paused && gameStarted)
+                // Render text continue
                 window.draw(textContinue);
         }
 
