@@ -48,10 +48,10 @@ int main()
 
     // Background
     Texture textureBackground;
-    // LOAD FROM FILE HERE
+    textureBackground.loadFromFile("assets/graphics/background.png");
 
     RectangleShape spriteBackground(Vector2f(80, 40));
-    spriteBackground.setTexture(textureBackground);
+    spriteBackground.setTexture(&textureBackground);
 
 
     // Level map
@@ -109,6 +109,15 @@ int main()
 
         // Render
 
+        // Render background
+        for (int i = 0; i < 18; i++) {
+            for (int j = 0; j < W; j++) {
+                int h = i * 40, w = j * 80;
+                spriteBackground.setPosition(w, h);
+                window.draw(spriteBackground);
+            }
+        }
+
         // Render level
         int offset = 40;
         for (int i = 0; i < H; i++)
@@ -121,15 +130,6 @@ int main()
                 if (j == 15) w -= offset;
                 spriteDirt.setPosition(w, h);
                 window.draw(spriteDirt);
-            }
-        }
-
-        // Render background
-        for (int i = 0; i < 18; i++) {
-            for (int j = 0; j < W; j++) {
-                int h = i * 40, w = j * 80;
-                spriteBackground.setPosition(w, h);
-                window.draw(spriteBackground);
             }
         }
 
