@@ -35,24 +35,49 @@
 #include <SFML/System.hpp>
 #include <SFML/Window.hpp>
 #include <SFML/Network.hpp>
-
 using namespace std;
 using namespace sf;
+//  Declaring fireBoy and waterGirl sprites and textures
+Sprite fireBoy, waterGirl;
+Texture fireBoyTexture, waterGirlTexture;
+//  Declaring the sprites' velocity variables in both the X and Y directions
+float waterGirlVX = 0, waterGirlVY = 0;
+float fireBoyVX = 0, fireBoyVY = 0;
+float maxSpeed = 3.f;
+float gravity = 0.5f, HorizontalPull = 0.5f;
+bool motionRightFireBoy = 1, motionRightWaterGirl = 1;
+
+// Functions to update the sprites Y positions taking the velocity in the y direction as a parameter for the move function
+void updateWaterGirlPosY()
+{
+    waterGirl.move({ 0, waterGirlVY });
+}
+void updateFireBoyPosY()
+{
+    fireBoy.move({ 0, fireBoyVY });
+}
+// Functions to update the sprites X positions taking the velocity in the X direction as a parameter for the move function
+void updateFireBoyPosX()
+{
+    fireBoy.move({fireBoyVX, 0});
+}
+void updateWaterGirlPosX()
+{
+    waterGirl.move({ waterGirlVX, 0 });
+}
+
 
 int main()
 {
     RenderWindow window(VideoMode(1280, 720), "Fireboy and Watergirl", Style::Titlebar | Style::Close);
-
-    const int H = 9;
-    const int W = 16;
-
+    window.setFramerateLimit(60);
+    const int H = 9, W = 16;
     // Background
     Texture textureBackground;
+    textureBackground.loadFromFile("assets/graphics/background.png");
     // LOAD FROM FILE HERE
-
     RectangleShape spriteBackground(Vector2f(80, 40));
-    spriteBackground.setTexture(textureBackground);
-
+    spriteBackground.setTexture(&textureBackground);
 
     // Level map
     String levelOneMap [9] =
@@ -86,13 +111,88 @@ int main()
     // Dirt
     Texture textureDirt;
     textureDirt.loadFromFile("assets/graphics/dirt.png");
-
-    RectangleShape spriteDirt(Vector2f(80, 40));
+    RectangleShape spriteDirt(Vector2f(80.f, 40.f));
     spriteDirt.setTexture(&textureDirt);
+    
+    // FireBoy and Watergirl
+    fireBoyTexture.loadFromFile("assets/graphics/fireBoy.png"), waterGirlTexture.loadFromFile("assets/graphics/waterGirl.png");
+    fireBoy.setTexture(fireBoyTexture), waterGirl.setTexture(waterGirlTexture);
+    fireBoy.setPosition({ 41.f, 599.f }), waterGirl.setPosition({ 41.f, 599.f });
 
     // Main game loop
     while (window.isOpen())
     {
+        //GRAVITY AFFECTS CHARACTERS
+        if (waterGirl.getPosition().y < 600)
+            waterGirlVY += gravity, updateWaterGirlPosY();
+        else
+            waterGirlVY = 0;
+    
+        if (fireBoy.getPosition().y < 600)
+            fireBoyVY += gravity, updateFireBoyPosY();
+        else
+            fireBoyVY = 0;
+        //DECELERATION EFFECT FOR FIREBOY
+        if (motionRightFireBoy && fireBoyVX > 0)
+            fireBoyVX -= HorizontalPull, updateFireBoyPosX();
+        if (!motionRightFireBoy && fireBoyVX < 0)
+            fireBoyVX += HorizontalPull, updateFireBoyPosX();
+        
+        //DECELERATION EFFECT FOR WATERGIRL
+        if (motionRightWaterGirl && waterGirlVX > 0)
+            waterGirlVX -= HorizontalPull, updateWaterGirlPosX();
+        if (!motionRightWaterGirl && waterGirlVX < 0)
+            waterGirlVX += HorizontalPull, updateWaterGirlPosX();
+
+        /*Time time;
+        time = clock.restart();
+
+        float iterationsPerSecond = 1.f / time.asSeconds();
+        float pixelsPerIteration = maxSpeed / iterationsPerSecond;*/
+
+        if (Keyboard::isKeyPressed(Keyboard::Key::D))
+        {
+            if (!motionRightWaterGirl)
+                motionRightWaterGirl = 1, waterGirlVX = 0;
+            waterGirlVX += 1.5 * HorizontalPull;
+            if (waterGirlVX > maxSpeed)
+                waterGirlVX = maxSpeed;
+        }
+        if (Keyboard::isKeyPressed(Keyboard::Key::A))
+        {
+            if (motionRightWaterGirl)
+                motionRightWaterGirl = 0, waterGirlVX = 0;
+            waterGirlVX -= 1.5 * HorizontalPull;
+            if (waterGirlVX < -maxSpeed)
+                waterGirlVX = -maxSpeed;
+        }
+        if (Keyboard::isKeyPressed(Keyboard::Key::Right))
+        {
+            if (!motionRightFireBoy)
+                motionRightFireBoy = 1, fireBoyVX = 0;
+            fireBoyVX += 1.5 * HorizontalPull;
+            if (fireBoyVX > maxSpeed)
+                fireBoyVX = maxSpeed;
+        }
+        if (Keyboard::isKeyPressed(Keyboard::Key::Left))
+        {
+            if (motionRightFireBoy)
+                motionRightFireBoy = 0, fireBoyVX = 0;
+            fireBoyVX -= 1.5 * HorizontalPull;
+            if (fireBoyVX < -maxSpeed)
+                fireBoyVX = -maxSpeed;
+        }
+        if (Keyboard::isKeyPressed(Keyboard::Key::W))
+        {
+            if (waterGirl.getPosition().y == 600 || waterGirl.getPosition().y == 599)
+                waterGirlVY = -11, updateWaterGirlPosY();
+        
+        }
+        if (Keyboard::isKeyPressed(Keyboard::Key::Up))
+        {
+            if (fireBoy.getPosition().y == 600 || fireBoy.getPosition().y == 599)
+                fireBoyVY = -11, updateFireBoyPosY();
+        }
         Event event;
         while (window.pollEvent(event))
         {
@@ -106,9 +206,14 @@ int main()
 
         // Clear
         window.clear();
-
-        // Render
-
+        // Render background
+        for (int i = 0; i < 18; i++) {
+            for (int j = 0; j < W; j++) {
+                int h = i * 40, w = j * 80;
+                spriteBackground.setPosition(w, h);
+                window.draw(spriteBackground);
+            }
+        }
         // Render level
         int offset = 40;
         for (int i = 0; i < H; i++)
@@ -123,20 +228,25 @@ int main()
                 window.draw(spriteDirt);
             }
         }
-
-        // Render background
-        for (int i = 0; i < 18; i++) {
-            for (int j = 0; j < W; j++) {
-                int h = i * 40, w = j * 80;
-                spriteBackground.setPosition(w, h);
-                window.draw(spriteBackground);
-            }
-        }
-
         // Render border
         for (int i = 0; i < 4; i++) window.draw(spriteBorder[i]);
-
-        // Display
+        // Check if fireboy is still inside the drawn borders
+        if (fireBoy.getPosition().x < 40)
+            fireBoy.setPosition({ 40.f, fireBoy.getPosition().y });
+        if (fireBoy.getPosition().x > 1160)
+            fireBoy.setPosition({ 1160.f, fireBoy.getPosition().y });
+        if (fireBoy.getPosition().y > 600)
+            fireBoy.setPosition({ fireBoy.getPosition().x, 600 });
+        
+        // Check if watergirl is still inside the drawn borders
+        if (waterGirl.getPosition().x < 40)
+            waterGirl.setPosition({ 40.f, waterGirl.getPosition().y });
+        if (waterGirl.getPosition().x > 1160)
+            waterGirl.setPosition({ 1160.f, waterGirl.getPosition().y });
+        if (waterGirl.getPosition().y > 600)
+            waterGirl.setPosition({ waterGirl.getPosition().x, 600 });
+        window.draw(fireBoy);
+        window.draw(waterGirl);
         window.display();
     }
 
