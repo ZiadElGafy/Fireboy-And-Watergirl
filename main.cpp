@@ -154,6 +154,20 @@ int main()
                         textRect.height / 2.0f);
     textStart.setPosition(640, 400);
 
+    // Press escape to continue
+    Text textContinue;
+    textContinue.setString("Press escape to continue");
+    textContinue.setCharacterSize(50);
+    textContinue.setFont(fontTitle);
+    textContinue.setFillColor(Color::White);
+
+    textRect = textContinue.getLocalBounds();
+    textContinue.setOrigin(textRect.left +
+                        textRect.width / 2.0f,
+                        textRect.top +
+                        textRect.height / 2.0f);
+    textContinue.setPosition(640, 400);
+
     // Door
     Texture textureDoor;
     textureDoor.loadFromFile("assets/graphics/door.png");
@@ -169,7 +183,7 @@ int main()
     fireBoy.setPosition({ 41.f, 599.f }), waterGirl.setPosition({ 41.f, 599.f });
 
     bool gameStarted = false;
-
+    bool paused = false;
     // Main game loop
     while (window.isOpen())
     {
@@ -202,7 +216,7 @@ int main()
         float iterationsPerSecond = 1.f / time.asSeconds();
         float pixelsPerIteration = maxSpeed / iterationsPerSecond;*/
 
-        if (Keyboard::isKeyPressed(Keyboard::Key::D))
+        if (Keyboard::isKeyPressed(Keyboard::Key::D) && !paused && gameStarted)
         {
             if (!motionRightWaterGirl)
                 motionRightWaterGirl = 1, waterGirlVX = 0;
@@ -210,7 +224,7 @@ int main()
             if (waterGirlVX > maxSpeed)
                 waterGirlVX = maxSpeed;
         }
-        if (Keyboard::isKeyPressed(Keyboard::Key::A))
+        if (Keyboard::isKeyPressed(Keyboard::Key::A) && !paused && gameStarted)
         {
             if (motionRightWaterGirl)
                 motionRightWaterGirl = 0, waterGirlVX = 0;
@@ -218,7 +232,7 @@ int main()
             if (waterGirlVX < -maxSpeed)
                 waterGirlVX = -maxSpeed;
         }
-        if (Keyboard::isKeyPressed(Keyboard::Key::Right))
+        if (Keyboard::isKeyPressed(Keyboard::Key::Right) && !paused && gameStarted)
         {
             if (!motionRightFireBoy)
                 motionRightFireBoy = 1, fireBoyVX = 0;
@@ -226,7 +240,7 @@ int main()
             if (fireBoyVX > maxSpeed)
                 fireBoyVX = maxSpeed;
         }
-        if (Keyboard::isKeyPressed(Keyboard::Key::Left))
+        if (Keyboard::isKeyPressed(Keyboard::Key::Left) && !paused && gameStarted)
         {
             if (motionRightFireBoy)
                 motionRightFireBoy = 0, fireBoyVX = 0;
@@ -234,13 +248,13 @@ int main()
             if (fireBoyVX < -maxSpeed)
                 fireBoyVX = -maxSpeed;
         }
-        if (Keyboard::isKeyPressed(Keyboard::Key::W))
+        if (Keyboard::isKeyPressed(Keyboard::Key::W) && !paused && gameStarted)
         {
             if (waterGirl.getPosition().y == 600 || waterGirl.getPosition().y == 599)
                 waterGirlVY = -11, updateWaterGirlPosY();
         
         }
-        if (Keyboard::isKeyPressed(Keyboard::Key::Up))
+        if (Keyboard::isKeyPressed(Keyboard::Key::Up) && !paused && gameStarted)
         {
             if (fireBoy.getPosition().y == 600 || fireBoy.getPosition().y == 599)
                 fireBoyVY = -11, updateFireBoyPosY();
@@ -253,7 +267,10 @@ int main()
                 window.close();
             }
             if (event.type == Event::KeyPressed && event.key.code == Keyboard::Escape) {
-                window.close();
+                if(paused)
+                    paused = false;
+                else
+                    paused = true;
             }
             if (event.type == Event::KeyPressed && event.key.code == Keyboard::Return) {
                 gameStarted = true;
@@ -273,7 +290,7 @@ int main()
         }
 
 
-        if (gameStarted)
+        if (gameStarted && !paused)
         {
 
             // Render level
@@ -321,11 +338,21 @@ int main()
 
             // Render border
             for (int i = 0; i < 4; i++) window.draw(spriteBorder[i]);
+            float fposx = fireBoy.getPosition().x, fposy = fireBoy.getPosition().y;
+            float wposx = waterGirl.getPosition().x, wposy = waterGirl.getPosition().y;
+            if(fposx >= 1160 && fposy >= 560 && wposx >= 1160 && wposy >= 560)
+            {
+                gameStarted = false;
+                fireBoy.setPosition({ 41.f, 599.f }), waterGirl.setPosition({ 41.f, 599.f });
+            }
         }
         else
         {
             window.draw(textTitle);
-            window.draw(textStart);
+            if(!gameStarted)
+                window.draw(textStart);
+            if(paused && gameStarted)
+                window.draw(textContinue);
         }
 
         window.display();
