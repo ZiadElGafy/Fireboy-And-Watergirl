@@ -473,7 +473,8 @@ int main()
             if (paused && gameStarted || !gameStarted)
             {
                 // Render text continue
-                window.draw(textContinue);
+                if (paused) window.draw(textContinue);
+                else window.draw(textStart);
 
                 // Exit button
                 if (mouse_xAxis >= 1145 && mouse_xAxis <= 1250 && mouse_yAxis >= 655 && mouse_yAxis <= 705)
