@@ -157,7 +157,7 @@ int main()
                           textRect.height / 2.0f);
     textTitle.setPosition(640, 100);
 
-    // Press enter to start
+    // Start
     Text textStart;
     textStart.setFont(fontTitle);
     textStart.setCharacterSize(50);
@@ -171,7 +171,7 @@ int main()
                         textRect.height / 2.0f);
     textStart.setPosition(640, 400);
 
-    // Press escape to continue
+    // Continue
     Text textContinue;
     textContinue.setFont(fontTitle);
     textContinue.setCharacterSize(50);
@@ -251,7 +251,9 @@ int main()
     textTimer.setFillColor(Color::White);
 
     // Flags
-    bool hover = false;
+    bool hoverStart = false;
+    bool hoverContinue = false;
+    bool hoverExit = false;
     bool paused = false;
     bool gameStarted = false;
 
@@ -363,13 +365,13 @@ int main()
                 window.close();
             }
             if (event.type == Event::KeyPressed && event.key.code == Keyboard::Escape) {
-                if(paused)
+                if (paused)
                     paused = false, chron.resume();
                 else
                     paused = true, chron.pause();
             }
             if (event.type == Event::KeyPressed && event.key.code == Keyboard::Return) {
-                if(!gameStarted)
+                if (!gameStarted)
                 {
                     chron.reset();
                     chron.resume();
@@ -391,7 +393,6 @@ int main()
                 window.draw(spriteBackground);
             }
         }
-
 
         if (gameStarted && !paused)
         {
@@ -470,31 +471,65 @@ int main()
             // Get mouse position
             float mouse_xAxis = Mouse::getPosition(window).x, mouse_yAxis = Mouse::getPosition(window).y;
 
-            if (paused && gameStarted || !gameStarted)
+            // Exit button
+            if (mouse_xAxis >= 1145 && mouse_xAxis <= 1250 && mouse_yAxis >= 655 && mouse_yAxis <= 705)
             {
-                // Render text continue
-                if (paused) window.draw(textContinue);
-                else window.draw(textStart);
-
-                // Exit button
-                if (mouse_xAxis >= 1145 && mouse_xAxis <= 1250 && mouse_yAxis >= 655 && mouse_yAxis <= 705)
+                if (!hoverExit)
                 {
-                    if (!hover)
-                    {
-                        soundButtonHover.play();
-                        hover = true;
-                    }
-                    textExit.setFillColor(Color::Red);
-                    if (Mouse::isButtonPressed(Mouse::Left))
-                        window.close();
+                    soundButtonHover.play();
+                    hoverExit = true;
                 }
-                else
-                {
-                    hover = false;
-                    textExit.setFillColor(Color::White);
-                }
-                window.draw(textExit);
+                textExit.setFillColor(Color::Red);
+                if (Mouse::isButtonPressed(Mouse::Left))
+                    window.close();
             }
+            else {
+                hoverExit = false;
+                textExit.setFillColor(Color::White);
+            }
+            window.draw(textExit);
+
+            // Start button
+            if (!gameStarted && mouse_xAxis >= 330 && mouse_xAxis <= 950 && mouse_yAxis >= 378.5 && mouse_yAxis <= 421.5)
+            {
+                if (!hoverStart)
+                {
+                    soundButtonHover.play();
+                    hoverStart = true;
+                }
+                textStart.setFillColor(Color::Red);
+                if (Mouse::isButtonPressed(Mouse::Left))
+                {
+                    gameStarted = true;
+                    chron.reset(), chron.resume();
+                    musicIntro.stop(), musicLevel.play();
+                }
+            }
+            else {
+                hoverStart = false;
+                textStart.setFillColor(Color::White);
+            }
+
+            // Continue button
+            if (paused && mouse_xAxis >= 278.5 && mouse_xAxis <= 1001.5 && mouse_yAxis >= 378.5 && mouse_yAxis <= 421.5)
+            {
+                if (!hoverContinue)
+                {
+                    soundButtonHover.play();
+                    hoverContinue = true;
+                }
+                textContinue.setFillColor(Color::Red);
+                if (Mouse::isButtonPressed(Mouse::Left))
+                    paused = false, chron.resume();
+            }
+            else {
+                hoverContinue = false;
+                textContinue.setFillColor(Color::White);
+            }
+
+            // Render text continue
+            if (paused) window.draw(textContinue);
+            else window.draw(textStart);
         }
 
         window.display();
