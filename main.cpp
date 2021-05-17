@@ -212,12 +212,32 @@ int main()
     fireBoy.setTexture(fireBoyTexture), waterGirl.setTexture(waterGirlTexture);
     fireBoy.setPosition({ 41.f, 599.f }), waterGirl.setPosition({ 41.f, 599.f });
 
+    // Sound effects
+    SoundBuffer bufferFireboyJump, bufferWatergirlJump, bufferLevelComplete;
+    bufferFireboyJump.loadFromFile("assets/audio/fireboyJump.ogg");
+    bufferWatergirlJump.loadFromFile("assets/audio/watergirlJump.ogg");
+    bufferLevelComplete.loadFromFile("assets/audio/levelComplete.ogg");
+
+    Sound soundFireboyJump(bufferFireboyJump), soundWatergirlJump(bufferWatergirlJump);
+    Sound soundLevelComplete(bufferLevelComplete);
+
+    // Music
+    Music musicIntro, musicLevel;
+    musicIntro.openFromFile("assets/audio/intro.ogg");
+    musicLevel.openFromFile("assets/audio/level.ogg");
+    musicIntro.setLoop(true), musicLevel.setLoop(true);
+    musicIntro.play();
+
     bool gameStarted = false;
     bool paused = false;
 
     // Main game loop
     while (window.isOpen())
     {
+        // Check music
+        if (soundLevelComplete.getStatus() != Music::Status::Playing && musicIntro.getStatus() != Music::Status::Playing && !gameStarted)
+            musicIntro.play();
+
         //GRAVITY AFFECTS CHARACTERS
         if (waterGirl.getPosition().y < 600)
             waterGirlVY += gravity, updateWaterGirlPosY();
@@ -282,13 +302,19 @@ int main()
         if (Keyboard::isKeyPressed(Keyboard::Key::W) && !paused && gameStarted)
         {
             if (waterGirl.getPosition().y == 600 || waterGirl.getPosition().y == 599)
+            {
                 waterGirlVY = -11, updateWaterGirlPosY();
-        
+                soundWatergirlJump.play();
+            }
+
         }
         if (Keyboard::isKeyPressed(Keyboard::Key::Up) && !paused && gameStarted)
         {
             if (fireBoy.getPosition().y == 600 || fireBoy.getPosition().y == 599)
+            {
                 fireBoyVY = -11, updateFireBoyPosY();
+                soundFireboyJump.play();
+            }
         }
 
         Event event;
@@ -305,6 +331,8 @@ int main()
             }
             if (event.type == Event::KeyPressed && event.key.code == Keyboard::Return) {
                 gameStarted = true;
+                musicIntro.stop();
+                musicLevel.play();
             }
         }
 
@@ -384,6 +412,8 @@ int main()
             if(fireBoyPositionX >= 1160 && fireBoyPositionY >= 560 && waterGirlPositionX >= 1160 && waterGirlPositionY >= 560)
             {
                 gameStarted = false;
+                musicLevel.stop();
+                soundLevelComplete.play();
                 fireBoy.setPosition({ 41.f, 599.f});
                 waterGirl.setPosition({ 41.f, 599.f});
             }
