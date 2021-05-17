@@ -41,10 +41,21 @@ using namespace sf;
 
 int main()
 {
-    RenderWindow window(VideoMode(1280, 720), "Fireboy and Watergirl");
+    RenderWindow window(VideoMode(1280, 720), "Fireboy and Watergirl", Style::Titlebar | Style::Close);
+
     const int H = 9;
     const int W = 16;
-    String TileMap [9] =
+
+    // Background
+    Texture textureBackground;
+    // LOAD FROM FILE HERE
+
+    RectangleShape spriteBackground(Vector2f(80, 40));
+    spriteBackground.setTexture(textureBackground);
+
+
+    // Level map
+    String levelOneMap [9] =
             {"                ",
              "BBB    BBBBBBBBB",
              "                ",
@@ -54,16 +65,32 @@ int main()
              "                ",
              "     BBB        ",
              "                ",
-             };
-    RectangleShape borders[4],rectangle(Vector2f(80,40));
-    Vector2f vec(1280,40), vec2(40,720);
-    borders[0].setSize(vec), borders[1].setSize(vec2), borders[2].setSize(vec), borders[3].setSize(vec2);
-    borders[0].setPosition(0, 0), borders[1].setPosition(0, 0), borders[2].setPosition(0, 680), borders[3].setPosition(1240, 0);
-    Texture block,dirt;
-    block.loadFromFile("assets/block.png");
-    dirt.loadFromFile("assets/dirt.png");
-    borders[0].setTexture(&block),borders[1].setTexture(&block),borders[2].setTexture(&block),borders[3].setTexture(&block);
-    rectangle.setTexture(&dirt);
+            };
+
+    // Border
+    Texture textureBorder;
+    textureBorder.loadFromFile("assets/graphics/block.png");
+
+    RectangleShape spriteBorder[4];
+    Vector2f vec1(1280,40), vec2(40,720);
+
+    spriteBorder[0].setSize(vec1), spriteBorder[1].setSize(vec2);
+    spriteBorder[2].setSize(vec1), spriteBorder[3].setSize(vec2);
+
+    spriteBorder[0].setPosition(0, 0), spriteBorder[1].setPosition(0, 0);
+    spriteBorder[2].setPosition(0, 680), spriteBorder[3].setPosition(1240, 0);
+
+    spriteBorder[0].setTexture(&textureBorder), spriteBorder[1].setTexture(&textureBorder);
+    spriteBorder[2].setTexture(&textureBorder), spriteBorder[3].setTexture(&textureBorder);
+
+    // Dirt
+    Texture textureDirt;
+    textureDirt.loadFromFile("assets/graphics/dirt.png");
+
+    RectangleShape spriteDirt(Vector2f(80, 40));
+    spriteDirt.setTexture(&textureDirt);
+
+    // Main game loop
     while (window.isOpen())
     {
         Event event;
@@ -76,24 +103,40 @@ int main()
                 window.close();
             }
         }
+
+        // Clear
         window.clear();
+
+        // Render
+
+        // Render level
         int offset = 40;
         for (int i = 0; i < H; i++)
         {
-            for (int j = 0; j < W ; j++)
+            for (int j = 0; j < W; j++)
             {
-                if (TileMap[i][j] == ' ')   continue;
+                if (levelOneMap[i][j] == ' ') continue;
                 int h = i * 80 + offset, w = j * 80 + offset;
-                if(i == 8)
-                    h -= offset;
-                if(j == 15)
-                    w -= offset;
-                rectangle.setPosition(w, h) ;
-                window.draw(rectangle);
+                if (i == 8) h -= offset;
+                if (j == 15) w -= offset;
+                spriteDirt.setPosition(w, h);
+                window.draw(spriteDirt);
             }
         }
-        for (int i = 0; i < 4; i++) window.draw(borders[i]);
 
+        // Render background
+        for (int i = 0; i < 18; i++) {
+            for (int j = 0; j < W; j++) {
+                int h = i * 40, w = j * 80;
+                spriteBackground.setPosition(w, h);
+                window.draw(spriteBackground);
+            }
+        }
+
+        // Render border
+        for (int i = 0; i < 4; i++) window.draw(spriteBorder[i]);
+
+        // Display
         window.display();
     }
 
