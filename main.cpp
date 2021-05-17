@@ -103,11 +103,12 @@ int main()
 
     // Borders
     Texture textureSideBorder, textureBottomBorder, textureTopBorder;
+    textureTopBorder.loadFromFile("assets/graphics/topBorder.png");
     textureSideBorder.loadFromFile("assets/graphics/sideBorder.png");
     textureBottomBorder.loadFromFile("assets/graphics/bottomBorder.png");
-    textureTopBorder.loadFromFile("assets/graphics/topBorder.png");
 
     RectangleShape sideBorder[2], bottomBorder, topBorder;
+
     Vector2f vec1(1280,40), vec2(40,720);
 
     topBorder.setSize(vec1);
@@ -144,10 +145,10 @@ int main()
     fontTitle.loadFromFile("assets/fonts/KOMIKAP_.ttf");
 
     Text textTitle;
-    textTitle.setString("Fireboy and Watergirl");
-    textTitle.setCharacterSize(70);
     textTitle.setFont(fontTitle);
+    textTitle.setCharacterSize(70);
     textTitle.setFillColor(Color::White);
+    textTitle.setString("Fireboy and Watergirl");
 
     FloatRect textRect = textTitle.getLocalBounds();
     textTitle.setOrigin(textRect.left +
@@ -158,10 +159,10 @@ int main()
 
     // Press enter to start
     Text textStart;
-    textStart.setString("Press enter to start");
-    textStart.setCharacterSize(50);
     textStart.setFont(fontTitle);
+    textStart.setCharacterSize(50);
     textStart.setFillColor(Color::White);
+    textStart.setString("Press enter to start");
 
     textRect = textStart.getLocalBounds();
     textStart.setOrigin(textRect.left +
@@ -172,10 +173,10 @@ int main()
 
     // Press escape to continue
     Text textContinue;
-    textContinue.setString("Press escape to continue");
-    textContinue.setCharacterSize(50);
     textContinue.setFont(fontTitle);
+    textContinue.setCharacterSize(50);
     textContinue.setFillColor(Color::White);
+    textContinue.setString("Press escape to continue");
 
     textRect = textContinue.getLocalBounds();
     textContinue.setOrigin(textRect.left +
@@ -186,9 +187,9 @@ int main()
 
     // Exit
     Text exit;
+    exit.setFont(fontTitle);
     exit.setString("Exit");
     exit.setCharacterSize(50);
-    exit.setFont(fontTitle);
     exit.setFillColor(Color::White);
 
     textRect = exit.getLocalBounds();
@@ -208,16 +209,21 @@ int main()
     spriteDoor.setPosition(1160, 570);
 
     // Fireboy and Watergirl
-    fireBoyTexture.loadFromFile("assets/graphics/fireBoy.png"), waterGirlTexture.loadFromFile("assets/graphics/waterGirl.png");
-    fireBoy.setTexture(fireBoyTexture), waterGirl.setTexture(waterGirlTexture);
-    fireBoy.setPosition({ 41.f, 599.f }), waterGirl.setPosition({ 41.f, 599.f });
+    fireBoyTexture.loadFromFile("assets/graphics/fireBoy.png"),
+    waterGirlTexture.loadFromFile("assets/graphics/waterGirl.png");
+
+    fireBoy.setTexture(fireBoyTexture),
+    waterGirl.setTexture(waterGirlTexture);
+
+    fireBoy.setPosition({ 41.f, 599.f }),
+    waterGirl.setPosition({ 41.f, 599.f });
 
     // Sound effects
     SoundBuffer bufferFireboyJump, bufferWatergirlJump, bufferLevelComplete, bufferButtonHover;
     bufferFireboyJump.loadFromFile("assets/audio/fireboyJump.ogg");
+    bufferButtonHover.loadFromFile("assets/audio/buttonHover.ogg");
     bufferWatergirlJump.loadFromFile("assets/audio/watergirlJump.ogg");
     bufferLevelComplete.loadFromFile("assets/audio/levelComplete.ogg");
-    bufferButtonHover.loadFromFile("assets/audio/buttonHover.ogg");
 
     Sound soundButtonHover(bufferButtonHover);
     Sound soundLevelComplete(bufferLevelComplete);
@@ -240,14 +246,15 @@ int main()
 
     //  Timer
     Time time;
-    Chronometer chron;
     Text textTimer;
-    string stringTimer;
     stringstream ss;
+    Chronometer chron;
+    string stringTimer;
     textTimer.setFont(fontTitle);
-    textTimer.setFillColor(Color::White);
     textTimer.setPosition(580, 0);
     textTimer.setCharacterSize(35);
+    textTimer.setFillColor(Color::White);
+
     // Main game loop
     while (window.isOpen())
     {
