@@ -37,9 +37,11 @@
 #include <SFML/Network.hpp>
 using namespace std;
 using namespace sf;
+
 //  Declaring fireBoy and waterGirl sprites and textures
 Sprite fireBoy, waterGirl;
 Texture fireBoyTexture, waterGirlTexture;
+
 //  Declaring the sprites' velocity variables in both the X and Y directions
 float waterGirlVX = 0, waterGirlVY = 0;
 float fireBoyVX = 0, fireBoyVY = 0;
@@ -52,15 +54,18 @@ void updateWaterGirlPosY()
 {
     waterGirl.move({ 0, waterGirlVY });
 }
+
 void updateFireBoyPosY()
 {
     fireBoy.move({ 0, fireBoyVY });
 }
+
 // Functions to update the sprites X positions taking the velocity in the X direction as a parameter for the move function
 void updateFireBoyPosX()
 {
     fireBoy.move({fireBoyVX, 0});
 }
+
 void updateWaterGirlPosX()
 {
     waterGirl.move({ waterGirlVX, 0 });
@@ -71,11 +76,13 @@ int main()
 {
     RenderWindow window(VideoMode(1280, 720), "Fireboy and Watergirl", Style::Titlebar | Style::Close);
     window.setFramerateLimit(60);
+
     const int H = 9, W = 16;
+
     // Background
     Texture textureBackground;
     textureBackground.loadFromFile("assets/graphics/background.png");
-    // LOAD FROM FILE HERE
+
     RectangleShape spriteBackground(Vector2f(80, 40));
     spriteBackground.setTexture(&textureBackground);
 
@@ -114,7 +121,7 @@ int main()
     RectangleShape spriteDirt(Vector2f(80.f, 40.f));
     spriteDirt.setTexture(&textureDirt);
     
-    // FireBoy and Watergirl
+    // Fireboy and Watergirl
     fireBoyTexture.loadFromFile("assets/graphics/fireBoy.png"), waterGirlTexture.loadFromFile("assets/graphics/waterGirl.png");
     fireBoy.setTexture(fireBoyTexture), waterGirl.setTexture(waterGirlTexture);
     fireBoy.setPosition({ 41.f, 599.f }), waterGirl.setPosition({ 41.f, 599.f });
@@ -132,6 +139,7 @@ int main()
             fireBoyVY += gravity, updateFireBoyPosY();
         else
             fireBoyVY = 0;
+
         //DECELERATION EFFECT FOR FIREBOY
         if (motionRightFireBoy && fireBoyVX > 0)
             fireBoyVX -= HorizontalPull, updateFireBoyPosX();
@@ -193,6 +201,7 @@ int main()
             if (fireBoy.getPosition().y == 600 || fireBoy.getPosition().y == 599)
                 fireBoyVY = -11, updateFireBoyPosY();
         }
+
         Event event;
         while (window.pollEvent(event))
         {
@@ -206,6 +215,7 @@ int main()
 
         // Clear
         window.clear();
+
         // Render background
         for (int i = 0; i < 18; i++) {
             for (int j = 0; j < W; j++) {
@@ -214,6 +224,7 @@ int main()
                 window.draw(spriteBackground);
             }
         }
+
         // Render level
         int offset = 40;
         for (int i = 0; i < H; i++)
@@ -228,8 +239,10 @@ int main()
                 window.draw(spriteDirt);
             }
         }
+
         // Render border
         for (int i = 0; i < 4; i++) window.draw(spriteBorder[i]);
+
         // Check if fireboy is still inside the drawn borders
         if (fireBoy.getPosition().x < 40)
             fireBoy.setPosition({ 40.f, fireBoy.getPosition().y });
