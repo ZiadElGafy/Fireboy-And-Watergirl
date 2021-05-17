@@ -87,16 +87,18 @@ int main()
     spriteBackground.setTexture(&textureBackground);
 
     // Level map
-    String levelOneMap [9] =
-            {"                ",
-             "BBB    BBBBBBBBB",
-             "                ",
-             "BBBBB      BBBBB",
-             "                ",
-             "        BBBBB   ",
-             "                ",
-             "     BBB        ",
-             "                ",
+    String levelOneMap [5][9] =
+            {
+                    {"                ",
+                     "BBB    BBBBBBBBB",
+                     "                ",
+                     "BBBBB      BBBBB",
+                     "                ",
+                     "        BBBBB   ",
+                     "                ",
+                     "     BBB        ",
+                     "                ",
+                    },
             };
 
     // Border
@@ -227,21 +229,24 @@ int main()
 
         // Render level
         int offset = 40;
-        for (int i = 0; i < H; i++)
+        for (int l = 0; l < 1; l++)
         {
-            for (int j = 0; j < W; j++)
+            for (int i = 0; i < H; i++)
             {
-                if (levelOneMap[i][j] == ' ') continue;
-                int h = i * 80 + offset, w = j * 80 + offset;
-                if (i == 8) h -= offset;
-                if (j == 15) w -= offset;
-                spriteDirt.setPosition(w, h);
-                window.draw(spriteDirt);
+                for (int j = 0; j < W; j++)
+                {
+                    if (levelOneMap[l][i][j] == ' ') continue;
+                    int h = i * 80 + offset, w = j * 80 + offset;
+                    if (i == 8) h -= offset;
+                    if (j == 15) w -= offset;
+                    spriteDirt.setPosition(w, h);
+                    window.draw(spriteDirt);
+                }
             }
         }
 
         // Render border
-        for (int i = 0; i < 4; i++) window.draw(spriteBorder[i]);
+        for (int i = 0; i < 5; i++) window.draw(spriteBorder[i]);
 
         // Check if fireboy is still inside the drawn borders
         if (fireBoy.getPosition().x < 40)
