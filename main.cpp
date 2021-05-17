@@ -260,7 +260,7 @@ int main()
     // Main game loop
     while (window.isOpen())
     {
-        // Check music
+        // Check level music
         if (soundLevelComplete.getStatus() != Music::Status::Playing && musicIntro.getStatus() != Music::Status::Playing && !gameStarted)
             musicIntro.play();
 
@@ -378,7 +378,7 @@ int main()
                 }
                 gameStarted = true;
                 musicIntro.stop();
-                musicLevel.play();
+                if (musicLevel.getStatus() != Music::Status::Playing) musicLevel.play();
             }
         }
 
@@ -497,7 +497,7 @@ int main()
                     soundButtonHover.play();
                     hoverStart = true;
                 }
-                textStart.setFillColor(Color::Red);
+                textStart.setFillColor(Color::Green);
                 if (Mouse::isButtonPressed(Mouse::Left))
                 {
                     gameStarted = true;
@@ -518,7 +518,7 @@ int main()
                     soundButtonHover.play();
                     hoverContinue = true;
                 }
-                textContinue.setFillColor(Color::Red);
+                textContinue.setFillColor(Color::Green);
                 if (Mouse::isButtonPressed(Mouse::Left))
                     paused = false, chron.resume();
             }
@@ -529,7 +529,7 @@ int main()
 
             // Render text continue
             if (paused) window.draw(textContinue);
-            else window.draw(textStart);
+            else if (!gameStarted) window.draw(textStart);
         }
 
         window.display();
