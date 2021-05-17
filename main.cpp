@@ -160,7 +160,8 @@ int main()
 
     Sprite spriteDoor;
     spriteDoor.setTexture(textureDoor);
-    spriteDoor.setPosition(1240, 640);
+    spriteDoor.setScale(1, 1);
+    spriteDoor.setPosition(1160, 560);
 
     // Fireboy and Watergirl
     fireBoyTexture.loadFromFile("assets/graphics/fireBoy.png"), waterGirlTexture.loadFromFile("assets/graphics/waterGirl.png");
@@ -310,12 +311,13 @@ int main()
             if (waterGirl.getPosition().y > 600)
                 waterGirl.setPosition({ waterGirl.getPosition().x, 600 });
 
+            // Render door
+            window.draw(spriteDoor);
+
             // Render characters
             window.draw(fireBoy);
             window.draw(waterGirl);
 
-            // Render door
-            window.draw(spriteDoor);
 
             // Render border
             for (int i = 0; i < 4; i++) window.draw(spriteBorder[i]);
