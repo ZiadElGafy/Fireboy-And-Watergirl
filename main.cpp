@@ -39,9 +39,11 @@
 using namespace std;
 using namespace sf;
 using namespace sftools;
+
 //  Declaring fireBoy and waterGirl sprites and textures
 Sprite fireBoy, waterGirl;
 Texture fireBoyTexture, waterGirlTexture;
+
 //  Declaring the sprites' velocity variables in both the X and Y directions
 float waterGirlVX = 0, waterGirlVY = 0;
 float fireBoyVX = 0, fireBoyVY = 0;
@@ -86,9 +88,10 @@ int main()
     RectangleShape spriteBackground(Vector2f(80, 40));
     spriteBackground.setTexture(&textureBackground);
 
-    // Level map
-    String levelOneMap [5][9] =
+    // Levels map
+    String levelsMap [5][9] =
             {
+            // Level one
                     {"                ",
                      "MMR    LMMMMMMMR",
                      "                ",
@@ -107,22 +110,19 @@ int main()
     textureSideBorder.loadFromFile("assets/graphics/sideBorder.png");
     textureBottomBorder.loadFromFile("assets/graphics/bottomBorder.png");
 
-    RectangleShape sideBorder[2], bottomBorder, topBorder;
+    // 0 -> Top border, 1 -> Bottom border, 2 -> Left border, 3 -> Right border
+    RectangleShape borders[4];
 
     Vector2f vec1(1280,40), vec2(40,720);
 
-    topBorder.setSize(vec1);
-    bottomBorder.setSize(vec1);
-    sideBorder[0].setSize(vec2), sideBorder[1].setSize(vec2);
+    borders[2].setSize(vec2), borders[3].setSize(vec2);
+    borders[0].setSize(vec1), borders[1].setSize(vec1);
 
-    topBorder.setPosition(0,0);
-    bottomBorder.setPosition(0,680);
-    sideBorder[0].setPosition(0, 0), sideBorder[1].setPosition(1240, 0);
+    borders[2].setPosition(0, 0), borders[3].setPosition(1240, 0);
+    borders[0].setPosition(0, 0), borders[1].setPosition(0, 680);
 
-    topBorder.setTexture(&textureTopBorder);
-    bottomBorder.setTexture(&textureBottomBorder);
-    sideBorder[0].setTexture(&textureSideBorder), sideBorder[1].setTexture(&textureSideBorder);
-
+    borders[2].setTexture(&textureSideBorder), borders[3].setTexture(&textureSideBorder);
+    borders[0].setTexture(&textureTopBorder), borders[1].setTexture(&textureBottomBorder);
 
     // Stones
     Texture textureStoneMid;
@@ -186,18 +186,18 @@ int main()
     textContinue.setPosition(640, 400);
 
     // Exit
-    Text exit;
-    exit.setFont(fontTitle);
-    exit.setString("Exit");
-    exit.setCharacterSize(50);
-    exit.setFillColor(Color::White);
+    Text textExit;
+    textExit.setFont(fontTitle);
+    textExit.setString("Exit");
+    textExit.setCharacterSize(50);
+    textExit.setFillColor(Color::White);
 
-    textRect = exit.getLocalBounds();
-    exit.setOrigin(textRect.left +
+    textRect = textExit.getLocalBounds();
+    textExit.setOrigin(textRect.left +
                            textRect.width / 2.0f,
                            textRect.top +
                            textRect.height / 2.0f);
-    exit.setPosition(1200, 680);
+    textExit.setPosition(1200, 680);
 
     // Door
     Texture textureDoor;
@@ -234,15 +234,10 @@ int main()
     musicIntro.openFromFile("assets/audio/intro.ogg");
     musicLevel.openFromFile("assets/audio/level.ogg");
     musicIntro.setLoop(true), musicLevel.setLoop(true);
-    musicIntro.play();
 
     musicIntro.setVolume(50);
     musicLevel.setVolume(40);
     soundButtonHover.setVolume(1000);
-
-    bool hover = false;
-    bool paused = false;
-    bool gameStarted = false;
 
     //  Timer
     Time time;
@@ -255,21 +250,28 @@ int main()
     textTimer.setCharacterSize(35);
     textTimer.setFillColor(Color::White);
 
+    // Flags
+    bool hover = false;
+    bool paused = false;
+    bool gameStarted = false;
+
     // Main game loop
     while (window.isOpen())
     {
         // Check music
         if (soundLevelComplete.getStatus() != Music::Status::Playing && musicIntro.getStatus() != Music::Status::Playing && !gameStarted)
             musicIntro.play();
-        //Getting elapsed time
+
+        // Getting elapsed time
         time = chron.getElapsedTime();
         int seconds = time.asSeconds(), minutes = seconds / 60;
         seconds %= 60;
-        //Adding the elapsed time into a string
-        if(minutes <= 9)
+
+        // Adding the elapsed time into a string
+        if (minutes <= 9)
             ss << 0;
-        ss << minutes <<":";
-        if(seconds <= 9)
+        ss << minutes << ":";
+        if (seconds <= 9)
             ss << 0;
         ss << seconds;
         ss >> stringTimer;
@@ -362,9 +364,9 @@ int main()
             }
             if (event.type == Event::KeyPressed && event.key.code == Keyboard::Escape) {
                 if(paused)
-                    paused = false,chron.resume();
+                    paused = false, chron.resume();
                 else
-                    paused = true,chron.pause();
+                    paused = true, chron.pause();
             }
             if (event.type == Event::KeyPressed && event.key.code == Keyboard::Return) {
                 if(!gameStarted)
@@ -401,23 +403,22 @@ int main()
                 {
                     for (int j = 0; j < W; j++)
                     {
-                        if (levelOneMap[l][i][j] == ' ') continue;
+                        if (levelsMap[l][i][j] == ' ') continue;
                         int h = i * 80 + offset, w = j * 80 + offset;
                         if (i == 8) h -= offset;
                         if (j == 15) w -= offset;
                         spriteStoneMid.setPosition(w, h);
                         spriteStoneRight.setPosition(w, h);
                         spriteStoneLeft.setPosition(w, h);
-                        if(levelOneMap[0][i][j] == 'M')
+                        if (levelsMap[0][i][j] == 'M')
                             window.draw(spriteStoneMid);
-                        else if(levelOneMap[0][i][j] == 'R')
+                        else if (levelsMap[0][i][j] == 'R')
                             window.draw(spriteStoneRight);
-                        else if(levelOneMap[0][i][j] == 'L')
+                        else if (levelsMap[0][i][j] == 'L')
                             window.draw(spriteStoneLeft);
                     }
                 }
             }
-
 
             // Check if fireboy is still inside the drawn borders
             if (fireBoy.getPosition().x < 40)
@@ -442,20 +443,17 @@ int main()
             window.draw(fireBoy);
             window.draw(waterGirl);
 
-
             // Render border
-            for (int i = 0; i < 2; i++) window.draw(sideBorder[i]);
-            
-            window.draw(bottomBorder);
-            window.draw(topBorder);
+            for (int i = 0; i < 4; i++) window.draw(borders[i]);
            
             //  Render timer
             window.draw(textTimer);
+
             // Level ending
             float fireBoyPositionX = fireBoy.getPosition().x, fireBoyPositionY = fireBoy.getPosition().y;
             float waterGirlPositionX = waterGirl.getPosition().x, waterGirlPositionY = waterGirl.getPosition().y;
 
-            if(fireBoyPositionX >= 1160 && fireBoyPositionY >= 560 && waterGirlPositionX >= 1160 && waterGirlPositionY >= 560)
+            if (fireBoyPositionX >= 1160 && fireBoyPositionY >= 560 && waterGirlPositionX >= 1160 && waterGirlPositionY >= 560)
             {
                 gameStarted = false;
                 musicLevel.stop();
@@ -472,56 +470,54 @@ int main()
             // Get mouse position
             float mouse_xAxis = Mouse::getPosition(window).x, mouse_yAxis = Mouse::getPosition(window).y;
 
-            if(!gameStarted)
+            if (!gameStarted)
             {
                 // Render text start
                 window.draw(textStart);
 
                 // Exit button
-                if(mouse_xAxis >= 1145 && mouse_xAxis <= 1250 && mouse_yAxis >= 655 && mouse_yAxis <= 705)
+                if (mouse_xAxis >= 1145 && mouse_xAxis <= 1250 && mouse_yAxis >= 655 && mouse_yAxis <= 705)
                 {
-                    if(!hover)
+                    if (!hover)
                     {
                         soundButtonHover.play();
                         hover = true;
                     }
-                    exit.setFillColor(Color::Red);
-                    if(Mouse::isButtonPressed(Mouse::Left))
+                    textExit.setFillColor(Color::Red);
+                    if (Mouse::isButtonPressed(Mouse::Left))
                         window.close();
                 }
                 else
                 {
                     hover = false;
-                    exit.setFillColor(Color::White);
+                    textExit.setFillColor(Color::White);
                 }
-
-                window.draw(exit);
+                window.draw(textExit);
             }
-            if(paused && gameStarted)
+            if (paused && gameStarted)
             {
                 // Render text continue
                 window.draw(textContinue);
 
-                //Exit button
-                if(mouse_xAxis >= 1145 && mouse_xAxis <= 1250 && mouse_yAxis >= 655 && mouse_yAxis <= 705)
+                // Exit button
+                if (mouse_xAxis >= 1145 && mouse_xAxis <= 1250 && mouse_yAxis >= 655 && mouse_yAxis <= 705)
                 {
-                    if(!hover)
+                    if (!hover)
                     {
                         soundButtonHover.play();
                         hover = true;
                     }
-                    exit.setFillColor(Color::Red);
-                    if(Mouse::isButtonPressed(Mouse::Left))
+                    textExit.setFillColor(Color::Red);
+                    if (Mouse::isButtonPressed(Mouse::Left))
                         window.close();
                 }
                 else
                 {
                     hover = false;
-                    exit.setFillColor(Color::White);
+                    textExit.setFillColor(Color::White);
                 }
-                window.draw(exit);
+                window.draw(textExit);
             }
-
         }
 
         window.display();
