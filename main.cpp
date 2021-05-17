@@ -35,13 +35,13 @@
 #include <SFML/System.hpp>
 #include <SFML/Window.hpp>
 #include <SFML/Network.hpp>
+#include <sftools/Chronometer.hpp>
 using namespace std;
 using namespace sf;
-
+using namespace sftools;
 //  Declaring fireBoy and waterGirl sprites and textures
 Sprite fireBoy, waterGirl;
 Texture fireBoyTexture, waterGirlTexture;
-
 //  Declaring the sprites' velocity variables in both the X and Y directions
 float waterGirlVX = 0, waterGirlVY = 0;
 float fireBoyVX = 0, fireBoyVY = 0;
@@ -214,7 +214,7 @@ int main()
 
     // Sound effects
     SoundBuffer bufferFireboyJump, bufferWatergirlJump, bufferLevelComplete;
-    bufferFireboyJump.loadFromFile("assets/audio/fireboyJump.ogg");
+    bufferFireboyJump.loadFromFile("ssets/audio/fireboyJump.ogg");
     bufferWatergirlJump.loadFromFile("assets/audio/watergirlJump.ogg");
     bufferLevelComplete.loadFromFile("assets/audio/levelComplete.ogg");
 
@@ -230,14 +230,38 @@ int main()
 
     bool gameStarted = false;
     bool paused = false;
-
+    
+    //  Timer
+    Time time;
+    Chronometer chron;
+    Text textTimer;
+    string stringTimer;
+    stringstream ss;
+    textTimer.setFont(fontTitle);
+    textTimer.setFillColor(Color::White);
+    textTimer.setPosition(600, 0);
+    textTimer.setCharacterSize(40);
     // Main game loop
     while (window.isOpen())
     {
         // Check music
         if (soundLevelComplete.getStatus() != Music::Status::Playing && musicIntro.getStatus() != Music::Status::Playing && !gameStarted)
             musicIntro.play();
-
+        //Getting elapsed time
+        time = chron.getElapsedTime();
+        int seconds = time.asSeconds(), minutes = seconds / 60;
+        seconds %= 60;
+        //Adding the elapsed time into a string
+        if(minutes <= 9)
+            ss << 0;
+        ss << minutes <<":";
+        if(seconds <= 9)
+            ss << 0;
+        ss << seconds;
+        ss >> stringTimer;
+        ss.clear();
+        textTimer.setString(stringTimer);
+        
         //GRAVITY AFFECTS CHARACTERS
         if (waterGirl.getPosition().y < 600)
             waterGirlVY += gravity, updateWaterGirlPosY();
@@ -263,7 +287,6 @@ int main()
 
         /*Time time;
         time = clock.restart();
-
         float iterationsPerSecond = 1.f / time.asSeconds();
         float pixelsPerIteration = maxSpeed / iterationsPerSecond;*/
 
@@ -325,11 +348,16 @@ int main()
             }
             if (event.type == Event::KeyPressed && event.key.code == Keyboard::Escape) {
                 if(paused)
-                    paused = false;
+                    paused = false,chron.resume();
                 else
-                    paused = true;
+                    paused = true,chron.pause();
             }
             if (event.type == Event::KeyPressed && event.key.code == Keyboard::Return) {
+                if(!gameStarted)
+                {
+                    chron.reset();
+                    chron.resume();
+                }
                 gameStarted = true;
                 musicIntro.stop();
                 musicLevel.play();
@@ -403,8 +431,12 @@ int main()
 
             // Render border
             for (int i = 0; i < 2; i++) window.draw(sideBorder[i]);
+            
             window.draw(bottomBorder);
             window.draw(topBorder);
+           
+            //  Render timer
+            window.draw(textTimer);
             // Level ending
             float fireBoyPositionX = fireBoy.getPosition().x, fireBoyPositionY = fireBoy.getPosition().y;
             float waterGirlPositionX = waterGirl.getPosition().x, waterGirlPositionY = waterGirl.getPosition().y;
@@ -467,3 +499,5 @@ int main()
 
     return 0;
 }
+
+
