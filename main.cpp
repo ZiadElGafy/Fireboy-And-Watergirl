@@ -81,7 +81,7 @@ int main()
 
     // Background
     Texture textureBackground;
-    textureBackground.loadFromFile("assets/graphics/background.png");
+    textureBackground.loadFromFile("assets/graphics/backGroundBrick.png");
 
     RectangleShape spriteBackground(Vector2f(80, 40));
     spriteBackground.setTexture(&textureBackground);
@@ -90,38 +90,54 @@ int main()
     String levelOneMap [5][9] =
             {
                     {"                ",
-                     "BBB    BBBBBBBBB",
+                     "MMR    LMMMMMMMR",
                      "                ",
-                     "BBBBB      BBBBB",
+                     "MMMMR      LMMMM",
                      "                ",
-                     "        BBBBB   ",
+                     "        LMMMR   ",
                      "                ",
-                     "     BBB        ",
+                     "     LMR        ",
                      "                ",
                     },
             };
 
-    // Border
-    Texture textureBorder;
-    textureBorder.loadFromFile("assets/graphics/block.png");
+    // Borders
+    Texture textureSideBorder, textureBottomBorder, textureTopBorder;
+    textureSideBorder.loadFromFile("assets/graphics/sideBorder.png");
+    textureBottomBorder.loadFromFile("assets/graphics/bottomBorder.png");
+    textureTopBorder.loadFromFile("assets/graphics/topBorder.png");
 
-    RectangleShape spriteBorder[4];
+    RectangleShape sideBorder[2], bottomBorder, topBorder;
     Vector2f vec1(1280,40), vec2(40,720);
 
-    spriteBorder[0].setSize(vec1), spriteBorder[1].setSize(vec2);
-    spriteBorder[2].setSize(vec1), spriteBorder[3].setSize(vec2);
+    topBorder.setSize(vec1);
+    bottomBorder.setSize(vec1);
+    sideBorder[0].setSize(vec2), sideBorder[1].setSize(vec2);
 
-    spriteBorder[0].setPosition(0, 0), spriteBorder[1].setPosition(0, 0);
-    spriteBorder[2].setPosition(0, 680), spriteBorder[3].setPosition(1240, 0);
+    topBorder.setPosition(0,0);
+    bottomBorder.setPosition(0,680);
+    sideBorder[0].setPosition(0, 0), sideBorder[1].setPosition(1240, 0);
 
-    spriteBorder[0].setTexture(&textureBorder), spriteBorder[1].setTexture(&textureBorder);
-    spriteBorder[2].setTexture(&textureBorder), spriteBorder[3].setTexture(&textureBorder);
+    topBorder.setTexture(&textureTopBorder);
+    bottomBorder.setTexture(&textureBottomBorder);
+    sideBorder[0].setTexture(&textureSideBorder), sideBorder[1].setTexture(&textureSideBorder);
 
-    // Dirt
-    Texture textureDirt;
-    textureDirt.loadFromFile("assets/graphics/dirt.png");
-    RectangleShape spriteDirt(Vector2f(80.f, 40.f));
-    spriteDirt.setTexture(&textureDirt);
+
+    // Stones
+    Texture textureStoneMid;
+    textureStoneMid.loadFromFile("assets/graphics/stoneMid.png");
+    RectangleShape spriteStoneMid(Vector2f(80.f, 40.f));
+    spriteStoneMid.setTexture(&textureStoneMid);
+
+    Texture textureStoneLeft;
+    textureStoneLeft.loadFromFile("assets/graphics/stoneLeft.png");
+    RectangleShape spriteStoneLeft(Vector2f(80.f, 40.f));
+    spriteStoneLeft.setTexture(&textureStoneLeft);
+
+    Texture textureStoneRight;
+    textureStoneRight.loadFromFile("assets/graphics/stoneRight.png");
+    RectangleShape spriteStoneRight(Vector2f(80.f, 40.f));
+    spriteStoneRight.setTexture(&textureStoneRight);
 
     // Title
     Font fontTitle;
@@ -168,6 +184,20 @@ int main()
                         textRect.height / 2.0f);
     textContinue.setPosition(640, 400);
 
+    // Exit
+    Text exit;
+    exit.setString("Exit");
+    exit.setCharacterSize(50);
+    exit.setFont(fontTitle);
+    exit.setFillColor(Color::White);
+
+    textRect = exit.getLocalBounds();
+    exit.setOrigin(textRect.left +
+                           textRect.width / 2.0f,
+                           textRect.top +
+                           textRect.height / 2.0f);
+    exit.setPosition(1200, 680);
+
     // Door
     Texture textureDoor;
     textureDoor.loadFromFile("assets/graphics/door.png");
@@ -175,7 +205,7 @@ int main()
     Sprite spriteDoor;
     spriteDoor.setTexture(textureDoor);
     spriteDoor.setScale(1, 1);
-    spriteDoor.setPosition(1160, 560);
+    spriteDoor.setPosition(1160, 570);
 
     // Fireboy and Watergirl
     fireBoyTexture.loadFromFile("assets/graphics/fireBoy.png"), waterGirlTexture.loadFromFile("assets/graphics/waterGirl.png");
@@ -305,8 +335,15 @@ int main()
                         int h = i * 80 + offset, w = j * 80 + offset;
                         if (i == 8) h -= offset;
                         if (j == 15) w -= offset;
-                        spriteDirt.setPosition(w, h);
-                        window.draw(spriteDirt);
+                        spriteStoneMid.setPosition(w, h);
+                        spriteStoneRight.setPosition(w, h);
+                        spriteStoneLeft.setPosition(w, h);
+                        if(levelOneMap[0][i][j] == 'M')
+                            window.draw(spriteStoneMid);
+                        else if(levelOneMap[0][i][j] == 'R')
+                            window.draw(spriteStoneRight);
+                        else if(levelOneMap[0][i][j] == 'L')
+                            window.draw(spriteStoneLeft);
                     }
                 }
             }
@@ -337,8 +374,9 @@ int main()
 
 
             // Render border
-            for (int i = 0; i < 4; i++) window.draw(spriteBorder[i]);
-
+            for (int i = 0; i < 2; i++) window.draw(sideBorder[i]);
+            window.draw(bottomBorder);
+            window.draw(topBorder);
             // Level ending
             float fireBoyPositionX = fireBoy.getPosition().x, fireBoyPositionY = fireBoy.getPosition().y;
             float waterGirlPositionX = waterGirl.getPosition().x, waterGirlPositionY = waterGirl.getPosition().y;
@@ -354,12 +392,44 @@ int main()
         {
             // Render text title
             window.draw(textTitle);
+
+            // Get mouse position
+            float mouse_xAxis = Mouse::getPosition(window).x, mouse_yAxis = Mouse::getPosition(window).y;
+
             if(!gameStarted)
+            {
                 // Render text start
                 window.draw(textStart);
+
+                // Exit button
+                if(mouse_xAxis >= 1145 && mouse_xAxis <= 1250 && mouse_yAxis >= 655 && mouse_yAxis <= 705)
+                {
+                    exit.setFillColor(Color::Red);
+                    if(Mouse::isButtonPressed(Mouse::Left))
+                        window.close();
+                }
+                else
+                    exit.setFillColor(Color::White);
+
+                window.draw(exit);
+            }
             if(paused && gameStarted)
+            {
                 // Render text continue
                 window.draw(textContinue);
+
+                //Exit button
+                if(mouse_xAxis >= 1145 && mouse_xAxis <= 1250 && mouse_yAxis >= 655 && mouse_yAxis <= 705)
+                {
+                    exit.setFillColor(Color::Red);
+                    if(Mouse::isButtonPressed(Mouse::Left))
+                        window.close();
+                }
+                else
+                    exit.setFillColor(Color::White);
+
+                window.draw(exit);
+            }
         }
 
         window.display();
