@@ -122,11 +122,52 @@ int main()
     textureDirt.loadFromFile("assets/graphics/dirt.png");
     RectangleShape spriteDirt(Vector2f(80.f, 40.f));
     spriteDirt.setTexture(&textureDirt);
-    
+
+    // Title
+    Font fontTitle;
+    fontTitle.loadFromFile("assets/fonts/KOMIKAP_.ttf");
+
+    Text textTitle;
+    textTitle.setString("Fireboy and Watergirl");
+    textTitle.setCharacterSize(70);
+    textTitle.setFont(fontTitle);
+    textTitle.setFillColor(Color::White);
+
+    FloatRect textRect = textTitle.getLocalBounds();
+    textTitle.setOrigin(textRect.left +
+                          textRect.width / 2.0f,
+                          textRect.top +
+                          textRect.height / 2.0f);
+    textTitle.setPosition(640, 100);
+
+    // Press enter to start
+    Text textStart;
+    textStart.setString("Press enter to start");
+    textStart.setCharacterSize(50);
+    textStart.setFont(fontTitle);
+    textStart.setFillColor(Color::White);
+
+    textRect = textStart.getLocalBounds();
+    textStart.setOrigin(textRect.left +
+                        textRect.width / 2.0f,
+                        textRect.top +
+                        textRect.height / 2.0f);
+    textStart.setPosition(640, 400);
+
+    // Door
+    Texture textureDoor;
+    textureDoor.loadFromFile("assets/graphics/door.png");
+
+    Sprite spriteDoor;
+    spriteDoor.setTexture(textureDoor);
+    spriteDoor.setPosition(1240, 640);
+
     // Fireboy and Watergirl
     fireBoyTexture.loadFromFile("assets/graphics/fireBoy.png"), waterGirlTexture.loadFromFile("assets/graphics/waterGirl.png");
     fireBoy.setTexture(fireBoyTexture), waterGirl.setTexture(waterGirlTexture);
     fireBoy.setPosition({ 41.f, 599.f }), waterGirl.setPosition({ 41.f, 599.f });
+
+    bool gameStarted = false;
 
     // Main game loop
     while (window.isOpen())
@@ -213,6 +254,9 @@ int main()
             if (event.type == Event::KeyPressed && event.key.code == Keyboard::Escape) {
                 window.close();
             }
+            if (event.type == Event::KeyPressed && event.key.code == Keyboard::Return) {
+                gameStarted = true;
+            }
         }
 
         // Clear
@@ -227,44 +271,61 @@ int main()
             }
         }
 
-        // Render level
-        int offset = 40;
-        for (int l = 0; l < 1; l++)
+
+        if (gameStarted)
         {
-            for (int i = 0; i < H; i++)
+
+            // Render level
+            int offset = 40;
+            for (int l = 0; l < 1; l++)
             {
-                for (int j = 0; j < W; j++)
+                for (int i = 0; i < H; i++)
                 {
-                    if (levelOneMap[l][i][j] == ' ') continue;
-                    int h = i * 80 + offset, w = j * 80 + offset;
-                    if (i == 8) h -= offset;
-                    if (j == 15) w -= offset;
-                    spriteDirt.setPosition(w, h);
-                    window.draw(spriteDirt);
+                    for (int j = 0; j < W; j++)
+                    {
+                        if (levelOneMap[l][i][j] == ' ') continue;
+                        int h = i * 80 + offset, w = j * 80 + offset;
+                        if (i == 8) h -= offset;
+                        if (j == 15) w -= offset;
+                        spriteDirt.setPosition(w, h);
+                        window.draw(spriteDirt);
+                    }
                 }
             }
+
+
+            // Check if fireboy is still inside the drawn borders
+            if (fireBoy.getPosition().x < 40)
+                fireBoy.setPosition({ 40.f, fireBoy.getPosition().y });
+            if (fireBoy.getPosition().x > 1160)
+                fireBoy.setPosition({ 1160.f, fireBoy.getPosition().y });
+            if (fireBoy.getPosition().y > 600)
+                fireBoy.setPosition({ fireBoy.getPosition().x, 600 });
+
+            // Check if watergirl is still inside the drawn borders
+            if (waterGirl.getPosition().x < 40)
+                waterGirl.setPosition({ 40.f, waterGirl.getPosition().y });
+            if (waterGirl.getPosition().x > 1160)
+                waterGirl.setPosition({ 1160.f, waterGirl.getPosition().y });
+            if (waterGirl.getPosition().y > 600)
+                waterGirl.setPosition({ waterGirl.getPosition().x, 600 });
+
+            // Render characters
+            window.draw(fireBoy);
+            window.draw(waterGirl);
+
+            // Render door
+            window.draw(spriteDoor);
+
+            // Render border
+            for (int i = 0; i < 4; i++) window.draw(spriteBorder[i]);
+        }
+        else
+        {
+            window.draw(textTitle);
+            window.draw(textStart);
         }
 
-        // Render border
-        for (int i = 0; i < 5; i++) window.draw(spriteBorder[i]);
-
-        // Check if fireboy is still inside the drawn borders
-        if (fireBoy.getPosition().x < 40)
-            fireBoy.setPosition({ 40.f, fireBoy.getPosition().y });
-        if (fireBoy.getPosition().x > 1160)
-            fireBoy.setPosition({ 1160.f, fireBoy.getPosition().y });
-        if (fireBoy.getPosition().y > 600)
-            fireBoy.setPosition({ fireBoy.getPosition().x, 600 });
-        
-        // Check if watergirl is still inside the drawn borders
-        if (waterGirl.getPosition().x < 40)
-            waterGirl.setPosition({ 40.f, waterGirl.getPosition().y });
-        if (waterGirl.getPosition().x > 1160)
-            waterGirl.setPosition({ 1160.f, waterGirl.getPosition().y });
-        if (waterGirl.getPosition().y > 600)
-            waterGirl.setPosition({ waterGirl.getPosition().x, 600 });
-        window.draw(fireBoy);
-        window.draw(waterGirl);
         window.display();
     }
 
