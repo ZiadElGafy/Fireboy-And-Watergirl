@@ -213,13 +213,15 @@ int main()
     fireBoy.setPosition({ 41.f, 599.f }), waterGirl.setPosition({ 41.f, 599.f });
 
     // Sound effects
-    SoundBuffer bufferFireboyJump, bufferWatergirlJump, bufferLevelComplete;
-    bufferFireboyJump.loadFromFile("ssets/audio/fireboyJump.ogg");
+    SoundBuffer bufferFireboyJump, bufferWatergirlJump, bufferLevelComplete, bufferButtonHover;
+    bufferFireboyJump.loadFromFile("assets/audio/fireboyJump.ogg");
     bufferWatergirlJump.loadFromFile("assets/audio/watergirlJump.ogg");
     bufferLevelComplete.loadFromFile("assets/audio/levelComplete.ogg");
+    bufferButtonHover.loadFromFile("assets/audio/buttonHover.ogg");
 
-    Sound soundFireboyJump(bufferFireboyJump), soundWatergirlJump(bufferWatergirlJump);
+    Sound soundButtonHover(bufferButtonHover);
     Sound soundLevelComplete(bufferLevelComplete);
+    Sound soundFireboyJump(bufferFireboyJump), soundWatergirlJump(bufferWatergirlJump);
 
     // Music
     Music musicIntro, musicLevel;
@@ -228,9 +230,14 @@ int main()
     musicIntro.setLoop(true), musicLevel.setLoop(true);
     musicIntro.play();
 
-    bool gameStarted = false;
+    musicIntro.setVolume(50);
+    musicLevel.setVolume(40);
+    soundButtonHover.setVolume(1000);
+
+    bool hover = false;
     bool paused = false;
-    
+    bool gameStarted = false;
+
     //  Timer
     Time time;
     Chronometer chron;
@@ -239,8 +246,8 @@ int main()
     stringstream ss;
     textTimer.setFont(fontTitle);
     textTimer.setFillColor(Color::White);
-    textTimer.setPosition(600, 0);
-    textTimer.setCharacterSize(40);
+    textTimer.setPosition(580, 0);
+    textTimer.setCharacterSize(35);
     // Main game loop
     while (window.isOpen())
     {
@@ -466,12 +473,20 @@ int main()
                 // Exit button
                 if(mouse_xAxis >= 1145 && mouse_xAxis <= 1250 && mouse_yAxis >= 655 && mouse_yAxis <= 705)
                 {
+                    if(!hover)
+                    {
+                        soundButtonHover.play();
+                        hover = true;
+                    }
                     exit.setFillColor(Color::Red);
                     if(Mouse::isButtonPressed(Mouse::Left))
                         window.close();
                 }
                 else
+                {
+                    hover = false;
                     exit.setFillColor(Color::White);
+                }
 
                 window.draw(exit);
             }
@@ -483,15 +498,23 @@ int main()
                 //Exit button
                 if(mouse_xAxis >= 1145 && mouse_xAxis <= 1250 && mouse_yAxis >= 655 && mouse_yAxis <= 705)
                 {
+                    if(!hover)
+                    {
+                        soundButtonHover.play();
+                        hover = true;
+                    }
                     exit.setFillColor(Color::Red);
                     if(Mouse::isButtonPressed(Mouse::Left))
                         window.close();
                 }
                 else
+                {
+                    hover = false;
                     exit.setFillColor(Color::White);
-
+                }
                 window.draw(exit);
             }
+
         }
 
         window.display();
