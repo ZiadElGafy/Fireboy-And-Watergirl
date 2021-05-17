@@ -239,7 +239,7 @@ int main()
     musicLevel.setVolume(40);
     soundButtonHover.setVolume(1000);
 
-    //  Timer
+    // Timer
     Time time;
     Text textTimer;
     stringstream ss;
@@ -470,31 +470,7 @@ int main()
             // Get mouse position
             float mouse_xAxis = Mouse::getPosition(window).x, mouse_yAxis = Mouse::getPosition(window).y;
 
-            if (!gameStarted)
-            {
-                // Render text start
-                window.draw(textStart);
-
-                // Exit button
-                if (mouse_xAxis >= 1145 && mouse_xAxis <= 1250 && mouse_yAxis >= 655 && mouse_yAxis <= 705)
-                {
-                    if (!hover)
-                    {
-                        soundButtonHover.play();
-                        hover = true;
-                    }
-                    textExit.setFillColor(Color::Red);
-                    if (Mouse::isButtonPressed(Mouse::Left))
-                        window.close();
-                }
-                else
-                {
-                    hover = false;
-                    textExit.setFillColor(Color::White);
-                }
-                window.draw(textExit);
-            }
-            if (paused && gameStarted)
+            if (paused && gameStarted || !gameStarted)
             {
                 // Render text continue
                 window.draw(textContinue);
