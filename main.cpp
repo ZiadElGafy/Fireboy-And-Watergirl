@@ -199,6 +199,77 @@ int main()
                            textRect.height / 2.0f);
     textExit.setPosition(1200, 680);
 
+    // Settings
+    Text textSettings;
+    textSettings.setFont(fontTitle);
+    textSettings.setString("Settings");
+    textSettings.setCharacterSize(50);
+    textSettings.setFillColor(Color::White);
+
+    textRect = textSettings.getLocalBounds();
+    textSettings.setOrigin(textRect.left +
+                       textRect.width / 2.0f,
+                       textRect.top +
+                       textRect.height / 2.0f);
+    textSettings.setPosition(640, 500);
+
+    Text textOn;
+    textOn.setFont(fontTitle);
+    textOn.setString("On");
+    textOn.setCharacterSize(50);
+    textOn.setFillColor(Color::White);
+    textRect = textOn.getLocalBounds();
+    textOn.setOrigin(textRect.left +
+                           textRect.width / 2.0f,
+                           textRect.top +
+                           textRect.height / 2.0f);
+    textOn.setPosition(640, 300);
+
+    Text textOff;
+    textOff.setFont(fontTitle);
+    textOff.setString("Off");
+    textOff.setCharacterSize(50);
+    textOff.setFillColor(Color::White);
+    textRect = textOff.getLocalBounds();
+    textOff.setOrigin(textRect.left +
+                     textRect.width / 2.0f,
+                     textRect.top +
+                     textRect.height / 2.0f);
+    textOff.setPosition(640, 500);
+
+    Text textMusic;
+    textMusic.setFont(fontTitle);
+    textMusic.setString("Music: ");
+    textMusic.setCharacterSize(50);
+    textMusic.setFillColor(Color::White);
+    textRect = textMusic.getLocalBounds();
+    textMusic.setOrigin(textRect.left +
+                      textRect.width / 2.0f,
+                      textRect.top +
+                      textRect.height / 2.0f);
+    textMusic.setPosition(620, 300);
+
+    Text textSoundFx;
+    textSoundFx.setFont(fontTitle);
+    textSoundFx.setString("Sound Fx: ");
+    textSoundFx.setCharacterSize(50);
+    textSoundFx.setFillColor(Color::White);
+    textRect = textSoundFx.getLocalBounds();
+    textSoundFx.setOrigin(textRect.left +
+                        textRect.width / 2.0f,
+                        textRect.top +
+                        textRect.height / 2.0f);
+    textSoundFx.setPosition(620, 400);
+
+    Texture textureWhiteArrow, textureRedArrow;
+    textureRedArrow.loadFromFile("assets/graphics/redArrow.png");
+    textureWhiteArrow.loadFromFile("assets/graphics/whiteArrow.png");
+
+    RectangleShape arrow;
+    arrow.setSize(Vector2f(150,80));
+    arrow.setPosition(30,40);
+    arrow.setTexture(&textureWhiteArrow);
+
     // Door
     Texture textureDoor;
     textureDoor.loadFromFile("assets/graphics/door.png");
@@ -251,11 +322,21 @@ int main()
     textTimer.setFillColor(Color::White);
 
     // Flags
-    bool hoverStart = false;
-    bool hoverContinue = false;
-    bool hoverExit = false;
+
     bool paused = false;
+    bool musicMute = false;
+    bool hoverExit = false;
+    bool hoverStart = false;
+    bool hoverArrow = false;
     bool gameStarted = false;
+    bool soundFxMute = false;
+    bool settingsMenu = false;
+    bool hoverContinue = false;
+    bool hoverSettings = false;
+    bool hoverMusicMute = false;
+    bool hoverSoundFxMute = false;
+    bool pressedMusicMute = false;
+    bool pressedSoundFxMute = false;
 
     // Main game loop
     while (window.isOpen())
@@ -268,6 +349,9 @@ int main()
         time = chron.getElapsedTime();
         int seconds = time.asSeconds(), minutes = seconds / 60;
         seconds %= 60;
+
+        // Get mouse position
+        float mouse_xAxis = Mouse::getPosition(window).x, mouse_yAxis = Mouse::getPosition(window).y;
 
         // Adding the elapsed time into a string
         if (minutes <= 9)
@@ -345,7 +429,8 @@ int main()
             if (waterGirl.getPosition().y == 600 || waterGirl.getPosition().y == 599)
             {
                 waterGirlVY = -11, updateWaterGirlPosY();
-                soundWatergirlJump.play();
+                if(!soundFxMute)
+                    soundWatergirlJump.play();
             }
 
         }
@@ -354,7 +439,8 @@ int main()
             if (fireBoy.getPosition().y == 600 || fireBoy.getPosition().y == 599)
             {
                 fireBoyVY = -11, updateFireBoyPosY();
-                soundFireboyJump.play();
+                if(!soundFxMute)
+                    soundFireboyJump.play();
             }
         }
 
@@ -364,8 +450,10 @@ int main()
             if (event.type == Event::Closed) {
                 window.close();
             }
-            if (event.type == Event::KeyPressed && event.key.code == Keyboard::Escape) {
-                if (paused)
+            if (event.type == Event::KeyPressed && event.key.code == Keyboard::Escape && gameStarted) {
+                if(settingsMenu)
+                    settingsMenu = false;
+                else if (paused)
                     paused = false, chron.resume();
                 else
                     paused = true, chron.pause();
@@ -378,7 +466,13 @@ int main()
                 }
                 gameStarted = true;
                 musicIntro.stop();
-                if (musicLevel.getStatus() != Music::Status::Playing) musicLevel.play();
+                if (musicLevel.getStatus() != Music::Status::Playing)
+                    musicLevel.play();
+            }
+            if(event.type == event.MouseButtonReleased && event.mouseButton.button == Mouse::Left)
+            {
+                pressedMusicMute = false;
+                pressedSoundFxMute = false;
             }
         }
 
@@ -396,6 +490,8 @@ int main()
 
         if (gameStarted && !paused)
         {
+            if(musicMute)
+                musicLevel.stop();
             // Render level
             int offset = 40;
             for (int l = 0; l < 1; l++)
@@ -463,13 +559,11 @@ int main()
                 waterGirl.setPosition({ 41.f, 599.f});
             }
         }
-        else
+        else if(!settingsMenu)
         {
             // Render text title
             window.draw(textTitle);
 
-            // Get mouse position
-            float mouse_xAxis = Mouse::getPosition(window).x, mouse_yAxis = Mouse::getPosition(window).y;
 
             // Exit button
             if (mouse_xAxis >= 1145 && mouse_xAxis <= 1250 && mouse_yAxis >= 655 && mouse_yAxis <= 705)
@@ -502,7 +596,8 @@ int main()
                 {
                     gameStarted = true;
                     chron.reset(), chron.resume();
-                    musicIntro.stop(), musicLevel.play();
+                    musicIntro.stop();
+                    musicLevel.play();
                 }
             }
             else {
@@ -527,11 +622,145 @@ int main()
                 textContinue.setFillColor(Color::White);
             }
 
+            // Settings Button
+            if (mouse_xAxis >= 518 && mouse_xAxis <= 760 && mouse_yAxis >= 483 && mouse_yAxis <= 520)
+            {
+                if (!hoverSettings)
+                {
+                    soundButtonHover.play();
+                    hoverSettings = true;
+                }
+                textSettings.setFillColor(Color::Green);
+                if (Mouse::isButtonPressed(Mouse::Left))
+                   settingsMenu = true;
+            }
+            else {
+                hoverSettings = false;
+                textSettings.setFillColor(Color::White);
+            }
+
             // Render text continue
             if (paused) window.draw(textContinue);
             else if (!gameStarted) window.draw(textStart);
-        }
 
+            // Render Setting text
+            window.draw(textSettings);
+        }
+        else // Setting Menu
+        {
+
+            Text state1, state2;
+
+            if(musicMute)
+                state1 = textOff;
+            else
+                state1 = textOn;
+
+            if(soundFxMute)
+                state2 = textOff;
+            else
+                state2 = textOn;
+
+
+            // Music mute button
+            if (mouse_xAxis >= 528 && mouse_xAxis <= 684 && mouse_yAxis >= 280 && mouse_yAxis <= 321)
+            {
+                if (!hoverMusicMute)
+                {
+                    soundButtonHover.play();
+                    hoverMusicMute = true;
+                }
+                if(musicMute)
+                {
+                    textMusic.setFillColor(Color::Green);
+                    state1 = textOff;
+                }
+                else
+                {
+                    textMusic.setFillColor(Color::Red);
+                    state1 = textOn;
+                }
+                if (Mouse::isButtonPressed(Mouse::Left) && !pressedMusicMute)
+                {
+                    if(musicMute)
+                    {
+                        musicLevel.play();
+                        musicMute = false;
+                    }
+                    else
+                    {
+                        musicLevel.stop();
+                        musicMute = true;
+                    }
+                    pressedMusicMute = true;
+                }
+            }
+            else {
+                hoverMusicMute = false;
+                textMusic.setFillColor(Color::White);
+            }
+
+            // Sound fx mute button
+            if (mouse_xAxis >= 483 && mouse_xAxis <= 723 && mouse_yAxis >= 376 && mouse_yAxis <= 425)
+            {
+                if (!hoverSoundFxMute && !hoverContinue && !hoverStart)
+                {
+                    soundButtonHover.play();
+                    hoverSoundFxMute = true;
+                    hoverContinue = true;
+                    hoverStart = true;
+                }
+                if(soundFxMute)
+                {
+                    textSoundFx.setFillColor(Color::Green);
+                    state2 = textOff;
+                }
+                else
+                {
+                    textSoundFx.setFillColor(Color::Red);
+                    state2 = textOn;
+                }
+                if (Mouse::isButtonPressed(Mouse::Left) && !pressedSoundFxMute)
+                {
+                    if(soundFxMute)
+                        soundFxMute = false;
+                    else
+                        soundFxMute = true;
+
+                    pressedSoundFxMute = true;
+                }
+            }
+            else {
+                hoverStart = false;
+                hoverContinue = false;
+                hoverSoundFxMute = false;
+                textSoundFx.setFillColor(Color::White);
+            }
+
+            // Back arrow
+            if (mouse_xAxis >= 44 && mouse_xAxis <= 163 && mouse_yAxis >= 51 && mouse_yAxis <= 104)
+            {
+                if (!hoverArrow)
+                {
+                    soundButtonHover.play();
+                    hoverArrow = true;
+                }
+                arrow.setTexture(&textureRedArrow);
+                if (Mouse::isButtonPressed(Mouse::Left))
+                    settingsMenu = false;
+            }
+            else {
+                hoverSoundFxMute = false;
+                arrow.setTexture(&textureWhiteArrow);
+            }
+            state1.setPosition(740, 300);
+            state2.setPosition(785, 400);
+            window.draw(textSoundFx);
+            window.draw(textMusic);
+            window.draw(state1);
+            window.draw(state2);
+            window.draw(arrow);
+        }
         window.display();
     }
 
