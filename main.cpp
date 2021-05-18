@@ -342,7 +342,7 @@ int main()
     while (window.isOpen())
     {
         // Check level music
-        if (soundLevelComplete.getStatus() != Music::Status::Playing && musicIntro.getStatus() != Music::Status::Playing && !gameStarted)
+        if (soundLevelComplete.getStatus() != Music::Status::Playing && musicIntro.getStatus() != Music::Status::Playing && !gameStarted && !musicMute)
             musicIntro.play();
 
         // Getting elapsed time
@@ -554,7 +554,7 @@ int main()
             {
                 gameStarted = false;
                 musicLevel.stop();
-                soundLevelComplete.play();
+                if (!soundFxMute) soundLevelComplete.play();
                 fireBoy.setPosition({ 41.f, 599.f});
                 waterGirl.setPosition({ 41.f, 599.f});
             }
@@ -684,12 +684,14 @@ int main()
                 {
                     if(musicMute)
                     {
-                        musicLevel.play();
+                        if (gameStarted) musicLevel.play();
+                        else musicIntro.play();
                         musicMute = false;
                     }
                     else
                     {
-                        musicLevel.stop();
+                        if (gameStarted) musicLevel.stop();
+                        else musicIntro.stop();
                         musicMute = true;
                     }
                     pressedMusicMute = true;
