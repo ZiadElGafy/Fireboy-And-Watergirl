@@ -46,8 +46,8 @@ Texture fireBoyTexture, waterGirlTexture;
 
 
 
-int jumpFactor=40, FBjumpCnt=jumpFactor, WGjumpCnt=jumpFactor;
-float gravity=6.5;
+int jumpFactor = 40, FBjumpCnt=jumpFactor, WGjumpCnt=jumpFactor;
+float gravity = 6.5;
 int FBready = 1, WGready = 1;
 bool FBgroundCheck = 1, WGgroundCheck = 1;
 
@@ -58,7 +58,7 @@ int main()
     window.setFramerateLimit(60);
 
     const int H = 9, W = 16;
-
+    // /Users/pluto/Desktop/Fireboy-And-Watergirl/assets/graphics/bottomBorder.png
     // Background
     Texture textureBackground;
     textureBackground.loadFromFile("assets/graphics/backGroundBrick.png");
@@ -483,6 +483,12 @@ int main()
         WGready++;
         FBready++;
         
+        //Side Barriers
+        if (fireBoy.getPosition().x > 1160) { fireBoy.setPosition({ 1160, fireBoy.getPosition().y }); }
+        if (fireBoy.getPosition().x < 40) { fireBoy.setPosition({ 40, fireBoy.getPosition().y }); }
+        if (waterGirl.getPosition().x > 1160) { waterGirl.setPosition({ 1160., waterGirl.getPosition().y }); }
+        if (waterGirl.getPosition().x < 40) { waterGirl.setPosition({ 40, waterGirl.getPosition().y }); }
+        
         // Check level music
         if (soundLevelComplete.getStatus() != Music::Status::Playing && musicIntro.getStatus() != Music::Status::Playing && !gameStarted && !musicMute)
             musicIntro.play();
@@ -505,13 +511,6 @@ int main()
         ss >> stringTimer;
         ss.clear();
         textTimer.setString(stringTimer);
-
-        //Side Barriers
-        if (fireBoy.getPosition().x > 1160) { fireBoy.setPosition({ 1160, fireBoy.getPosition().y }); }
-        if (fireBoy.getPosition().x < 40) { fireBoy.setPosition({ 40, fireBoy.getPosition().y }); }
-        if (waterGirl.getPosition().x > 1160) { waterGirl.setPosition({ 1160., waterGirl.getPosition().y }); }
-        if (waterGirl.getPosition().x < 40) { waterGirl.setPosition({ 40, waterGirl.getPosition().y }); }
-
        
         Event event;
         while (window.pollEvent(event))
@@ -592,16 +591,13 @@ int main()
                 fireBoy.setPosition({ 40.f, fireBoy.getPosition().y });
             if (fireBoy.getPosition().x > 1160)
                 fireBoy.setPosition({ 1160.f, fireBoy.getPosition().y });
-            if (fireBoy.getPosition().y > 600)
-                fireBoy.setPosition({ fireBoy.getPosition().x, 600 });
 
             // Check if watergirl is still inside the drawn borders
             if (waterGirl.getPosition().x < 40)
                 waterGirl.setPosition({ 40.f, waterGirl.getPosition().y });
             if (waterGirl.getPosition().x > 1160)
                 waterGirl.setPosition({ 1160.f, waterGirl.getPosition().y });
-            if (waterGirl.getPosition().y > 600)
-                waterGirl.setPosition({ waterGirl.getPosition().x, 600 });
+
 
             // Render door
             window.draw(spriteDoor);
