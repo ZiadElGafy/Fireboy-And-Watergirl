@@ -36,6 +36,7 @@
 #include <SFML/Window.hpp>
 #include <SFML/Network.hpp>
 #include <sftools/Chronometer.hpp>
+#include "ResourcePath.hpp"
 using namespace std;
 using namespace sf;
 using namespace sftools;
@@ -50,18 +51,15 @@ int jumpFactor = 40, FBjumpCnt=jumpFactor, WGjumpCnt=jumpFactor;
 float gravity = 6.5;
 int FBready = 1, WGready = 1;
 bool FBgroundCheck = 1, WGgroundCheck = 1;
-
-
 int main()
 {
     RenderWindow window(VideoMode(1280, 720), "Fireboy and Watergirl", Style::Titlebar | Style::Close);
     window.setFramerateLimit(60);
 
     const int H = 9, W = 16;
-    // /Users/pluto/Desktop/Fireboy-And-Watergirl/assets/graphics/bottomBorder.png
     // Background
     Texture textureBackground;
-    textureBackground.loadFromFile("assets/graphics/backGroundBrick.png");
+    textureBackground.loadFromFile(resourcePath() + "assets/graphics/backGroundBrick.png");
 
     RectangleShape spriteBackground(Vector2f(80, 40));
     spriteBackground.setTexture(&textureBackground);
@@ -125,9 +123,9 @@ int main()
     
     // Borders
     Texture textureSideBorder, textureBottomBorder, textureTopBorder;
-    textureTopBorder.loadFromFile("assets/graphics/topBorder.png");
-    textureSideBorder.loadFromFile("assets/graphics/sideBorder.png");
-    textureBottomBorder.loadFromFile("assets/graphics/bottomBorder.png");
+    textureTopBorder.loadFromFile(resourcePath() + "assets/graphics/topBorder.png");
+    textureSideBorder.loadFromFile(resourcePath() + "assets/graphics/sideBorder.png");
+    textureBottomBorder.loadFromFile(resourcePath() + "assets/graphics/bottomBorder.png");
 
     // 0 -> Top border, 1 -> Bottom border, 2 -> Left border, 3 -> Right border
     RectangleShape borders[4];
@@ -145,23 +143,23 @@ int main()
 
     // Stones
     Texture textureStoneMid;
-    textureStoneMid.loadFromFile("assets/graphics/stoneMid.png");
+    textureStoneMid.loadFromFile(resourcePath() + "assets/graphics/stoneMid.png");
     RectangleShape spriteStoneMid(Vector2f(80.f, 40.f));
     spriteStoneMid.setTexture(&textureStoneMid);
 
     Texture textureStoneLeft;
-    textureStoneLeft.loadFromFile("assets/graphics/stoneLeft.png");
+    textureStoneLeft.loadFromFile(resourcePath() + "assets/graphics/stoneLeft.png");
     RectangleShape spriteStoneLeft(Vector2f(80.f, 40.f));
     spriteStoneLeft.setTexture(&textureStoneLeft);
 
     Texture textureStoneRight;
-    textureStoneRight.loadFromFile("assets/graphics/stoneRight.png");
+    textureStoneRight.loadFromFile(resourcePath() + "assets/graphics/stoneRight.png");
     RectangleShape spriteStoneRight(Vector2f(80.f, 40.f));
     spriteStoneRight.setTexture(&textureStoneRight);
 
     // Title
     Font fontTitle;
-    fontTitle.loadFromFile("assets/fonts/KOMIKAP_.ttf");
+    fontTitle.loadFromFile(resourcePath() + "assets/fonts/KOMIKAP_.ttf");
 
     Text textTitle;
     textTitle.setFont(fontTitle);
@@ -295,8 +293,8 @@ int main()
     textSoundFx.setPosition(620, 400);
 
     Texture textureWhiteArrow, textureRedArrow;
-    textureRedArrow.loadFromFile("assets/graphics/redArrow.png");
-    textureWhiteArrow.loadFromFile("assets/graphics/whiteArrow.png");
+    textureRedArrow.loadFromFile(resourcePath() + "assets/graphics/redArrow.png");
+    textureWhiteArrow.loadFromFile(resourcePath() + "assets/graphics/whiteArrow.png");
 
     RectangleShape arrow;
     arrow.setSize(Vector2f(150,80));
@@ -305,7 +303,7 @@ int main()
 
     // Door
     Texture textureDoor;
-    textureDoor.loadFromFile("assets/graphics/door.png");
+    textureDoor.loadFromFile(resourcePath() + "assets/graphics/door.png");
 
     Sprite spriteDoor;
     spriteDoor.setTexture(textureDoor);
@@ -313,16 +311,16 @@ int main()
     spriteDoor.setPosition(1160, 570);
 
     // Fireboy and Watergirl
-    fireBoyTexture.loadFromFile("assets/graphics/fireBoy.png"), waterGirlTexture.loadFromFile("assets/graphics/waterGirl.png");
+    fireBoyTexture.loadFromFile(resourcePath() + "assets/graphics/fireBoy.png"), waterGirlTexture.loadFromFile(resourcePath() + "assets/graphics/waterGirl.png");
     fireBoy.setTexture(fireBoyTexture), waterGirl.setTexture(waterGirlTexture);
     fireBoy.setPosition({ 40.f, 130.f }), waterGirl.setPosition({ 40.f, 0.f });
 
     // Sound effects
     SoundBuffer bufferFireboyJump, bufferWatergirlJump, bufferLevelComplete, bufferButtonHover;
-    bufferFireboyJump.loadFromFile("assets/audio/fireboyJump.ogg");
-    bufferButtonHover.loadFromFile("assets/audio/buttonHover.ogg");
-    bufferWatergirlJump.loadFromFile("assets/audio/watergirlJump.ogg");
-    bufferLevelComplete.loadFromFile("assets/audio/levelComplete.ogg");
+    bufferFireboyJump.loadFromFile(resourcePath() + "assets/audio/fireboyJump.ogg");
+    bufferButtonHover.loadFromFile(resourcePath() + "assets/audio/buttonHover.ogg");
+    bufferWatergirlJump.loadFromFile(resourcePath() + "assets/audio/watergirlJump.ogg");
+    bufferLevelComplete.loadFromFile(resourcePath() + "assets/audio/levelComplete.ogg");
 
     Sound soundButtonHover(bufferButtonHover);
     Sound soundLevelComplete(bufferLevelComplete);
