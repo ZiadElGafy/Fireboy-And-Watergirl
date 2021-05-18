@@ -456,6 +456,8 @@ int main()
                 WGjumpCnt = 0;
                 WGready = 0;
                 WGgroundCheck = 0;
+                if(!soundFxMute)
+                    soundWatergirlJump.play();
             }
         }
         if (Keyboard::isKeyPressed(Keyboard::Key::Up) && !paused && gameStarted)
@@ -465,6 +467,8 @@ int main()
                 FBjumpCnt = 0;
                 FBready = 0;
                 FBgroundCheck = 0;
+                if(!soundFxMute)
+                    soundFireboyJump.play();
             }
         }
 
@@ -473,6 +477,7 @@ int main()
         {
             fireBoy.move(0, (FBjumpCnt - (jumpFactor / 2)) / 2);
             fireBoy.move(0, -gravity);
+
         }
         if (WGjumpCnt <= jumpFactor)
         {
@@ -751,7 +756,7 @@ int main()
 
 
             // Music mute button
-            if (mouse_xAxis >= 528 && mouse_xAxis <= 684 && mouse_yAxis >= 280 && mouse_yAxis <= 321)
+            if (mouse_xAxis >= 700 && mouse_xAxis <= 780 && mouse_yAxis >= 280 && mouse_yAxis <= 321)
             {
                 if (!hoverMusicMute)
                 {
@@ -760,13 +765,13 @@ int main()
                 }
                 if(musicMute)
                 {
-                    textMusic.setFillColor(Color::Green);
                     state1 = textOff;
+                    state1.setFillColor(Color::Green);
                 }
                 else
                 {
-                    textMusic.setFillColor(Color::Red);
                     state1 = textOn;
+                    state1.setFillColor(Color::Red);
                 }
                 if (Mouse::isButtonPressed(Mouse::Left) && !pressedMusicMute)
                 {
@@ -787,11 +792,11 @@ int main()
             }
             else {
                 hoverMusicMute = false;
-                textMusic.setFillColor(Color::White);
+                state1.setFillColor(Color::White);
             }
 
             // Sound fx mute button
-            if (mouse_xAxis >= 483 && mouse_xAxis <= 723 && mouse_yAxis >= 376 && mouse_yAxis <= 425)
+            if (mouse_xAxis >= 750 && mouse_xAxis <= 810 && mouse_yAxis >= 376 && mouse_yAxis <= 425)
             {
                 if (!hoverSoundFxMute && !hoverContinue && !hoverStart)
                 {
@@ -802,13 +807,13 @@ int main()
                 }
                 if(soundFxMute)
                 {
-                    textSoundFx.setFillColor(Color::Green);
                     state2 = textOff;
+                    state2.setFillColor(Color::Green);
                 }
                 else
                 {
-                    textSoundFx.setFillColor(Color::Red);
                     state2 = textOn;
+                    state2.setFillColor(Color::Red);
                 }
                 if (Mouse::isButtonPressed(Mouse::Left) && !pressedSoundFxMute)
                 {
@@ -824,7 +829,7 @@ int main()
                 hoverStart = false;
                 hoverContinue = false;
                 hoverSoundFxMute = false;
-                textSoundFx.setFillColor(Color::White);
+                state2.setFillColor(Color::White);
             }
 
             // Back arrow
