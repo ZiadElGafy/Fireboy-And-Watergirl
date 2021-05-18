@@ -51,6 +51,8 @@ int jumpFactor = 40, FBjumpCnt=jumpFactor, WGjumpCnt=jumpFactor;
 float gravity = 6.5;
 int FBready = 1, WGready = 1;
 bool FBgroundCheck = 1, WGgroundCheck = 1;
+
+
 int main()
 {
     RenderWindow window(VideoMode(1280, 720), "Fireboy and Watergirl", Style::Titlebar | Style::Close);
@@ -123,7 +125,7 @@ int main()
     
     // Borders
     Texture textureSideBorder, textureBottomBorder, textureTopBorder;
-    textureTopBorder.loadFromFile(resourcePath() + "assets/graphics/topBorder.png");
+    textureTopBorder.loadFromFile(resourcePath() +"assets/graphics/topBorder.png");
     textureSideBorder.loadFromFile(resourcePath() + "assets/graphics/sideBorder.png");
     textureBottomBorder.loadFromFile(resourcePath() + "assets/graphics/bottomBorder.png");
 
@@ -328,8 +330,8 @@ int main()
 
     // Music
     Music musicIntro, musicLevel;
-    musicIntro.openFromFile("assets/audio/intro.ogg");
-    musicLevel.openFromFile("assets/audio/level.ogg");
+    musicIntro.openFromFile(resourcePath() + "assets/audio/intro.ogg");
+    musicLevel.openFromFile(resourcePath() + "assets/audio/level.ogg");
     musicIntro.setLoop(true), musicLevel.setLoop(true);
 
     musicIntro.setVolume(50);
