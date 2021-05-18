@@ -715,7 +715,11 @@ int main()
                 
                 textRetryLevel.setFillColor(Color::Green);
                 if (Mouse::isButtonPressed(Mouse::Left))
-                    waterGirl.setPosition(40,50),fireBoy.setPosition(40,50), chron.reset(),paused = false;
+                {
+                    waterGirl.setPosition(40,50), fireBoy.setPosition(40,50);
+                    chron.reset(), chron.resume(), paused = false;
+                    musicLevel.stop(), musicLevel.play();
+                }
             }
             else {
                 hoverRetry = false;
