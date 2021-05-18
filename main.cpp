@@ -44,34 +44,12 @@ using namespace sftools;
 Sprite fireBoy, waterGirl;
 Texture fireBoyTexture, waterGirlTexture;
 
-//  Declaring the sprites' velocity variables in both the X and Y directions
-float waterGirlVX = 0, waterGirlVY = 0;
-float fireBoyVX = 0, fireBoyVY = 0;
-float maxSpeed = 3.f;
-float gravity = 0.5f, HorizontalPull = 0.5f;
-bool motionRightFireBoy = 1, motionRightWaterGirl = 1;
 
-// Functions to update the sprites Y positions taking the velocity in the y direction as a parameter for the move function
-void updateWaterGirlPosY()
-{
-    waterGirl.move({ 0, waterGirlVY });
-}
 
-void updateFireBoyPosY()
-{
-    fireBoy.move({ 0, fireBoyVY });
-}
-
-// Functions to update the sprites X positions taking the velocity in the X direction as a parameter for the move function
-void updateFireBoyPosX()
-{
-    fireBoy.move({fireBoyVX, 0});
-}
-
-void updateWaterGirlPosX()
-{
-    waterGirl.move({ waterGirlVX, 0 });
-}
+int jumpFactor=40, FBjumpCnt=jumpFactor, WGjumpCnt=jumpFactor;
+float gravity=6.5;
+int FBready = 1, WGready = 1;
+bool FBgroundCheck = 1, WGgroundCheck = 1;
 
 
 int main()
@@ -91,19 +69,60 @@ int main()
     // Levels map
     String levelsMap [5][9] =
             {
-            // Level one
+                    // Level one
                     {"                ",
-                     "MMR    LMMMMMMMR",
-                     "                ",
-                     "MMMMR      LMMMM",
-                     "                ",
-                     "        LMMMR   ",
-                     "                ",
-                     "     LMR        ",
-                     "                ",
+                            "MMR    LMMMMMMMR",
+                            "                ",
+                            "MMMMR      LMMMM",
+                            "                ",
+                            "        LMMMR   ",
+                            "                ",
+                            "     LMR        ",
+                            "                ",
                     },
             };
 
+    // Creating Objects for platforms
+
+    Color color(255, 255, 255, 100);
+    vector<RectangleShape> platformObjects;
+    int streak = 0;
+    for (int i = 0; i < 9; i++)
+    {
+        for (int j = 0; j < 16; j++)
+        {
+            if (levelsMap[0][i][j] != ' ')
+            {
+                streak++;
+            }
+            else
+            {
+                if (streak)
+                {
+                    float start = (j - streak) * 80 + 40, end = start+(80*streak);
+                    RectangleShape obj({end-start, 40});
+                    obj.setPosition({start, (float)(40 + 80 * i) });
+                    obj.setFillColor(color);
+                    platformObjects.push_back(obj);
+                    streak = 0;
+                }
+            }
+        }
+        if(streak)
+        {
+            float start = (15 - streak) * 80 + 40 + 80, end = start + (80 * streak);
+            RectangleShape obj({ end - start, 40 });
+            obj.setPosition({ start, (float)(40 + 80 * i) });
+            obj.setFillColor(color);
+            platformObjects.push_back(obj);
+            streak = 0;
+        }
+    }
+
+    RectangleShape ground({ 1280, 1 });
+    ground.setPosition({ 0, 680 });
+    platformObjects.push_back(ground);
+    
     // Borders
     Texture textureSideBorder, textureBottomBorder, textureTopBorder;
     textureTopBorder.loadFromFile("assets/graphics/topBorder.png");
@@ -152,9 +171,9 @@ int main()
 
     FloatRect textRect = textTitle.getLocalBounds();
     textTitle.setOrigin(textRect.left +
-                          textRect.width / 2.0f,
-                          textRect.top +
-                          textRect.height / 2.0f);
+                        textRect.width / 2.0f,
+                        textRect.top +
+                        textRect.height / 2.0f);
     textTitle.setPosition(640, 100);
 
     // Start
@@ -180,9 +199,9 @@ int main()
 
     textRect = textMainMenu.getLocalBounds();
     textMainMenu.setOrigin(textRect.left +
-                        textRect.width / 2.0f,
-                        textRect.top +
-                        textRect.height / 2.0f);
+                           textRect.width / 2.0f,
+                           textRect.top +
+                           textRect.height / 2.0f);
     textMainMenu.setPosition(640, 600);
 
     // Continue
@@ -194,9 +213,9 @@ int main()
 
     textRect = textContinue.getLocalBounds();
     textContinue.setOrigin(textRect.left +
-                        textRect.width / 2.0f,
-                        textRect.top +
-                        textRect.height / 2.0f);
+                           textRect.width / 2.0f,
+                           textRect.top +
+                           textRect.height / 2.0f);
     textContinue.setPosition(640, 400);
 
     // Exit
@@ -208,9 +227,9 @@ int main()
 
     textRect = textExit.getLocalBounds();
     textExit.setOrigin(textRect.left +
-                           textRect.width / 2.0f,
-                           textRect.top +
-                           textRect.height / 2.0f);
+                       textRect.width / 2.0f,
+                       textRect.top +
+                       textRect.height / 2.0f);
     textExit.setPosition(1200, 680);
 
     // Settings
@@ -222,9 +241,9 @@ int main()
 
     textRect = textSettings.getLocalBounds();
     textSettings.setOrigin(textRect.left +
-                       textRect.width / 2.0f,
-                       textRect.top +
-                       textRect.height / 2.0f);
+                           textRect.width / 2.0f,
+                           textRect.top +
+                           textRect.height / 2.0f);
     textSettings.setPosition(640, 500);
 
     Text textOn;
@@ -234,9 +253,9 @@ int main()
     textOn.setFillColor(Color::White);
     textRect = textOn.getLocalBounds();
     textOn.setOrigin(textRect.left +
-                           textRect.width / 2.0f,
-                           textRect.top +
-                           textRect.height / 2.0f);
+                     textRect.width / 2.0f,
+                     textRect.top +
+                     textRect.height / 2.0f);
     textOn.setPosition(640, 300);
 
     Text textOff;
@@ -246,9 +265,9 @@ int main()
     textOff.setFillColor(Color::White);
     textRect = textOff.getLocalBounds();
     textOff.setOrigin(textRect.left +
-                     textRect.width / 2.0f,
-                     textRect.top +
-                     textRect.height / 2.0f);
+                      textRect.width / 2.0f,
+                      textRect.top +
+                      textRect.height / 2.0f);
     textOff.setPosition(640, 500);
 
     Text textMusic;
@@ -258,9 +277,9 @@ int main()
     textMusic.setFillColor(Color::White);
     textRect = textMusic.getLocalBounds();
     textMusic.setOrigin(textRect.left +
-                      textRect.width / 2.0f,
-                      textRect.top +
-                      textRect.height / 2.0f);
+                        textRect.width / 2.0f,
+                        textRect.top +
+                        textRect.height / 2.0f);
     textMusic.setPosition(620, 300);
 
     Text textSoundFx;
@@ -270,9 +289,9 @@ int main()
     textSoundFx.setFillColor(Color::White);
     textRect = textSoundFx.getLocalBounds();
     textSoundFx.setOrigin(textRect.left +
-                        textRect.width / 2.0f,
-                        textRect.top +
-                        textRect.height / 2.0f);
+                          textRect.width / 2.0f,
+                          textRect.top +
+                          textRect.height / 2.0f);
     textSoundFx.setPosition(620, 400);
 
     Texture textureWhiteArrow, textureRedArrow;
@@ -294,14 +313,9 @@ int main()
     spriteDoor.setPosition(1160, 570);
 
     // Fireboy and Watergirl
-    fireBoyTexture.loadFromFile("assets/graphics/fireBoy.png"),
-    waterGirlTexture.loadFromFile("assets/graphics/waterGirl.png");
-
-    fireBoy.setTexture(fireBoyTexture),
-    waterGirl.setTexture(waterGirlTexture);
-
-    fireBoy.setPosition({ 41.f, 599.f }),
-    waterGirl.setPosition({ 41.f, 599.f });
+    fireBoyTexture.loadFromFile("assets/graphics/fireBoy.png"), waterGirlTexture.loadFromFile("assets/graphics/waterGirl.png");
+    fireBoy.setTexture(fireBoyTexture), waterGirl.setTexture(waterGirlTexture);
+    fireBoy.setPosition({ 40.f, 130.f }), waterGirl.setPosition({ 40.f, 0.f });
 
     // Sound effects
     SoundBuffer bufferFireboyJump, bufferWatergirlJump, bufferLevelComplete, bufferButtonHover;
@@ -352,9 +366,123 @@ int main()
     bool pressedMusicMute = false;
     bool pressedSoundFxMute = false;
 
+    Clock clock;
     // Main game loop
     while (window.isOpen())
     {
+        //Jump cnt increments
+        if (FBjumpCnt < 100) { FBjumpCnt++; }
+        if (WGjumpCnt < 100) { WGjumpCnt++; }
+
+        //speed and clock claculations
+        Time timePerIteration;
+        timePerIteration = clock.restart();
+
+        float speed = 150;
+        float iterationsPerSecond = 1.f / timePerIteration.asSeconds();
+        float pixelsPerIteration = speed / iterationsPerSecond;
+
+        float safe = 5.f;
+        
+        //Resistance
+        for (auto i : platformObjects)
+        {
+            //Y-axis
+            if (waterGirl.getGlobalBounds().intersects(i.getGlobalBounds()) && waterGirl.getPosition().y < i.getPosition().y)
+            {
+                waterGirl.move({ 0, -gravity });
+                WGgroundCheck = 1;
+            }
+            if (waterGirl.getGlobalBounds().intersects(i.getGlobalBounds()))
+            {
+                WGjumpCnt = jumpFactor + 1;
+            }
+            if (fireBoy.getGlobalBounds().intersects(i.getGlobalBounds()) && fireBoy.getPosition().y < i.getPosition().y)
+            {
+                fireBoy.move({ 0, -gravity });
+                FBgroundCheck = 1;
+            }
+            if (fireBoy.getGlobalBounds().intersects(i.getGlobalBounds()))
+            {
+                FBjumpCnt = jumpFactor + 1;
+            }
+
+            //X-axis
+            if (waterGirl.getGlobalBounds().intersects(i.getGlobalBounds()) && waterGirl.getPosition().y + 80 - safe >= i.getPosition().y && waterGirl.getPosition().x + 80 - safe >= i.getPosition().x)
+            {
+                waterGirl.move({ pixelsPerIteration, 0 });
+            }
+            if (waterGirl.getGlobalBounds().intersects(i.getGlobalBounds()) && waterGirl.getPosition().y + 80 - safe >= i.getPosition().y && waterGirl.getPosition().x + safe <= i.getPosition().x + i.getGlobalBounds().width)
+            {
+                waterGirl.move({ -pixelsPerIteration, 0 });
+            }
+
+            if (fireBoy.getGlobalBounds().intersects(i.getGlobalBounds()) && fireBoy.getPosition().y + 80 - safe >= i.getPosition().y && fireBoy.getPosition().x + 80 - safe >= i.getPosition().x)
+            {
+                fireBoy.move({ pixelsPerIteration, 0 });
+            }
+            if (fireBoy.getGlobalBounds().intersects(i.getGlobalBounds()) && fireBoy.getPosition().y + 80 - safe >= i.getPosition().y && fireBoy.getPosition().x + safe <= i.getPosition().x + i.getGlobalBounds().width)
+            {
+                fireBoy.move({ -pixelsPerIteration, 0 });
+            }
+
+        }
+    
+        waterGirl.move({ 0, gravity });
+        fireBoy.move({ 0, gravity });
+        
+        if (Keyboard::isKeyPressed(Keyboard::Key::D) && !paused && gameStarted)
+        {
+            waterGirl.move({ pixelsPerIteration , 0});
+            
+        }
+        if (Keyboard::isKeyPressed(Keyboard::Key::A) && !paused && gameStarted)
+        {
+            waterGirl.move({-pixelsPerIteration , 0});
+            
+        }
+        if (Keyboard::isKeyPressed(Keyboard::Key::Right) && !paused && gameStarted)
+        {
+            fireBoy.move({ pixelsPerIteration , 0});
+        }
+        if (Keyboard::isKeyPressed(Keyboard::Key::Left) && !paused && gameStarted)
+        {
+            fireBoy.move({ -pixelsPerIteration , 0 });
+        }
+        if (Keyboard::isKeyPressed(Keyboard::Key::W) && !paused && gameStarted)
+        {
+            if (WGjumpCnt > jumpFactor && WGready >= iterationsPerSecond/2 && WGgroundCheck)
+            {
+                WGjumpCnt = 0;
+                WGready = 0;
+                WGgroundCheck = 0;
+            }
+        }
+        if (Keyboard::isKeyPressed(Keyboard::Key::Up) && !paused && gameStarted)
+        {
+            if (FBjumpCnt > jumpFactor && FBready >= iterationsPerSecond/2 && FBgroundCheck)
+            {
+                FBjumpCnt = 0;
+                FBready = 0;
+                FBgroundCheck = 0;
+            }
+        }
+
+        //Jump mechanics
+        if (FBjumpCnt <= jumpFactor)
+        {
+            fireBoy.move(0, (FBjumpCnt - (jumpFactor / 2)) / 2);
+            fireBoy.move(0, -gravity);
+        }
+        if (WGjumpCnt <= jumpFactor)
+        {
+            waterGirl.move(0, (WGjumpCnt - (jumpFactor / 2)) / 2);
+            waterGirl.move(0, -gravity);
+        }
+
+        WGready++;
+        FBready++;
+        
         // Check level music
         if (soundLevelComplete.getStatus() != Music::Status::Playing && musicIntro.getStatus() != Music::Status::Playing && !gameStarted && !musicMute)
             musicIntro.play();
@@ -377,87 +505,14 @@ int main()
         ss >> stringTimer;
         ss.clear();
         textTimer.setString(stringTimer);
-        
-        //GRAVITY AFFECTS CHARACTERS
-        if (waterGirl.getPosition().y < 600)
-            waterGirlVY += gravity, updateWaterGirlPosY();
-        else
-            waterGirlVY = 0;
-    
-        if (fireBoy.getPosition().y < 600)
-            fireBoyVY += gravity, updateFireBoyPosY();
-        else
-            fireBoyVY = 0;
 
-        //DECELERATION EFFECT FOR FIREBOY
-        if (motionRightFireBoy && fireBoyVX > 0)
-            fireBoyVX -= HorizontalPull, updateFireBoyPosX();
-        if (!motionRightFireBoy && fireBoyVX < 0)
-            fireBoyVX += HorizontalPull, updateFireBoyPosX();
-        
-        //DECELERATION EFFECT FOR WATERGIRL
-        if (motionRightWaterGirl && waterGirlVX > 0)
-            waterGirlVX -= HorizontalPull, updateWaterGirlPosX();
-        if (!motionRightWaterGirl && waterGirlVX < 0)
-            waterGirlVX += HorizontalPull, updateWaterGirlPosX();
+        //Side Barriers
+        if (fireBoy.getPosition().x > 1160) { fireBoy.setPosition({ 1160, fireBoy.getPosition().y }); }
+        if (fireBoy.getPosition().x < 40) { fireBoy.setPosition({ 40, fireBoy.getPosition().y }); }
+        if (waterGirl.getPosition().x > 1160) { waterGirl.setPosition({ 1160., waterGirl.getPosition().y }); }
+        if (waterGirl.getPosition().x < 40) { waterGirl.setPosition({ 40, waterGirl.getPosition().y }); }
 
-        /*Time time;
-        time = clock.restart();
-        float iterationsPerSecond = 1.f / time.asSeconds();
-        float pixelsPerIteration = maxSpeed / iterationsPerSecond;*/
-
-        if (Keyboard::isKeyPressed(Keyboard::Key::D) && !paused && gameStarted)
-        {
-            if (!motionRightWaterGirl)
-                motionRightWaterGirl = 1, waterGirlVX = 0;
-            waterGirlVX += 1.5 * HorizontalPull;
-            if (waterGirlVX > maxSpeed)
-                waterGirlVX = maxSpeed;
-        }
-        if (Keyboard::isKeyPressed(Keyboard::Key::A) && !paused && gameStarted)
-        {
-            if (motionRightWaterGirl)
-                motionRightWaterGirl = 0, waterGirlVX = 0;
-            waterGirlVX -= 1.5 * HorizontalPull;
-            if (waterGirlVX < -maxSpeed)
-                waterGirlVX = -maxSpeed;
-        }
-        if (Keyboard::isKeyPressed(Keyboard::Key::Right) && !paused && gameStarted)
-        {
-            if (!motionRightFireBoy)
-                motionRightFireBoy = 1, fireBoyVX = 0;
-            fireBoyVX += 1.5 * HorizontalPull;
-            if (fireBoyVX > maxSpeed)
-                fireBoyVX = maxSpeed;
-        }
-        if (Keyboard::isKeyPressed(Keyboard::Key::Left) && !paused && gameStarted)
-        {
-            if (motionRightFireBoy)
-                motionRightFireBoy = 0, fireBoyVX = 0;
-            fireBoyVX -= 1.5 * HorizontalPull;
-            if (fireBoyVX < -maxSpeed)
-                fireBoyVX = -maxSpeed;
-        }
-        if (Keyboard::isKeyPressed(Keyboard::Key::W) && !paused && gameStarted)
-        {
-            if (waterGirl.getPosition().y == 600 || waterGirl.getPosition().y == 599)
-            {
-                waterGirlVY = -11, updateWaterGirlPosY();
-                if(!soundFxMute)
-                    soundWatergirlJump.play();
-            }
-
-        }
-        if (Keyboard::isKeyPressed(Keyboard::Key::Up) && !paused && gameStarted)
-        {
-            if (fireBoy.getPosition().y == 600 || fireBoy.getPosition().y == 599)
-            {
-                fireBoyVY = -11, updateFireBoyPosY();
-                if(!soundFxMute)
-                    soundFireboyJump.play();
-            }
-        }
-
+       
         Event event;
         while (window.pollEvent(event))
         {
@@ -557,7 +612,7 @@ int main()
 
             // Render border
             for (int i = 0; i < 4; i++) window.draw(borders[i]);
-           
+
             // Render timer
             window.draw(textTimer);
 
@@ -647,7 +702,7 @@ int main()
                 }
                 textSettings.setFillColor(Color::Green);
                 if (Mouse::isButtonPressed(Mouse::Left))
-                   settingsMenu = true;
+                    settingsMenu = true;
             }
             else {
                 hoverSettings = false;
