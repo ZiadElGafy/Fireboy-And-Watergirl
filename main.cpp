@@ -36,16 +36,14 @@
 #include <SFML/Window.hpp>
 #include <SFML/Network.hpp>
 #include <sftools/Chronometer.hpp>
-#include "ResourcePath.hpp"
 using namespace std;
 using namespace sf;
 using namespace sftools;
-
+//  /Users/pluto/Desktop/Fireboy-And-Watergirl/
 //  Declaring fireBoy and waterGirl sprites and textures
 Sprite fireBoy, waterGirl;
 Texture fireBoyTexture, waterGirlTexture;
-
-
+string m = "";
 
 int jumpFactor = 40, FBjumpCnt=jumpFactor, WGjumpCnt=jumpFactor;
 float gravity = 6.5;
@@ -61,7 +59,7 @@ int main()
     const int H = 9, W = 16;
     // Background
     Texture textureBackground;
-    textureBackground.loadFromFile(resourcePath() + "assets/graphics/backGroundBrick.png");
+    textureBackground.loadFromFile(m + "assets/graphics/backGroundBrick.png");
 
     RectangleShape spriteBackground(Vector2f(80, 40));
     spriteBackground.setTexture(&textureBackground);
@@ -125,9 +123,9 @@ int main()
     
     // Borders
     Texture textureSideBorder, textureBottomBorder, textureTopBorder;
-    textureTopBorder.loadFromFile(resourcePath() +"assets/graphics/topBorder.png");
-    textureSideBorder.loadFromFile(resourcePath() + "assets/graphics/sideBorder.png");
-    textureBottomBorder.loadFromFile(resourcePath() + "assets/graphics/bottomBorder.png");
+    textureTopBorder.loadFromFile(m + "assets/graphics/topBorder.png");
+    textureSideBorder.loadFromFile(m + "assets/graphics/sideBorder.png");
+    textureBottomBorder.loadFromFile(m + "assets/graphics/bottomBorder.png");
 
     // 0 -> Top border, 1 -> Bottom border, 2 -> Left border, 3 -> Right border
     RectangleShape borders[4];
@@ -145,23 +143,23 @@ int main()
 
     // Stones
     Texture textureStoneMid;
-    textureStoneMid.loadFromFile(resourcePath() + "assets/graphics/stoneMid.png");
+    textureStoneMid.loadFromFile(m + "assets/graphics/stoneMid.png");
     RectangleShape spriteStoneMid(Vector2f(80.f, 40.f));
     spriteStoneMid.setTexture(&textureStoneMid);
 
     Texture textureStoneLeft;
-    textureStoneLeft.loadFromFile(resourcePath() + "assets/graphics/stoneLeft.png");
+    textureStoneLeft.loadFromFile(m + "assets/graphics/stoneLeft.png");
     RectangleShape spriteStoneLeft(Vector2f(80.f, 40.f));
     spriteStoneLeft.setTexture(&textureStoneLeft);
 
     Texture textureStoneRight;
-    textureStoneRight.loadFromFile(resourcePath() + "assets/graphics/stoneRight.png");
+    textureStoneRight.loadFromFile( m + "assets/graphics/stoneRight.png");
     RectangleShape spriteStoneRight(Vector2f(80.f, 40.f));
     spriteStoneRight.setTexture(&textureStoneRight);
 
     // Title
     Font fontTitle;
-    fontTitle.loadFromFile(resourcePath() + "assets/fonts/KOMIKAP_.ttf");
+    fontTitle.loadFromFile(m + "assets/fonts/KOMIKAP_.ttf");
 
     Text textTitle;
     textTitle.setFont(fontTitle);
@@ -203,6 +201,20 @@ int main()
                            textRect.top +
                            textRect.height / 2.0f);
     textMainMenu.setPosition(640, 600);
+    
+    // Retry level
+    Text textRetryLevel;
+    textRetryLevel.setFont(fontTitle);
+    textRetryLevel.setCharacterSize(50);
+    textRetryLevel.setFillColor(Color::White);
+    textRetryLevel.setString("Retry Level");
+
+    textRect = textMainMenu.getLocalBounds();
+    textRetryLevel.setOrigin(textRect.left +
+                           textRect.width / 2.0f,
+                           textRect.top +
+                           textRect.height / 2.0f);
+    textRetryLevel.setPosition(610, 400);
 
     // Continue
     Text textContinue;
@@ -216,7 +228,7 @@ int main()
                            textRect.width / 2.0f,
                            textRect.top +
                            textRect.height / 2.0f);
-    textContinue.setPosition(640, 400);
+    textContinue.setPosition(640, 300);
 
     // Exit
     Text textExit;
@@ -231,7 +243,7 @@ int main()
                        textRect.top +
                        textRect.height / 2.0f);
     textExit.setPosition(1200, 680);
-
+    
     // Settings
     Text textSettings;
     textSettings.setFont(fontTitle);
@@ -295,8 +307,8 @@ int main()
     textSoundFx.setPosition(620, 400);
 
     Texture textureWhiteArrow, textureRedArrow;
-    textureRedArrow.loadFromFile(resourcePath() + "assets/graphics/redArrow.png");
-    textureWhiteArrow.loadFromFile(resourcePath() + "assets/graphics/whiteArrow.png");
+    textureRedArrow.loadFromFile(m + "assets/graphics/redArrow.png");
+    textureWhiteArrow.loadFromFile(m + "assets/graphics/whiteArrow.png");
 
     RectangleShape arrow;
     arrow.setSize(Vector2f(150,80));
@@ -305,7 +317,7 @@ int main()
 
     // Door
     Texture textureDoor;
-    textureDoor.loadFromFile(resourcePath() + "assets/graphics/door.png");
+    textureDoor.loadFromFile(m + "assets/graphics/door.png");
 
     Sprite spriteDoor;
     spriteDoor.setTexture(textureDoor);
@@ -313,16 +325,16 @@ int main()
     spriteDoor.setPosition(1160, 570);
 
     // Fireboy and Watergirl
-    fireBoyTexture.loadFromFile(resourcePath() + "assets/graphics/fireBoy.png"), waterGirlTexture.loadFromFile(resourcePath() + "assets/graphics/waterGirl.png");
+    fireBoyTexture.loadFromFile(m + "assets/graphics/fireBoy.png"), waterGirlTexture.loadFromFile(m + "assets/graphics/waterGirl.png");
     fireBoy.setTexture(fireBoyTexture), waterGirl.setTexture(waterGirlTexture);
-    fireBoy.setPosition({ 40.f, 130.f }), waterGirl.setPosition({ 40.f, 0.f });
+    fireBoy.setPosition({ 40.f, 0.f }), waterGirl.setPosition({ 40.f, 0.f });
 
     // Sound effects
     SoundBuffer bufferFireboyJump, bufferWatergirlJump, bufferLevelComplete, bufferButtonHover;
-    bufferFireboyJump.loadFromFile(resourcePath() + "assets/audio/fireboyJump.ogg");
-    bufferButtonHover.loadFromFile(resourcePath() + "assets/audio/buttonHover.ogg");
-    bufferWatergirlJump.loadFromFile(resourcePath() + "assets/audio/watergirlJump.ogg");
-    bufferLevelComplete.loadFromFile(resourcePath() + "assets/audio/levelComplete.ogg");
+    bufferFireboyJump.loadFromFile( m + "assets/audio/fireboyJump.ogg");
+    bufferButtonHover.loadFromFile(m + "assets/audio/buttonHover.ogg");
+    bufferWatergirlJump.loadFromFile(m + "assets/audio/watergirlJump.ogg");
+    bufferLevelComplete.loadFromFile(m + "assets/audio/levelComplete.ogg");
 
     Sound soundButtonHover(bufferButtonHover);
     Sound soundLevelComplete(bufferLevelComplete);
@@ -330,8 +342,8 @@ int main()
 
     // Music
     Music musicIntro, musicLevel;
-    musicIntro.openFromFile(resourcePath() + "assets/audio/intro.ogg");
-    musicLevel.openFromFile(resourcePath() + "assets/audio/level.ogg");
+    musicIntro.openFromFile( m + "assets/audio/intro.ogg");
+    musicLevel.openFromFile( m + "assets/audio/level.ogg");
     musicIntro.setLoop(true), musicLevel.setLoop(true);
 
     musicIntro.setVolume(50);
@@ -359,6 +371,7 @@ int main()
     bool soundFxMute = false;
     bool settingsMenu = false;
     bool hoverContinue = false;
+    bool hoverRetry = false;
     bool hoverSettings = false;
     bool hoverMainMenu = false;
     bool hoverMusicMute = false;
@@ -374,7 +387,7 @@ int main()
         if (FBjumpCnt < 100) { FBjumpCnt++; }
         if (WGjumpCnt < 100) { WGjumpCnt++; }
 
-        //speed and clock claculations
+        //speed and clock calculations
         Time timePerIteration;
         timePerIteration = clock.restart();
 
@@ -677,7 +690,7 @@ int main()
             }
 
             // Continue button
-            if (paused && mouse_xAxis >= 278.5 && mouse_xAxis <= 1001.5 && mouse_yAxis >= 378.5 && mouse_yAxis <= 421.5)
+            if (paused && mouse_xAxis >= 278.5 && mouse_xAxis <= 1001.5 && mouse_yAxis >= 278.5 && mouse_yAxis <= 321.5)
             {
                 if (!hoverContinue)
                 {
@@ -692,7 +705,23 @@ int main()
                 hoverContinue = false;
                 textContinue.setFillColor(Color::White);
             }
-
+            
+            // Retry level Button
+            
+            if (paused && mouse_xAxis >= 508.5 && mouse_xAxis <= 801.5 && mouse_yAxis >= 378.5 && mouse_yAxis <= 421.5)
+            {
+                if (!hoverRetry)
+                    hoverRetry = true;
+                
+                textRetryLevel.setFillColor(Color::Green);
+                if (Mouse::isButtonPressed(Mouse::Left))
+                    waterGirl.setPosition(40,50),fireBoy.setPosition(40,50), chron.reset(),paused = false;
+            }
+            else {
+                hoverRetry = false;
+                textRetryLevel.setFillColor(Color::White);
+            }
+            
             // Settings Button
             if (mouse_xAxis >= 518 && mouse_xAxis <= 760 && mouse_yAxis >= 483 && mouse_yAxis <= 520)
             {
@@ -719,12 +748,12 @@ int main()
                     hoverMainMenu = true;
                 }
                 textMainMenu.setFillColor(Color::Green);
-                if (Mouse::isButtonPressed(Mouse::Left))
+                if (Mouse::isButtonPressed(Mouse::Left) )
                 {
                     gameStarted = false, paused = false;
                     musicLevel.stop();
-                    fireBoy.setPosition({ 41.f, 599.f});
-                    waterGirl.setPosition({ 41.f, 599.f});
+                    fireBoy.setPosition({ 41.f, 50.f});
+                    waterGirl.setPosition({ 41.f, 50.f});
                 }
             }
             else {
@@ -733,7 +762,7 @@ int main()
             }
 
             // Render text continue
-            if (paused) window.draw(textContinue), window.draw(textMainMenu);
+            if (paused) window.draw(textContinue), window.draw(textMainMenu), window.draw(textRetryLevel);
             else if (!gameStarted) window.draw(textStart);
 
             // Render Setting text
