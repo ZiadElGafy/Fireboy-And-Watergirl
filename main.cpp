@@ -171,6 +171,20 @@ int main()
                         textRect.height / 2.0f);
     textStart.setPosition(640, 400);
 
+    // Main menu
+    Text textMainMenu;
+    textMainMenu.setFont(fontTitle);
+    textMainMenu.setCharacterSize(50);
+    textMainMenu.setFillColor(Color::White);
+    textMainMenu.setString("Main menu");
+
+    textRect = textMainMenu.getLocalBounds();
+    textMainMenu.setOrigin(textRect.left +
+                        textRect.width / 2.0f,
+                        textRect.top +
+                        textRect.height / 2.0f);
+    textMainMenu.setPosition(640, 600);
+
     // Continue
     Text textContinue;
     textContinue.setFont(fontTitle);
@@ -322,7 +336,6 @@ int main()
     textTimer.setFillColor(Color::White);
 
     // Flags
-
     bool paused = false;
     bool musicMute = false;
     bool hoverExit = false;
@@ -333,6 +346,7 @@ int main()
     bool settingsMenu = false;
     bool hoverContinue = false;
     bool hoverSettings = false;
+    bool hoverMainMenu = false;
     bool hoverMusicMute = false;
     bool hoverSoundFxMute = false;
     bool pressedMusicMute = false;
@@ -492,6 +506,7 @@ int main()
         {
             if(musicMute)
                 musicLevel.stop();
+
             // Render level
             int offset = 40;
             for (int l = 0; l < 1; l++)
@@ -543,7 +558,7 @@ int main()
             // Render border
             for (int i = 0; i < 4; i++) window.draw(borders[i]);
            
-            //  Render timer
+            // Render timer
             window.draw(textTimer);
 
             // Level ending
@@ -639,8 +654,30 @@ int main()
                 textSettings.setFillColor(Color::White);
             }
 
+            // Main menu button
+            if (paused && mouse_xAxis >= 516.5 && mouse_xAxis <= 763.5 && mouse_yAxis >= 578.5 && mouse_yAxis <= 621.5)
+            {
+                if (!hoverMainMenu)
+                {
+                    soundButtonHover.play();
+                    hoverMainMenu = true;
+                }
+                textMainMenu.setFillColor(Color::Green);
+                if (Mouse::isButtonPressed(Mouse::Left))
+                {
+                    gameStarted = false, paused = false;
+                    musicLevel.stop();
+                    fireBoy.setPosition({ 41.f, 599.f});
+                    waterGirl.setPosition({ 41.f, 599.f});
+                }
+            }
+            else {
+                hoverMainMenu = false;
+                textMainMenu.setFillColor(Color::White);
+            }
+
             // Render text continue
-            if (paused) window.draw(textContinue);
+            if (paused) window.draw(textContinue), window.draw(textMainMenu);
             else if (!gameStarted) window.draw(textStart);
 
             // Render Setting text
