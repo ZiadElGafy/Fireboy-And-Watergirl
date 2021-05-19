@@ -91,14 +91,14 @@ int main()
     window.setFramerateLimit(60);
 
     // Declaring characters
-    fireBoyTexture.loadFromFile(m + "assets/graphics/fireBoy.png");
-    waterGirlTexture.loadFromFile(m + "assets/graphics/waterGirl.png");
+    fireBoyTexture.loadFromFile("assets/graphics/fireBoy.png");
+    waterGirlTexture.loadFromFile("assets/graphics/waterGirl.png");
     Player fireBoy(fireBoyTexture), waterGirl(waterGirlTexture);
 
     const int H = 9, W = 16;
     // Background
     Texture textureBackground;
-    textureBackground.loadFromFile(m + "assets/graphics/backGroundBrick.png");
+    textureBackground.loadFromFile("assets/graphics/backGroundBrick.png");
 
     RectangleShape spriteBackground(Vector2f(80, 40));
     spriteBackground.setTexture(&textureBackground);
@@ -121,7 +121,6 @@ int main()
             };
 
     // Creating Objects for platforms
-
     Color color(255, 255, 255, 100);
     vector<RectangleShape> platformObjects;
     int streak = 0;
@@ -163,9 +162,9 @@ int main()
 
     // Borders
     Texture textureSideBorder, textureBottomBorder, textureTopBorder;
-    textureTopBorder.loadFromFile(m + "assets/graphics/topBorder.png");
-    textureSideBorder.loadFromFile(m + "assets/graphics/sideBorder.png");
-    textureBottomBorder.loadFromFile(m + "assets/graphics/bottomBorder.png");
+    textureTopBorder.loadFromFile("assets/graphics/topBorder.png");
+    textureSideBorder.loadFromFile("assets/graphics/sideBorder.png");
+    textureBottomBorder.loadFromFile("assets/graphics/bottomBorder.png");
 
     // 0 -> Top border, 1 -> Bottom border, 2 -> Left border, 3 -> Right border
     RectangleShape borders[4];
@@ -183,23 +182,23 @@ int main()
 
     // Stones
     Texture textureStoneMid;
-    textureStoneMid.loadFromFile(m + "assets/graphics/stoneMid.png");
+    textureStoneMid.loadFromFile("assets/graphics/stoneMid.png");
     RectangleShape spriteStoneMid(Vector2f(80.f, 40.f));
     spriteStoneMid.setTexture(&textureStoneMid);
 
     Texture textureStoneLeft;
-    textureStoneLeft.loadFromFile(m + "assets/graphics/stoneLeft.png");
+    textureStoneLeft.loadFromFile("assets/graphics/stoneLeft.png");
     RectangleShape spriteStoneLeft(Vector2f(80.f, 40.f));
     spriteStoneLeft.setTexture(&textureStoneLeft);
 
     Texture textureStoneRight;
-    textureStoneRight.loadFromFile( m + "assets/graphics/stoneRight.png");
+    textureStoneRight.loadFromFile( "assets/graphics/stoneRight.png");
     RectangleShape spriteStoneRight(Vector2f(80.f, 40.f));
     spriteStoneRight.setTexture(&textureStoneRight);
 
     // Title
     Font fontTitle;
-    fontTitle.loadFromFile(m + "assets/fonts/KOMIKAP_.ttf");
+    fontTitle.loadFromFile("assets/fonts/KOMIKAP_.ttf");
 
     Text textTitle;
     textTitle.setFont(fontTitle);
@@ -213,6 +212,28 @@ int main()
                         textRect.top +
                         textRect.height / 2.0f);
     textTitle.setPosition(640, 100);
+
+    // Pause background
+    Texture texturePauseBackground;
+    texturePauseBackground.loadFromFile("assets/graphics/pauseBackground.png");
+
+    Sprite spritePauseBackground;
+    spritePauseBackground.setTexture(texturePauseBackground);
+    spritePauseBackground.setPosition(0, 0);
+
+    // Paused
+    Text textPaused;
+    textPaused.setFont(fontTitle);
+    textPaused.setCharacterSize(70);
+    textPaused.setFillColor(Color::White);
+    textPaused.setString("Paused");
+
+    textRect = textPaused.getLocalBounds();
+    textPaused.setOrigin(textRect.left +
+                         textRect.width / 2.0f,
+                         textRect.top +
+                         textRect.height / 2.0f);
+    textPaused.setPosition(640, 100);
 
     // Start
     Text textStart;
@@ -347,8 +368,8 @@ int main()
     textSoundFx.setPosition(620, 400);
 
     Texture textureWhiteArrow, textureRedArrow;
-    textureRedArrow.loadFromFile(m + "assets/graphics/redArrow.png");
-    textureWhiteArrow.loadFromFile(m + "assets/graphics/whiteArrow.png");
+    textureRedArrow.loadFromFile("assets/graphics/redArrow.png");
+    textureWhiteArrow.loadFromFile("assets/graphics/whiteArrow.png");
 
     RectangleShape arrow;
     arrow.setSize(Vector2f(150,80));
@@ -357,7 +378,7 @@ int main()
 
     // Door
     Texture textureDoor;
-    textureDoor.loadFromFile(m + "assets/graphics/door.png");
+    textureDoor.loadFromFile("assets/graphics/door.png");
 
     Sprite spriteDoor;
     spriteDoor.setTexture(textureDoor);
@@ -367,10 +388,10 @@ int main()
 
     // Sound effects
     SoundBuffer bufferFireboyJump, bufferWatergirlJump, bufferLevelComplete, bufferButtonHover;
-    bufferFireboyJump.loadFromFile( m + "assets/audio/fireboyJump.ogg");
-    bufferButtonHover.loadFromFile(m + "assets/audio/buttonHover.ogg");
-    bufferWatergirlJump.loadFromFile(m + "assets/audio/watergirlJump.ogg");
-    bufferLevelComplete.loadFromFile(m + "assets/audio/levelComplete.ogg");
+    bufferFireboyJump.loadFromFile( "assets/audio/fireboyJump.ogg");
+    bufferButtonHover.loadFromFile("assets/audio/buttonHover.ogg");
+    bufferWatergirlJump.loadFromFile("assets/audio/watergirlJump.ogg");
+    bufferLevelComplete.loadFromFile("assets/audio/levelComplete.ogg");
 
     Sound soundButtonHover(bufferButtonHover);
     Sound soundLevelComplete(bufferLevelComplete);
@@ -378,8 +399,8 @@ int main()
 
     // Music
     Music musicIntro, musicLevel;
-    musicIntro.openFromFile( m + "assets/audio/intro.ogg");
-    musicLevel.openFromFile( m + "assets/audio/level.ogg");
+    musicIntro.openFromFile( "assets/audio/intro.ogg");
+    musicLevel.openFromFile( "assets/audio/level.ogg");
     musicIntro.setLoop(true), musicLevel.setLoop(true);
 
     musicIntro.setVolume(50);
@@ -400,18 +421,20 @@ int main()
     // Flags
     bool paused = false;
     bool musicMute = false;
+    bool soundFxMute = false;
+    bool gameStarted = false;
+    bool settingsMenu = false;
     bool hoverExit = false;
     bool hoverStart = false;
     bool hoverArrow = false;
-    bool gameStarted = false;
-    bool soundFxMute = false;
-    bool settingsMenu = false;
-    bool hoverContinue = false;
     bool hoverRetry = false;
+    bool hoverContinue = false;
     bool hoverSettings = false;
     bool hoverMainMenu = false;
     bool hoverMusicMute = false;
     bool hoverSoundFxMute = false;
+    bool pushedFireBoy = false;
+    bool pushedWaterGirl = false;
     bool pressedMusicMute = false;
     bool pressedSoundFxMute = false;
 
@@ -462,23 +485,26 @@ int main()
             waterGirl.Inquire();
             if (waterGirl.bounds.intersects(i.getGlobalBounds()) && waterGirl.dy + 80 - safe >= i.getPosition().y && waterGirl.dx + 80 - safe >= i.getPosition().x)
             {
+                pushedWaterGirl = true;
                 waterGirl.move({ pixelsPerIteration, 0 });
             }
             waterGirl.Inquire();
             if (waterGirl.bounds.intersects(i.getGlobalBounds()) && waterGirl.dy + 80 - safe >= i.getPosition().y && waterGirl.dx+ safe <= i.getPosition().x + i.getGlobalBounds().width)
             {
+                pushedWaterGirl = true;
                 waterGirl.move({ -pixelsPerIteration, 0 });
             }
             fireBoy.Inquire();
             if (fireBoy.bounds.intersects(i.getGlobalBounds()) && fireBoy.dy + 80 - safe >= i.getPosition().y && fireBoy.dx + 80 - safe >= i.getPosition().x)
             {
+                pushedFireBoy = true;
                 fireBoy.move({ pixelsPerIteration, 0 });
             }
             if (fireBoy.bounds.intersects(i.getGlobalBounds()) && fireBoy.dy + 80 - safe >= i.getPosition().y && fireBoy.dx + safe <= i.getPosition().x + i.getGlobalBounds().width)
             {
+                pushedFireBoy = true;
                 fireBoy.move({ -pixelsPerIteration, 0 });
             }
-
         }
 
         waterGirl.move({ 0, gravity });
@@ -486,21 +512,23 @@ int main()
 
         if (Keyboard::isKeyPressed(Keyboard::Key::D) && !paused && gameStarted)
         {
-            waterGirl.move({ pixelsPerIteration , 0});
-
+            if (!pushedWaterGirl) waterGirl.move({ pixelsPerIteration , 0});
+            pushedWaterGirl = false;
         }
         if (Keyboard::isKeyPressed(Keyboard::Key::A) && !paused && gameStarted)
         {
-            waterGirl.move({-pixelsPerIteration , 0});
-
+            if (!pushedWaterGirl) waterGirl.move({-pixelsPerIteration , 0});
+            pushedWaterGirl = false;
         }
         if (Keyboard::isKeyPressed(Keyboard::Key::Right) && !paused && gameStarted)
         {
-            fireBoy.move({ pixelsPerIteration , 0});
+            if (!pushedFireBoy) fireBoy.move({ pixelsPerIteration , 0});
+            pushedFireBoy = false;
         }
         if (Keyboard::isKeyPressed(Keyboard::Key::Left) && !paused && gameStarted)
         {
-            fireBoy.move({ -pixelsPerIteration , 0 });
+            if (!pushedFireBoy) fireBoy.move({ -pixelsPerIteration , 0 });
+            pushedFireBoy = false;
         }
         if (Keyboard::isKeyPressed(Keyboard::Key::W) && !paused && gameStarted)
         {
@@ -612,7 +640,7 @@ int main()
             }
         }
 
-        if (gameStarted && !paused)
+        if (gameStarted)
         {
             if(musicMute)
                 musicLevel.stop();
@@ -668,30 +696,17 @@ int main()
                 fireBoy.Restart();
                 waterGirl.Restart();
             }
+
+            // Render pause background
+            if (gameStarted && paused)
+            {
+                window.draw(spritePauseBackground);
+            }
         }
-        else if(!settingsMenu)
+        if (!gameStarted && !paused && !settingsMenu)
         {
             // Render text title
             window.draw(textTitle);
-
-
-            // Exit button
-            if (mouse_xAxis >= 1145 && mouse_xAxis <= 1250 && mouse_yAxis >= 655 && mouse_yAxis <= 705)
-            {
-                if (!hoverExit)
-                {
-                    soundButtonHover.play();
-                    hoverExit = true;
-                }
-                textExit.setFillColor(Color::Red);
-                if (Mouse::isButtonPressed(Mouse::Left))
-                    window.close();
-            }
-            else {
-                hoverExit = false;
-                textExit.setFillColor(Color::White);
-            }
-            window.draw(textExit);
 
             // Start button
             if (!gameStarted && mouse_xAxis >= 330 && mouse_xAxis <= 950 && mouse_yAxis >= 378.5 && mouse_yAxis <= 421.5)
@@ -714,42 +729,27 @@ int main()
                 hoverStart = false;
                 textStart.setFillColor(Color::White);
             }
-
-            // Continue button
-            if (paused && mouse_xAxis >= 278.5 && mouse_xAxis <= 1001.5 && mouse_yAxis >= 278.5 && mouse_yAxis <= 321.5)
+            window.draw(textStart);
+        }
+        if ((paused || !gameStarted) && !settingsMenu)
+        {
+            // Exit button
+            if (mouse_xAxis >= 1145 && mouse_xAxis <= 1250 && mouse_yAxis >= 655 && mouse_yAxis <= 705)
             {
-                if (!hoverContinue)
+                if (!hoverExit)
                 {
                     soundButtonHover.play();
-                    hoverContinue = true;
+                    hoverExit = true;
                 }
-                textContinue.setFillColor(Color::Green);
+                textExit.setFillColor(Color::Red);
                 if (Mouse::isButtonPressed(Mouse::Left))
-                    paused = false, chron.resume();
+                    window.close();
             }
             else {
-                hoverContinue = false;
-                textContinue.setFillColor(Color::White);
+                hoverExit = false;
+                textExit.setFillColor(Color::White);
             }
-
-            // Retry level Button
-
-            if (paused && mouse_xAxis >= 508.5 && mouse_xAxis <= 801.5 && mouse_yAxis >= 378.5 && mouse_yAxis <= 421.5)
-            {
-                if (!hoverRetry)
-                    hoverRetry = true;
-
-                textRetryLevel.setFillColor(Color::Green);
-                if (Mouse::isButtonPressed(Mouse::Left))
-                {
-                    waterGirl.Restart(),fireBoy.Restart(), chron.reset(),chron.resume(),paused = false;
-                    musicLevel.stop(), musicLevel.play();
-                }
-            }
-            else {
-                hoverRetry = false;
-                textRetryLevel.setFillColor(Color::White);
-            }
+            window.draw(textExit);
 
             // Settings Button
             if (mouse_xAxis >= 518 && mouse_xAxis <= 760 && mouse_yAxis >= 483 && mouse_yAxis <= 520)
@@ -767,9 +767,53 @@ int main()
                 hoverSettings = false;
                 textSettings.setFillColor(Color::White);
             }
+            window.draw(textSettings);
+        }
+        if (paused && !settingsMenu)
+        {
+            // Render text paused
+            window.draw(textPaused);
+
+            // Continue button
+            if (mouse_xAxis >= 278.5 && mouse_xAxis <= 1001.5 && mouse_yAxis >= 278.5 && mouse_yAxis <= 321.5)
+            {
+                if (!hoverContinue)
+                {
+                    soundButtonHover.play();
+                    hoverContinue = true;
+                }
+                textContinue.setFillColor(Color::Green);
+                if (Mouse::isButtonPressed(Mouse::Left))
+                    paused = false, chron.resume();
+            }
+            else {
+                hoverContinue = false;
+                textContinue.setFillColor(Color::White);
+            }
+            window.draw(textContinue);
+
+            // Retry level Button
+            if (mouse_xAxis >= 508.5 && mouse_xAxis <= 801.5 && mouse_yAxis >= 378.5 && mouse_yAxis <= 421.5)
+            {
+                if (!hoverRetry)
+                    hoverRetry = true;
+
+                textRetryLevel.setFillColor(Color::Green);
+                if (Mouse::isButtonPressed(Mouse::Left))
+                {
+                    waterGirl.Restart(), fireBoy.Restart();
+                    chron.reset(), chron.resume(), paused = false;
+                    musicLevel.stop(), musicLevel.play();
+                }
+            }
+            else {
+                hoverRetry = false;
+                textRetryLevel.setFillColor(Color::White);
+            }
+            window.draw(textRetryLevel);
 
             // Main menu button
-            if (paused && mouse_xAxis >= 516.5 && mouse_xAxis <= 763.5 && mouse_yAxis >= 578.5 && mouse_yAxis <= 621.5)
+            if (mouse_xAxis >= 516.5 && mouse_xAxis <= 763.5 && mouse_yAxis >= 578.5 && mouse_yAxis <= 621.5)
             {
                 if (!hoverMainMenu)
                 {
@@ -777,29 +821,21 @@ int main()
                     hoverMainMenu = true;
                 }
                 textMainMenu.setFillColor(Color::Green);
-                if (Mouse::isButtonPressed(Mouse::Left) )
+                if (Mouse::isButtonPressed(Mouse::Left))
                 {
                     gameStarted = false, paused = false;
+                    fireBoy.Restart(), waterGirl.Restart();
                     musicLevel.stop();
-                    fireBoy.Restart();
-                    waterGirl.Restart();
                 }
             }
             else {
                 hoverMainMenu = false;
                 textMainMenu.setFillColor(Color::White);
             }
-
-            // Render text continue
-            if (paused) window.draw(textContinue), window.draw(textMainMenu), window.draw(textRetryLevel);
-            else if (!gameStarted) window.draw(textStart);
-
-            // Render Setting text
-            window.draw(textSettings);
+            window.draw(textMainMenu);
         }
-        else // Setting Menu
+        if (settingsMenu)
         {
-
             Text state1, state2;
 
             if(musicMute)
