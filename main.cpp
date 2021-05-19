@@ -133,13 +133,13 @@ int main()
             {
                     // Level one
                     {
-                            "                ",
+                            "             M  ",
                             "                ",
                             "            LMMR",
                             "          M     ",
                             "        M       ",
                             "      M         ",
-                            "    M           ",
+                            "    L           ",
                             "  M             ",
                             "                ",
                     },
@@ -742,12 +742,15 @@ int main()
             // Check if fireboy and Watergirl is still inside the drawn borders
             fireBoy.Inquire();
             waterGirl.Inquire();
+
+
+            // Render border
+            for (int i = 0; i < 4; i++) window.draw(borders[i]);
+
             // Render characters
             window.draw(fireBoy.playerSprite);
             window.draw(waterGirl.playerSprite);
 
-            // Render border
-            for (int i = 0; i < 4; i++) window.draw(borders[i]);
 
             // Render timer
             window.draw(textTimer);
