@@ -237,7 +237,7 @@ int main()
                         textRect.width / 2.0f,
                         textRect.top +
                         textRect.height / 2.0f);
-    textTitle.setPosition(640, 100);
+    textTitle.setPosition(640, 150);
 
     // Pause background
     Texture texturePauseBackground;
