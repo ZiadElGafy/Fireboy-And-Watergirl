@@ -227,17 +227,16 @@ int main()
 
     Text textTitle;
     textTitle.setFont(fontTitle);
-    textTitle.setCharacterSize(30);
+    textTitle.setCharacterSize(70);
     textTitle.setFillColor(Color::White);
-    loadText();
-    textTitle.setString(introText);
+    textTitle.setString("Fireboy and Watergirl");
 
     FloatRect textRect = textTitle.getLocalBounds();
     textTitle.setOrigin(textRect.left +
                         textRect.width / 2.0f,
                         textRect.top +
                         textRect.height / 2.0f);
-    textTitle.setPosition(640, 150);
+    textTitle.setPosition(640, 100);
 
     // Pause background
     Texture texturePauseBackground;
@@ -492,6 +491,7 @@ int main()
                 waterGirl.jumpCnt = jumpFactor + 1;
                 if(waterGirl.dy < i.getPosition().y)
                 {
+                    pushedWaterGirl = false;
                     waterGirl.move( {0, -gravity} );
                     waterGirl.groundCheck = 1;
                 }
@@ -499,6 +499,7 @@ int main()
 
             if (fireBoy.bounds.intersects(i.getGlobalBounds()))
             {
+                pushedFireBoy = false;
                 fireBoy.jumpCnt = jumpFactor + 1;
                 if(fireBoy.dy < i.getPosition().y)
                 {
@@ -539,26 +540,22 @@ int main()
         if (Keyboard::isKeyPressed(Keyboard::Key::D) && !paused && gameStarted)
         {
             if (!pushedWaterGirl) waterGirl.move({ pixelsPerIteration , 0});
-            pushedWaterGirl = false;
         }
         if (Keyboard::isKeyPressed(Keyboard::Key::A) && !paused && gameStarted)
         {
             if (!pushedWaterGirl) waterGirl.move({-pixelsPerIteration , 0});
-            pushedWaterGirl = false;
         }
         if (Keyboard::isKeyPressed(Keyboard::Key::Right) && !paused && gameStarted)
         {
             if (!pushedFireBoy) fireBoy.move({ pixelsPerIteration , 0});
-            pushedFireBoy = false;
         }
         if (Keyboard::isKeyPressed(Keyboard::Key::Left) && !paused && gameStarted)
         {
             if (!pushedFireBoy) fireBoy.move({ -pixelsPerIteration , 0 });
-            pushedFireBoy = false;
         }
         if (Keyboard::isKeyPressed(Keyboard::Key::W) && !paused && gameStarted)
         {
-            if (waterGirl.jumpCnt > jumpFactor && waterGirl.ready >= iterationsPerSecond/2 && waterGirl.groundCheck)
+            if (!pushedWaterGirl && waterGirl.jumpCnt > jumpFactor && waterGirl.ready >= iterationsPerSecond/2 && waterGirl.groundCheck)
             {
                 waterGirl.jumpCnt = 0;
                 waterGirl.ready = 0;
@@ -569,7 +566,7 @@ int main()
         }
         if (Keyboard::isKeyPressed(Keyboard::Key::Up) && !paused && gameStarted)
         {
-            if (fireBoy.jumpCnt > jumpFactor && fireBoy.ready >= iterationsPerSecond/2 && fireBoy.groundCheck)
+            if (!pushedFireBoy && fireBoy.jumpCnt > jumpFactor && fireBoy.ready >= iterationsPerSecond/2 && fireBoy.groundCheck)
             {
                 fireBoy.jumpCnt = 0;
                 fireBoy.ready = 0;
