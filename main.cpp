@@ -36,10 +36,35 @@
 #include <SFML/Window.hpp>
 #include <SFML/Network.hpp>
 #include <sftools/Chronometer.hpp>
+#include <fstream>
 using namespace std;
 using namespace sf;
 using namespace sftools;
+
 //  /Users/pluto/Desktop/Fireboy-And-Watergirl/
+
+// decraing text strings
+string introText = "";
+
+// loading intro text
+void loadText()
+{
+    string temp;
+    ifstream introFile;
+    introFile.open("assets/textData/introText.txt");
+
+    if (!introFile.fail())
+    {
+        while (!introFile.eof())
+        {
+            getline(introFile, temp);
+            introText += temp;
+            introText += '\n';
+        };
+    }
+}
+
+
 //  Declaring fireBoy and waterGirl sprites and textures
 
 string m = "/Users/pluto/Desktop/Fireboy-And-Watergirl/";
@@ -202,9 +227,10 @@ int main()
 
     Text textTitle;
     textTitle.setFont(fontTitle);
-    textTitle.setCharacterSize(70);
+    textTitle.setCharacterSize(30);
     textTitle.setFillColor(Color::White);
-    textTitle.setString("Fireboy and Watergirl");
+    loadText();
+    textTitle.setString(introText);
 
     FloatRect textRect = textTitle.getLocalBounds();
     textTitle.setOrigin(textRect.left +
