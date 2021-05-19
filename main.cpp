@@ -40,18 +40,18 @@
 using namespace std;
 using namespace sf;
 using namespace sftools;
-
 //  /Users/pluto/Desktop/Fireboy-And-Watergirl/
+string m = "";
 
 // decraing text strings
 string introText = "";
 
 // loading intro text
-void loadText()
+void FloadText()
 {
     string temp;
     ifstream introFile;
-    introFile.open("assets/textData/introText.txt");
+    introFile.open(m + "assets/textData/introText.txt");
 
     if (!introFile.fail())
     {
@@ -66,88 +66,35 @@ void loadText()
 
 
 //  Declaring fireBoy and waterGirl sprites and textures
-
-string m = "/Users/pluto/Desktop/Fireboy-And-Watergirl/";
 int jumpFactor = 40;
 float gravity = 6.5;
 Texture fireBoyTexture, waterGirlTexture;
-class Player
+Time timePerIteration;
+vector<RectangleShape> platformObjects;
+float pixelsPerIteration;
+float safe = 5.f;
+
+// Levels map
+String levelsMap [5][9] =
+        {
+                // Level one
+                {
+                        "                ",
+                        "                ",
+                        "MMR    LMMMMMMMR",
+                        "                ",
+                        "MMMMMMMR        ",
+                        "                ",
+                        "    LMMMMMMMMMMR",
+                        "                ",
+                        "                ",
+                },
+        };
+
+// Creating Objects for platforms
+void FplatformObjects()
 {
-public:
-    int jumpCnt = jumpFactor, ready = 1, groundCheck = 1;
-    Sprite playerSprite;
-    // Declaring variable to store local bounds
-    FloatRect bounds;
-    // Declaring variables to store character's x and y coordinates
-    float dx, dy;
-    // Declaring waterGirl or fireBoy sprite for the first time and taking a texture as a parameter
-    Player(Texture &image)
-    {
-        playerSprite.setTexture(image);
-        playerSprite.setPosition({ 41.f, 599.f });
-
-    }
-    void Inquire()
-    {
-        bounds = playerSprite.getGlobalBounds();
-        dx = playerSprite.getPosition().x;
-        dy = playerSprite.getPosition().y;
-
-        // Checking if waterGirl or fireBoy has collided with a border
-        if (dx > 1160)
-            playerSprite.setPosition({ 1160, dy });
-        if (dx < 40)
-            playerSprite.setPosition({ 40, dy});
-
-    }
-    void Restart()
-    {
-        playerSprite.setPosition({ 41.f, 599.f });
-    }
-    void move( pair < float, float> coordinates)
-    {
-        playerSprite.move({coordinates.first,coordinates.second});
-    }
-};
-
-int main()
-{
-    RenderWindow window(VideoMode(1280, 720), "Fireboy and Watergirl", Style::Titlebar | Style::Close);
-    window.setFramerateLimit(60);
-
-    // Declaring characters
-    fireBoyTexture.loadFromFile("assets/graphics/fireBoy.png");
-    waterGirlTexture.loadFromFile("assets/graphics/waterGirl.png");
-    Player fireBoy(fireBoyTexture), waterGirl(waterGirlTexture);
-
-    const int H = 9, W = 16;
-    // Background
-    Texture textureBackground;
-    textureBackground.loadFromFile("assets/graphics/backGroundBrick.png");
-
-    RectangleShape spriteBackground(Vector2f(80, 40));
-    spriteBackground.setTexture(&textureBackground);
-
-    // Levels map
-    String levelsMap [5][9] =
-            {
-                    // Level one
-                    {
-                            "                ",
-                            "                ",
-                            "            LMMR",
-                            "          M     ",
-                            "        M       ",
-                            "      M         ",
-                            "    M           ",
-                            "  M             ",
-                            "                ",
-                    },
-            };
-
-    // Creating Objects for platforms
     Color color(255, 255, 255, 100);
-    vector<RectangleShape> platformObjects;
     int streak = 0;
     for (int i = 0; i < 9; i++)
     {
@@ -180,16 +127,111 @@ int main()
             streak = 0;
         }
     }
-
+    
     RectangleShape ground({ 1280, 1 });
     ground.setPosition({ 0, 680 });
     platformObjects.push_back(ground);
+}
+class Player
+{
+public:
+    int jumpCnt = jumpFactor, ready = 1, groundCheck = 1;
+    bool pushed = false;
+    Sprite playerSprite;
+    // Declaring variable to store local bounds
+    FloatRect bounds;
+    // Declaring variables to store character's x and y coordinates
+    float dx, dy;
+    // Declaring waterGirl or fireBoy sprite for the first time and taking a texture as a parameter
+   
+    Player(Texture &image)
+    {
+        playerSprite.setTexture(image);
+        playerSprite.setPosition({ 41.f, 599.f });
+
+    }
+    void Inquire()
+    {
+        bounds = playerSprite.getGlobalBounds();
+        dx = playerSprite.getPosition().x;
+        dy = playerSprite.getPosition().y;
+
+        // Checking if waterGirl or fireBoy has collided with a border
+        if (dx > 1160)
+            playerSprite.setPosition({ 1160, dy });
+        if (dx < 40)
+            playerSprite.setPosition({ 40, dy});
+
+    }
+    void Restart()
+    {
+        playerSprite.setPosition({ 41.f, 599.f });
+    }
+    void move( pair < float, float> coordinates)
+    {
+        playerSprite.move({coordinates.first,coordinates.second});
+    }
+    void Resist()
+    {
+        for (auto i : platformObjects)
+        {
+            //Y-axis
+            if (bounds.intersects(i.getGlobalBounds()))
+            {
+                jumpCnt = jumpFactor + 1;
+                
+                if(dy < i.getPosition().y)
+                {
+                    pushed = false;
+                    move( {0, -gravity} );
+                    groundCheck = 1;
+                }
+            }
+            //X-axis
+            if (bounds.intersects(i.getGlobalBounds()) && dy + 80 - safe >= i.getPosition().y && dx + 80 - safe >= i.getPosition().x)
+            {
+                pushed = true;
+                move({ pixelsPerIteration, 0 });
+            }
+            if (bounds.intersects(i.getGlobalBounds()) && dy + 80 - safe >= i.getPosition().y && dx + safe <= i.getPosition().x + i.getGlobalBounds().width)
+            {
+                pushed = false;
+                if(dx > 41 && dy < 599)
+                    pushed = true;
+                move({ -pixelsPerIteration, 0 });
+            }
+           
+        }
+
+    }
+};
+
+int main()
+{
+    RenderWindow window(VideoMode(1280, 720), "Fireboy and Watergirl", Style::Titlebar | Style::Close);
+    window.setFramerateLimit(60);
+
+    // Declaring characters
+    fireBoyTexture.loadFromFile( m +"assets/graphics/fireBoy.png");
+    waterGirlTexture.loadFromFile(m + "assets/graphics/waterGirl.png");
+    Player fireBoy(fireBoyTexture), waterGirl(waterGirlTexture);
+
+    const int H = 9, W = 16;
+    // Background
+    Texture textureBackground;
+    textureBackground.loadFromFile( m + "assets/graphics/backGroundBrick.png");
+
+    RectangleShape spriteBackground(Vector2f(80, 40));
+    spriteBackground.setTexture(&textureBackground);
+
+    //Creating objects for the platforms
+    FplatformObjects();
 
     // Borders
     Texture textureSideBorder, textureBottomBorder, textureTopBorder;
-    textureTopBorder.loadFromFile("assets/graphics/topBorder.png");
-    textureSideBorder.loadFromFile("assets/graphics/sideBorder.png");
-    textureBottomBorder.loadFromFile("assets/graphics/bottomBorder.png");
+    textureTopBorder.loadFromFile( m + "assets/graphics/topBorder.png");
+    textureSideBorder.loadFromFile( m + "assets/graphics/sideBorder.png");
+    textureBottomBorder.loadFromFile( m + "assets/graphics/bottomBorder.png");
 
     // 0 -> Top border, 1 -> Bottom border, 2 -> Left border, 3 -> Right border
     RectangleShape borders[4];
@@ -207,23 +249,23 @@ int main()
 
     // Stones
     Texture textureStoneMid;
-    textureStoneMid.loadFromFile("assets/graphics/stoneMid.png");
+    textureStoneMid.loadFromFile(m + "assets/graphics/stoneMid.png");
     RectangleShape spriteStoneMid(Vector2f(80.f, 40.f));
     spriteStoneMid.setTexture(&textureStoneMid);
 
     Texture textureStoneLeft;
-    textureStoneLeft.loadFromFile("assets/graphics/stoneLeft.png");
+    textureStoneLeft.loadFromFile(m + "assets/graphics/stoneLeft.png");
     RectangleShape spriteStoneLeft(Vector2f(80.f, 40.f));
     spriteStoneLeft.setTexture(&textureStoneLeft);
 
     Texture textureStoneRight;
-    textureStoneRight.loadFromFile( "assets/graphics/stoneRight.png");
+    textureStoneRight.loadFromFile(m + "assets/graphics/stoneRight.png");
     RectangleShape spriteStoneRight(Vector2f(80.f, 40.f));
     spriteStoneRight.setTexture(&textureStoneRight);
 
     // Title
     Font fontTitle;
-    fontTitle.loadFromFile("assets/fonts/KOMIKAP_.ttf");
+    fontTitle.loadFromFile(m + "assets/fonts/KOMIKAP_.ttf");
 
     Text textTitle;
     textTitle.setFont(fontTitle);
@@ -236,26 +278,26 @@ int main()
                         textRect.width / 2.0f,
                         textRect.top +
                         textRect.height / 2.0f);
-    textTitle.setPosition(640, 100);
+    textTitle.setPosition(640, 150);
 
     // Intro text
-    loadText();
-    Text textIntro;
-    textIntro.setFont(fontTitle);
-    textIntro.setCharacterSize(30);
-    textIntro.setFillColor(Color::White);
-    textIntro.setString(introText);
+     FloadText();
+     Text textIntro;
+     textIntro.setFont(fontTitle);
+     textIntro.setCharacterSize(30);
+     textIntro.setFillColor(Color::White);
+     textIntro.setString(introText);
 
-    textRect = textIntro.getLocalBounds();
-    textIntro.setOrigin(textRect.left +
-                        textRect.width / 2.0f,
-                        textRect.top +
-                        textRect.height / 2.0f);
-    textIntro.setPosition(640, 200);
+     textRect = textIntro.getLocalBounds();
+     textIntro.setOrigin(textRect.left +
+                         textRect.width / 2.0f,
+                         textRect.top +
+                         textRect.height / 2.0f);
+     textIntro.setPosition(640, 200);
 
     // Pause background
     Texture texturePauseBackground;
-    texturePauseBackground.loadFromFile("assets/graphics/pauseBackground.png");
+    texturePauseBackground.loadFromFile(m + "assets/graphics/pauseBackground.png");
 
     Sprite spritePauseBackground;
     spritePauseBackground.setTexture(texturePauseBackground);
@@ -317,6 +359,20 @@ int main()
                              textRect.height / 2.0f);
     textRetryLevel.setPosition(610, 400);
 
+    // Continue intro
+     Text textContinueIntro;
+     textContinueIntro.setFont(fontTitle);
+     textContinueIntro.setCharacterSize(60);
+     textContinueIntro.setFillColor(Color::White);
+     textContinueIntro.setString("Press enter to continue");
+
+     textRect = textContinueIntro.getLocalBounds();
+     textContinueIntro.setOrigin(textRect.left +
+                            textRect.width / 2.0f,
+                            textRect.top +
+                            textRect.height / 2.0f);
+     textContinueIntro.setPosition(640, 430);
+
     // Continue
     Text textContinue;
     textContinue.setFont(fontTitle);
@@ -330,20 +386,6 @@ int main()
                            textRect.top +
                            textRect.height / 2.0f);
     textContinue.setPosition(640, 300);
-
-    // Continue intro
-    Text textContinueIntro;
-    textContinueIntro.setFont(fontTitle);
-    textContinueIntro.setCharacterSize(60);
-    textContinueIntro.setFillColor(Color::White);
-    textContinueIntro.setString("Press enter to continue");
-
-    textRect = textContinueIntro.getLocalBounds();
-    textContinueIntro.setOrigin(textRect.left +
-                           textRect.width / 2.0f,
-                           textRect.top +
-                           textRect.height / 2.0f);
-    textContinueIntro.setPosition(640, 430);
 
     // Exit
     Text textExit;
@@ -422,8 +464,8 @@ int main()
     textSoundFx.setPosition(620, 400);
 
     Texture textureWhiteArrow, textureRedArrow;
-    textureRedArrow.loadFromFile("assets/graphics/redArrow.png");
-    textureWhiteArrow.loadFromFile("assets/graphics/whiteArrow.png");
+    textureRedArrow.loadFromFile(m + "assets/graphics/redArrow.png");
+    textureWhiteArrow.loadFromFile(m + "assets/graphics/whiteArrow.png");
 
     RectangleShape arrow;
     arrow.setSize(Vector2f(150,80));
@@ -432,7 +474,7 @@ int main()
 
     // Door
     Texture textureDoor;
-    textureDoor.loadFromFile("assets/graphics/door.png");
+    textureDoor.loadFromFile(m + "assets/graphics/door.png");
 
     Sprite spriteDoor;
     spriteDoor.setTexture(textureDoor);
@@ -442,10 +484,10 @@ int main()
 
     // Sound effects
     SoundBuffer bufferFireboyJump, bufferWatergirlJump, bufferLevelComplete, bufferButtonHover;
-    bufferFireboyJump.loadFromFile( "assets/audio/fireboyJump.ogg");
-    bufferButtonHover.loadFromFile("assets/audio/buttonHover.ogg");
-    bufferWatergirlJump.loadFromFile("assets/audio/watergirlJump.ogg");
-    bufferLevelComplete.loadFromFile("assets/audio/levelComplete.ogg");
+    bufferFireboyJump.loadFromFile(m + "assets/audio/fireboyJump.ogg");
+    bufferButtonHover.loadFromFile(m + "assets/audio/buttonHover.ogg");
+    bufferWatergirlJump.loadFromFile(m + "assets/audio/watergirlJump.ogg");
+    bufferLevelComplete.loadFromFile(m + "assets/audio/levelComplete.ogg");
 
     Sound soundButtonHover(bufferButtonHover);
     Sound soundLevelComplete(bufferLevelComplete);
@@ -453,8 +495,8 @@ int main()
 
     // Music
     Music musicIntro, musicLevel;
-    musicIntro.openFromFile( "assets/audio/intro.ogg");
-    musicLevel.openFromFile( "assets/audio/level.ogg");
+    musicIntro.openFromFile( m + "assets/audio/intro.ogg");
+    musicLevel.openFromFile( m + "assets/audio/level.ogg");
     musicIntro.setLoop(true), musicLevel.setLoop(true);
 
     musicIntro.setVolume(50);
@@ -474,11 +516,11 @@ int main()
 
     // Flags
     bool paused = false;
-    bool started = false;
     bool musicMute = false;
     bool soundFxMute = false;
     bool gameStarted = false;
     bool settingsMenu = false;
+    bool started = false;
     bool hoverExit = false;
     bool hoverStart = false;
     bool hoverArrow = false;
@@ -489,12 +531,9 @@ int main()
     bool hoverMainMenu = false;
     bool hoverMusicMute = false;
     bool hoverSoundFxMute = false;
-    bool pushedFireBoy = false;
-    bool pushedWaterGirl = false;
     bool pressedMusicMute = false;
     bool pressedSoundFxMute = false;
     bool continueFillColorInc = false;
-
     int continueFillColor = 255;
 
     Clock clock;
@@ -502,98 +541,50 @@ int main()
     while (window.isOpen())
     {
         // Check continue fill color increasing
-        if (!continueFillColor) continueFillColorInc = true;
-        else if (continueFillColor == 255) continueFillColorInc = false;
-
+         if (!continueFillColor) continueFillColorInc = true;
+         else if (continueFillColor == 255) continueFillColorInc = false;
+        
+        //check if characters are colliding with borders
+        waterGirl.Inquire();
+        fireBoy.Inquire();
         //Jump cnt increments
         if (fireBoy.jumpCnt < 100) { ++fireBoy.jumpCnt; }
         if (waterGirl.jumpCnt < 100) { ++waterGirl.jumpCnt; }
-
+        
         //speed and clock calculations
-        Time timePerIteration;
         timePerIteration = clock.restart();
 
         float speed = 150;
         float iterationsPerSecond = 1.f / timePerIteration.asSeconds();
-        float pixelsPerIteration = speed / iterationsPerSecond;
-
-        float safe = 5.f;
+        pixelsPerIteration = speed / iterationsPerSecond;
 
         //Resistance
-        for (auto i : platformObjects)
-        {
-            waterGirl.Inquire();
-            //Y-axis
-            if (waterGirl.bounds.intersects(i.getGlobalBounds()))
-            {
-                waterGirl.jumpCnt = jumpFactor + 1;
-                if(waterGirl.dy < i.getPosition().y)
-                {
-                    pushedWaterGirl = false;
-                    waterGirl.move( {0, -gravity} );
-                    waterGirl.groundCheck = 1;
-                }
-            }
-
-            if (fireBoy.bounds.intersects(i.getGlobalBounds()))
-            {
-                pushedFireBoy = false;
-                fireBoy.jumpCnt = jumpFactor + 1;
-                if(fireBoy.dy < i.getPosition().y)
-                {
-                    fireBoy.move({ 0, -gravity });
-                    fireBoy.groundCheck = 1;
-                }
-            }
-
-            //X-axis
-            waterGirl.Inquire();
-            if (waterGirl.bounds.intersects(i.getGlobalBounds()) && waterGirl.dy + 80 - safe >= i.getPosition().y && waterGirl.dx + 80 - safe >= i.getPosition().x)
-            {
-                pushedWaterGirl = true;
-                waterGirl.move({ pixelsPerIteration, 0 });
-            }
-            waterGirl.Inquire();
-            if (waterGirl.bounds.intersects(i.getGlobalBounds()) && waterGirl.dy + 80 - safe >= i.getPosition().y && waterGirl.dx+ safe <= i.getPosition().x + i.getGlobalBounds().width)
-            {
-                pushedWaterGirl = true;
-                waterGirl.move({ -pixelsPerIteration, 0 });
-            }
-            fireBoy.Inquire();
-            if (fireBoy.bounds.intersects(i.getGlobalBounds()) && fireBoy.dy + 80 - safe >= i.getPosition().y && fireBoy.dx + 80 - safe >= i.getPosition().x)
-            {
-                pushedFireBoy = true;
-                fireBoy.move({ pixelsPerIteration, 0 });
-            }
-            if (fireBoy.bounds.intersects(i.getGlobalBounds()) && fireBoy.dy + 80 - safe >= i.getPosition().y && fireBoy.dx + safe <= i.getPosition().x + i.getGlobalBounds().width)
-            {
-                pushedFireBoy = true;
-                fireBoy.move({ -pixelsPerIteration, 0 });
-            }
-        }
-
+        waterGirl.Resist(), fireBoy.Resist();
+        
         waterGirl.move({ 0, gravity });
         fireBoy.move({ 0, gravity });
 
         if (Keyboard::isKeyPressed(Keyboard::Key::D) && !paused && gameStarted)
         {
-            if (!pushedWaterGirl) waterGirl.move({ pixelsPerIteration , 0});
+            if (!waterGirl.pushed) waterGirl.move({ pixelsPerIteration , 0});
         }
         if (Keyboard::isKeyPressed(Keyboard::Key::A) && !paused && gameStarted)
         {
-            if (!pushedWaterGirl) waterGirl.move({-pixelsPerIteration , 0});
+            if (!waterGirl.pushed) waterGirl.move({-pixelsPerIteration , 0});
+        
         }
         if (Keyboard::isKeyPressed(Keyboard::Key::Right) && !paused && gameStarted)
         {
-            if (!pushedFireBoy) fireBoy.move({ pixelsPerIteration , 0});
+            if (!fireBoy.pushed) fireBoy.move({ pixelsPerIteration , 0});
+
         }
         if (Keyboard::isKeyPressed(Keyboard::Key::Left) && !paused && gameStarted)
         {
-            if (!pushedFireBoy) fireBoy.move({ -pixelsPerIteration , 0 });
+            if (!fireBoy.pushed) fireBoy.move({ -pixelsPerIteration , 0 });
         }
         if (Keyboard::isKeyPressed(Keyboard::Key::W) && !paused && gameStarted)
         {
-            if (!pushedWaterGirl && waterGirl.jumpCnt > jumpFactor && waterGirl.ready >= iterationsPerSecond/2 && waterGirl.groundCheck)
+            if (!waterGirl.pushed && waterGirl.jumpCnt > jumpFactor && waterGirl.ready >= iterationsPerSecond/2 && waterGirl.groundCheck)
             {
                 waterGirl.jumpCnt = 0;
                 waterGirl.ready = 0;
@@ -604,7 +595,7 @@ int main()
         }
         if (Keyboard::isKeyPressed(Keyboard::Key::Up) && !paused && gameStarted)
         {
-            if (!pushedFireBoy && fireBoy.jumpCnt > jumpFactor && fireBoy.ready >= iterationsPerSecond/2 && fireBoy.groundCheck)
+            if (!fireBoy.pushed && fireBoy.jumpCnt > jumpFactor && fireBoy.ready >= iterationsPerSecond/2 && fireBoy.groundCheck)
             {
                 fireBoy.jumpCnt = 0;
                 fireBoy.ready = 0;
@@ -630,9 +621,6 @@ int main()
         ++waterGirl.ready;
         ++fireBoy.ready;
 
-        //Side Barriers
-        waterGirl.Inquire();
-        fireBoy.Inquire();
 
         // Check level music
         if (soundLevelComplete.getStatus() != Music::Status::Playing && musicIntro.getStatus() != Music::Status::Playing && !gameStarted && !musicMute)
@@ -673,19 +661,20 @@ int main()
             }
             if (event.type == Event::KeyPressed && event.key.code == Keyboard::Return) {
                 if (!started)
-                {
-                    started = true;
-                    textContinueIntro.setFillColor(Color::White);
-                }
-                else if (!gameStarted)
+              {
+                  started = true;
+                  textContinueIntro.setFillColor(Color::White);
+              }
+                if (!gameStarted)
                 {
                     chron.reset();
                     chron.resume();
                     gameStarted = true;
                     musicIntro.stop();
                     if (musicLevel.getStatus() != Music::Status::Playing)
-                        musicLevel.play();
+                     musicLevel.play();
                 }
+    
             }
             if(event.type == event.MouseButtonReleased && event.mouseButton.button == Mouse::Left)
             {
@@ -739,9 +728,7 @@ int main()
                 }
             }
 
-            // Check if fireboy and Watergirl is still inside the drawn borders
-            fireBoy.Inquire();
-            waterGirl.Inquire();
+        
             // Render characters
             window.draw(fireBoy.playerSprite);
             window.draw(waterGirl.playerSprite);
@@ -752,8 +739,6 @@ int main()
             // Render timer
             window.draw(textTimer);
 
-            // Level ending
-            fireBoy.Inquire(), waterGirl.Inquire();
             if (fireBoy.dx >= 1160 && fireBoy.dy <= 131 && waterGirl.dx >= 1160 && waterGirl.dy <= 131)
             {
                 gameStarted = false;
@@ -835,6 +820,7 @@ int main()
             }
             window.draw(textSettings);
         }
+
         if (paused && !settingsMenu && started)
         {
             // Render text paused
@@ -1016,48 +1002,50 @@ int main()
             window.draw(state2);
             window.draw(arrow);
         }
-
-        // Render intro
         if (!started)
-        {
-            bool currentlyHovering = false;
+         {
+             bool currentlyHovering = false;
 
-            // Continue button
-            if (mouse_xAxis >= 235 && mouse_xAxis <= 1045 && mouse_yAxis >= 405.5 && mouse_yAxis <= 454.5)
-            {
-                if (!hoverContinueIntro)
-                {
-                    soundButtonHover.play();
-                    hoverContinueIntro = true;
-                }
-                currentlyHovering = true;
-                if (Mouse::isButtonPressed(Mouse::Left))
-                    started = true;
-            }
-            else {
-                hoverContinueIntro = false;
-                textContinueIntro.setFillColor(Color::White);
-            }
+             // Continue button
+             if (mouse_xAxis >= 235 && mouse_xAxis <= 1045 && mouse_yAxis >= 405.5 && mouse_yAxis <= 454.5)
+             {
+                 if (!hoverContinueIntro)
+                 {
+                     soundButtonHover.play();
+                     hoverContinueIntro = true;
+                 }
+                 currentlyHovering = true;
+                 if (Mouse::isButtonPressed(Mouse::Left))
+                     started = true;
+             }
+             else {
+                 hoverContinueIntro = false;
+                 textContinueIntro.setFillColor(Color::White);
+             }
 
-            if (currentlyHovering)
-            {
-                Color colorContinue(0, 255, 0, continueFillColor -= ((continueFillColorInc) ? -5 : 5));
-                textContinueIntro.setFillColor(colorContinue);
-            }
-            else
-            {
-                Color colorContinue(255, 255, 255, continueFillColor -= ((continueFillColorInc) ? -5 : 5));
-                textContinueIntro.setFillColor(colorContinue);
-            }
+             if (currentlyHovering)
+             {
+                 Color colorContinue(0, 255, 0, continueFillColor -= ((continueFillColorInc) ? -5 : 5));
+                 textContinueIntro.setFillColor(colorContinue);
+             }
+             else
+             {
+                 Color colorContinue(255, 255, 255, continueFillColor -= ((continueFillColorInc) ? -5 : 5));
+                 textContinueIntro.setFillColor(colorContinue);
+             }
 
-            window.draw(textIntro);
-            window.draw(textContinueIntro);
-        }
+             window.draw(textIntro);
+             window.draw(textContinueIntro);
+         }
         window.display();
     }
 
     return 0;
 }
+
+
+
+
 
 
 
