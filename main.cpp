@@ -75,22 +75,21 @@ float pixelsPerIteration;
 float safe = 5.f;
 
 // Levels map
-String levelsMap [5][9] =
-        {
-                // Level one
-                {
-                        "                ",
-                        "                ",
-                        "MMR    LMMMMMMMR",
-                        "                ",
-                        "MMMMMMMR        ",
-                        "                ",
-                        "    LMMMMMMMMMMR",
-                        "                ",
-                        "                ",
-                },
-        };
-
+String levelsMap[5][9] =
+{
+    // Level one
+    {
+            "                ",
+            "                ",
+            "            LMMR",
+            "          M     ",
+            "        M       ",
+            "      M         ",
+            "    M           ",
+            "  M             ",
+            "                ",
+    },
+};
 // Creating Objects for platforms
 void FplatformObjects()
 {
