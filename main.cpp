@@ -135,12 +135,12 @@ int main()
                     {
                             "                ",
                             "                ",
-                            "MMR    LMMMMMMMR",
-                            "                ",
-                            "MMMMMMMR        ",
-                            "                ",
-                            "    LMMMMMMMMMMR",
-                            "                ",
+                            "            LMMR",
+                            "          M     ",
+                            "        M       ",
+                            "      M         ",
+                            "    M           ",
+                            "  M             ",
                             "                ",
                     },
             };
@@ -238,6 +238,21 @@ int main()
                         textRect.height / 2.0f);
     textTitle.setPosition(640, 100);
 
+    // Intro text
+    loadText();
+    Text textIntro;
+    textIntro.setFont(fontTitle);
+    textIntro.setCharacterSize(30);
+    textIntro.setFillColor(Color::White);
+    textIntro.setString(introText);
+
+    textRect = textIntro.getLocalBounds();
+    textIntro.setOrigin(textRect.left +
+                        textRect.width / 2.0f,
+                        textRect.top +
+                        textRect.height / 2.0f);
+    textIntro.setPosition(640, 200);
+
     // Pause background
     Texture texturePauseBackground;
     texturePauseBackground.loadFromFile("assets/graphics/pauseBackground.png");
@@ -315,6 +330,20 @@ int main()
                            textRect.top +
                            textRect.height / 2.0f);
     textContinue.setPosition(640, 300);
+
+    // Continue intro
+    Text textContinueIntro;
+    textContinueIntro.setFont(fontTitle);
+    textContinueIntro.setCharacterSize(60);
+    textContinueIntro.setFillColor(Color::White);
+    textContinueIntro.setString("Press enter to continue");
+
+    textRect = textContinueIntro.getLocalBounds();
+    textContinueIntro.setOrigin(textRect.left +
+                           textRect.width / 2.0f,
+                           textRect.top +
+                           textRect.height / 2.0f);
+    textContinueIntro.setPosition(640, 430);
 
     // Exit
     Text textExit;
@@ -445,6 +474,7 @@ int main()
 
     // Flags
     bool paused = false;
+    bool started = false;
     bool musicMute = false;
     bool soundFxMute = false;
     bool gameStarted = false;
@@ -454,6 +484,7 @@ int main()
     bool hoverArrow = false;
     bool hoverRetry = false;
     bool hoverContinue = false;
+    bool hoverContinueIntro = false;
     bool hoverSettings = false;
     bool hoverMainMenu = false;
     bool hoverMusicMute = false;
@@ -462,11 +493,18 @@ int main()
     bool pushedWaterGirl = false;
     bool pressedMusicMute = false;
     bool pressedSoundFxMute = false;
+    bool continueFillColorInc = false;
+
+    int continueFillColor = 255;
 
     Clock clock;
     // Main game loop
     while (window.isOpen())
     {
+        // Check continue fill color increasing
+        if (!continueFillColor) continueFillColorInc = true;
+        else if (continueFillColor == 255) continueFillColorInc = false;
+
         //Jump cnt increments
         if (fireBoy.jumpCnt < 100) { ++fireBoy.jumpCnt; }
         if (waterGirl.jumpCnt < 100) { ++waterGirl.jumpCnt; }
@@ -634,15 +672,20 @@ int main()
                     paused = true, chron.pause();
             }
             if (event.type == Event::KeyPressed && event.key.code == Keyboard::Return) {
-                if (!gameStarted)
+                if (!started)
+                {
+                    started = true;
+                    textContinueIntro.setFillColor(Color::White);
+                }
+                else if (!gameStarted)
                 {
                     chron.reset();
                     chron.resume();
+                    gameStarted = true;
+                    musicIntro.stop();
+                    if (musicLevel.getStatus() != Music::Status::Playing)
+                        musicLevel.play();
                 }
-                gameStarted = true;
-                musicIntro.stop();
-                if (musicLevel.getStatus() != Music::Status::Playing)
-                    musicLevel.play();
             }
             if(event.type == event.MouseButtonReleased && event.mouseButton.button == Mouse::Left)
             {
@@ -726,7 +769,7 @@ int main()
                 window.draw(spritePauseBackground);
             }
         }
-        if (!gameStarted && !paused && !settingsMenu)
+        if (!gameStarted && !paused && !settingsMenu && started)
         {
             // Render text title
             window.draw(textTitle);
@@ -754,7 +797,7 @@ int main()
             }
             window.draw(textStart);
         }
-        if ((paused || !gameStarted) && !settingsMenu)
+        if ((paused || !gameStarted) && !settingsMenu && started)
         {
             // Exit button
             if (mouse_xAxis >= 1145 && mouse_xAxis <= 1250 && mouse_yAxis >= 655 && mouse_yAxis <= 705)
@@ -792,7 +835,7 @@ int main()
             }
             window.draw(textSettings);
         }
-        if (paused && !settingsMenu)
+        if (paused && !settingsMenu && started)
         {
             // Render text paused
             window.draw(textPaused);
@@ -857,7 +900,7 @@ int main()
             }
             window.draw(textMainMenu);
         }
-        if (settingsMenu)
+        if (settingsMenu && started)
         {
             Text state1, state2;
 
@@ -972,6 +1015,43 @@ int main()
             window.draw(state1);
             window.draw(state2);
             window.draw(arrow);
+        }
+
+        // Render intro
+        if (!started)
+        {
+            bool currentlyHovering = false;
+
+            // Continue button
+            if (mouse_xAxis >= 235 && mouse_xAxis <= 1045 && mouse_yAxis >= 405.5 && mouse_yAxis <= 454.5)
+            {
+                if (!hoverContinueIntro)
+                {
+                    soundButtonHover.play();
+                    hoverContinueIntro = true;
+                }
+                currentlyHovering = true;
+                if (Mouse::isButtonPressed(Mouse::Left))
+                    started = true;
+            }
+            else {
+                hoverContinueIntro = false;
+                textContinueIntro.setFillColor(Color::White);
+            }
+
+            if (currentlyHovering)
+            {
+                Color colorContinue(0, 255, 0, continueFillColor -= ((continueFillColorInc) ? -5 : 5));
+                textContinueIntro.setFillColor(colorContinue);
+            }
+            else
+            {
+                Color colorContinue(255, 255, 255, continueFillColor -= ((continueFillColorInc) ? -5 : 5));
+                textContinueIntro.setFillColor(colorContinue);
+            }
+
+            window.draw(textIntro);
+            window.draw(textContinueIntro);
         }
         window.display();
     }
