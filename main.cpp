@@ -66,7 +66,8 @@ void loadText()
 
 
 //  Declaring fireBoy and waterGirl sprites and textures
-
+//Test
+cout << "test";
 string m = "/Users/pluto/Desktop/Fireboy-And-Watergirl/";
 int jumpFactor = 40;
 float gravity = 6.5;
