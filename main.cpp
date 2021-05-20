@@ -45,7 +45,8 @@ using namespace sftools;
 
 // decraing text strings
 string introText = "";
-string m = "/Users/pluto/Desktop/Fireboy-And-Watergirl/";
+string mHolder = "/Users/pluto/Desktop/Fireboy-And-Watergirl/";
+string m = "";
 // loading intro text
 void loadText()
 {
@@ -60,10 +61,9 @@ void loadText()
             getline(introFile, temp);
             introText += temp;
             introText += '\n';
-        };
+        }
     }
 }
-
 // Levels map
 String levelsMap [5][9] =
         {
