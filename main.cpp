@@ -261,8 +261,6 @@ int main()
     Player fireBoy(fireBoyTexture,1), waterGirl(waterGirlTexture,2);
     
     //Pools Textures
-    Texture waterLeftText, waterMidText, waterRightText, lavaLeftText, lavaMidText, lavaRightText, acidLeftText, acidMidText, acidRightText;
-    Texture smallLavaText, smallAcidText, smallWaterText;
     waterLeftText.loadFromFile(m + "assets/graphics/waterLeft.png");
     waterMidText.loadFromFile(m + "assets/graphics/waterMid.png");
     waterRightText.loadFromFile(m + "assets/graphics/waterRight.png");
@@ -272,7 +270,7 @@ int main()
     acidLeftText.loadFromFile(m + "assets/graphics/acidLeft.png");
     acidMidText.loadFromFile(m + "assets/graphics/acidMid.png");
     acidRightText.loadFromFile(m + "assets/graphics/acidRight.png");
-    smallWaterText.loadFromFile(m + "assets/graphics/SmallWater.png");
+    smallWaterText.loadFromFile(m + "assets/graphics/smallWater.png");
     smallAcidText.loadFromFile(m + "assets/graphics/smallAcid.png");
     smallLavaText.loadFromFile(m + "assets/graphics/smallLava.png");
     
