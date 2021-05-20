@@ -907,8 +907,9 @@ int main()
         {
             window.draw(enterYourNameRectangle);
             window.draw(enterYourNameRectangle2);
-            if(event.type == Event::KeyReleased && event.key.code == Keyboard::Backspace && !player1Name.empty())
+            if(event.type == sf::Event::TextEntered && event.text.unicode == 8 && !player1Name.empty() && canType)
             {
+                canType = false;
                 player1Name.pop_back();
                 player1Text.setString(player1Name);
                 window.draw(player1Text);
@@ -948,9 +949,9 @@ int main()
         {
             window.draw(enterYourNameRectangle);
             window.draw(enterYourNameRectangle2);
-            if(event.type == Event::KeyReleased && event.key.code == Keyboard::Backspace  && !player2Name.empty())
+            if(event.type == sf::Event::TextEntered && event.text.unicode == 8 && !player2Name.empty() && canType)
             {
-
+                canType = false;
                 player2Name.pop_back();
                 player2Text.setString(player2Name);
                 window.draw(player2Text);
