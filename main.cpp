@@ -99,7 +99,7 @@ map<pair<string, string>, vector<int>> currentRecords;
 
 int level = 0;
 vector<RectangleShape> platformObjects;
-bool curPlatformObjectLevel = 100;
+int curPlatformObjectLevel = 100;
 
 void fillPlatformObjects()
 {
