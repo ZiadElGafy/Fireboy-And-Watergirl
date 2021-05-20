@@ -99,7 +99,7 @@ map<pair<string, string>, vector<int>> currentRecords;
 
 int level = 0;
 vector<RectangleShape> platformObjects;
-int curPlatformObjectLevel = 100;
+bool curPlatformObjectLevel = 100;
 
 void fillPlatformObjects()
 {
@@ -601,6 +601,7 @@ int main()
     bool continueFillColorInc = false;
     bool enterYourNameFillColorInc = false;
     bool levelInquire = false;
+    bool canType = true;
 
     int continueFillColor = 255;
     int enterYourNameFillColor = 255;
@@ -899,6 +900,8 @@ int main()
             }
         }
 
+        if(event.type == Event::KeyReleased)
+            canType = true;
         // Player 1 Name
         if(!gameStarted && !paused && !settingsMenu && started && !bothPlayers && player1Input && !player2Input && !levelInquire)
         {
@@ -914,10 +917,12 @@ int main()
             else if(player1Name.size() >= 30)
             { //
             }
-            else if(event.type == Event::TextEntered && event.text.unicode <= 128 && event.text.unicode != 8 && !Keyboard::isKeyPressed(Keyboard::Key::Return))
+            else if(event.type == sf::Event::TextEntered && event.text.unicode <= 128 && event.text.unicode != 8 && !Keyboard::isKeyPressed(Keyboard::Key::Return) && canType)
             {
+                canType = false;
                 player1Name += tolower(event.text.unicode);
                 player1Text.setString(player1Name);
+
             }
             // Player has entered player 1 name
             if(Keyboard::isKeyPressed(Keyboard::Key::Return) && !player1Name.empty())
@@ -945,6 +950,7 @@ int main()
             window.draw(enterYourNameRectangle2);
             if(event.type == Event::KeyReleased && event.key.code == Keyboard::Backspace  && !player2Name.empty())
             {
+
                 player2Name.pop_back();
                 player2Text.setString(player2Name);
                 window.draw(player2Text);
@@ -953,10 +959,12 @@ int main()
             else if(player2Name.size() >= 30)
             { //
             }
-            else if(event.type == sf::Event::TextEntered && event.text.unicode <= 128 && event.text.unicode != 8 && !Keyboard::isKeyPressed(Keyboard::Key::Return))
+            else if(event.type == sf::Event::TextEntered && event.text.unicode <= 128 && event.text.unicode != 8 && !Keyboard::isKeyPressed(Keyboard::Key::Return) && canType)
             {
+
                 player2Name += tolower(event.text.unicode);
                 player2Text.setString(player2Name);
+
             }
             // Player has entered player 2 name
             if(Keyboard::isKeyPressed(Keyboard::Key::Return) && !player2Name.empty())
@@ -1323,5 +1331,7 @@ int main()
 
     return 0;
 }
+
+
 
 
