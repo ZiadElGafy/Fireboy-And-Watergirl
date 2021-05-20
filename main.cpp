@@ -200,6 +200,7 @@ void updateData(string n1,string n2, int lvl , int sec )
     writeData(data);
 }
 
+vector<int> guestRecords(20, 0);
 map<pair<string,string> , vector<int>> currentRecords;
 void initializeCurrentRecords()
 {
@@ -703,6 +704,20 @@ int main()
                        textRect.height / 2.0f);
     textExit.setPosition(1200, 680);
 
+    // Guest
+    Text textGuest;
+    textGuest.setFont(fontTitle);
+    textGuest.setString("play as a guest");
+    textGuest.setCharacterSize(50);
+    textGuest.setFillColor(Color::White);
+
+    textRect = textGuest.getLocalBounds();
+    textGuest.setOrigin(textRect.left +
+                       textRect.width / 2.0f,
+                       textRect.top +
+                       textRect.height / 2.0f);
+    textGuest.setPosition(640, 575);
+
     // Level 1 (Test)
     Text textLevel1;
     textLevel1.setFont(fontTitle);
@@ -838,6 +853,7 @@ int main()
 
     // Flags
     bool paused = false;
+    bool guest = false;
     bool started = false;
     bool musicMute = false;
     bool soundFxMute = false;
@@ -857,6 +873,7 @@ int main()
     bool hoverSettings = false;
     bool hoverMainMenu = false;
     bool hoverMusicMute = false;
+    bool hoverGuest = false;
     bool hoverSoundFxMute = false;
     bool pushedFireBoy = false;
     bool pushedWaterGirl = false;
@@ -1173,8 +1190,15 @@ int main()
                     if (!soundFxMute) soundLevelComplete.play();
                     fireBoy.Restart();
                     waterGirl.Restart();
-                    updateData(player1Name, player2Name, level, seconds + minutes * 60);
-                    initializeCurrentRecords();
+                    if (!guest)
+                    {
+                        updateData(player1Name, player2Name, level, seconds + minutes * 60);
+                        initializeCurrentRecords();
+                    }
+                    else
+                    {
+                        guestRecords[level] = seconds + minutes * 60;
+                    }
                 }
             }
 
@@ -1187,6 +1211,31 @@ int main()
 
         if(event.type == Event::KeyReleased)
             canType = true;
+
+        // Guest
+        if (!gameStarted && !paused && !settingsMenu && started && !bothPlayers && !levelInquire)
+        {
+            if (mouse_xAxis >= 412.5 && mouse_xAxis <= 867.5 && mouse_yAxis >= 554 && mouse_yAxis <= 596)
+            {
+                if (!hoverGuest)
+                {
+                    soundButtonHover.play();
+                    hoverGuest = true;
+                }
+                textGuest.setFillColor(Color::Green);
+                if (Mouse::isButtonPressed(Mouse::Left))
+                {
+                    player1Input = true, player2Input = true;
+                    bothPlayers = true, guest = true;
+                }
+            }
+            else {
+                hoverGuest = false;
+                textGuest.setFillColor(Color::White);
+            }
+            window.draw(textGuest);
+        }
+
         // Player 1 Name
         if(!gameStarted && !paused && !settingsMenu && started && !bothPlayers && player1Input && !player2Input && !levelInquire)
         {
@@ -1332,22 +1381,25 @@ int main()
             }
             // Level 2
             window.draw(textLevel2);
-            if (currentRecords[{currentPlayer1, currentPlayer2}].size() > 0 && currentRecords[{currentPlayer1, currentPlayer2}][0] && !gameStarted && mouse_xAxis >= 237 && mouse_xAxis <= 1043 && mouse_yAxis >= 418.5 && mouse_yAxis <= 481.5)
+            if (!gameStarted && mouse_xAxis >= 237 && mouse_xAxis <= 1043 && mouse_yAxis >= 418.5 && mouse_yAxis <= 481.5)
             {
-                if (!hoverLevel2)
+                if ((!guest && currentRecords[{currentPlayer1, currentPlayer2}].size() > 0 && currentRecords[{currentPlayer1, currentPlayer2}][0]) || (guest && guestRecords[0]))
                 {
-                    soundButtonHover.play();
-                    hoverLevel2 = true;
-                }
-                textLevel2.setFillColor(Color::Green);
-                if (Mouse::isButtonPressed(Mouse::Left))
-                {
-                    level = 1;
-                    spriteDoor.setPosition(120, 95);
-                    gameStarted = true, levelInquire = false;
-                    musicIntro.stop();
-                    musicLevel.play();
-                    chron.reset(), chron.resume();
+                    if (!hoverLevel2)
+                    {
+                        soundButtonHover.play();
+                        hoverLevel2 = true;
+                    }
+                    textLevel2.setFillColor(Color::Green);
+                    if (Mouse::isButtonPressed(Mouse::Left))
+                    {
+                        level = 1;
+                        spriteDoor.setPosition(120, 95);
+                        gameStarted = true, levelInquire = false;
+                        musicIntro.stop();
+                        musicLevel.play();
+                        chron.reset(), chron.resume();
+                    }
                 }
             }
             else {
