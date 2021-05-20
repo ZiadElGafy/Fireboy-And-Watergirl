@@ -1432,6 +1432,8 @@ int main()
             }
         }
 
+        bool oneDead = (fireBoy.isDead || waterGirl.isDead);
+
         if (!gameStarted || paused || settingsMenu)
         {
             // Exit button
@@ -1457,7 +1459,7 @@ int main()
         {
 
             // Settings Button
-            if (mouse_xAxis >= 518 && mouse_xAxis <= 760 && mouse_yAxis >= 483 && mouse_yAxis <= 520)
+            if (mouse_xAxis >= 518 && mouse_xAxis <= 760 && mouse_yAxis >= ((oneDead) ? 383 : 483) && mouse_yAxis <= ((oneDead) ? 420 : 520))
             {
                 if (!hoverSettings)
                 {
@@ -1472,6 +1474,8 @@ int main()
                 hoverSettings = false;
                 textSettings.setFillColor(Color::White);
             }
+            if (oneDead) textSettings.setPosition(640, 400);
+            else textSettings.setPosition(640, 500);
             window.draw(textSettings);
         }
         if (paused && !settingsMenu && started && !levelInquire)
@@ -1483,25 +1487,27 @@ int main()
             if (fireBoy.isDead || waterGirl.isDead) window.draw(textGameOver);
 
             // Continue button
-            if (mouse_xAxis >= 278.5 && mouse_xAxis <= 1001.5 && mouse_yAxis >= 278.5 && mouse_yAxis <= 321.5)
+            if (!fireBoy.isDead && !waterGirl.isDead)
             {
-                if (!hoverContinue)
+                if (mouse_xAxis >= 278.5 && mouse_xAxis <= 1001.5 && mouse_yAxis >= 278.5 && mouse_yAxis <= 321.5)
                 {
-                    soundButtonHover.play();
-                    hoverContinue = true;
+                    if (!hoverContinue)
+                    {
+                        soundButtonHover.play();
+                        hoverContinue = true;
+                    }
+                    textContinue.setFillColor(Color::Green);
+                    if (Mouse::isButtonPressed(Mouse::Left))
+                        paused = false, chron.resume();
                 }
-                textContinue.setFillColor(Color::Green);
-                if (Mouse::isButtonPressed(Mouse::Left))
-                    paused = false, chron.resume();
+                else {
+                    hoverContinue = false;
+                    textContinue.setFillColor(Color::White);
+                }
+                window.draw(textContinue);
             }
-            else {
-                hoverContinue = false;
-                textContinue.setFillColor(Color::White);
-            }
-            window.draw(textContinue);
-
             // Retry level Button
-            if (mouse_xAxis >= 476.5 && mouse_xAxis <= 803.5 && mouse_yAxis >= 379 && mouse_yAxis <= 421)
+            if (mouse_xAxis >= 476.5 && mouse_xAxis <= 803.5 && mouse_yAxis >= ((oneDead) ? 279 : 379) && mouse_yAxis <= ((oneDead) ? 321 : 421))
             {
                 if (!hoverRetry)
                     hoverRetry = true;
@@ -1518,10 +1524,12 @@ int main()
                 hoverRetry = false;
                 textRetryLevel.setFillColor(Color::White);
             }
+            if (oneDead) textRetryLevel.setPosition(640, 300);
+            else textRetryLevel.setPosition(640, 400);
             window.draw(textRetryLevel);
 
             // Main menu button
-            if (mouse_xAxis >= 516.5 && mouse_xAxis <= 763.5 && mouse_yAxis >= 578.5 && mouse_yAxis <= 621.5)
+            if (mouse_xAxis >= 516.5 && mouse_xAxis <= 763.5 && mouse_yAxis >= ((oneDead) ? 478.5 : 578.5) && mouse_yAxis <= ((oneDead) ? 521.5 : 621.5))
             {
                 if (!hoverMainMenu)
                 {
@@ -1540,6 +1548,8 @@ int main()
                 hoverMainMenu = false;
                 textMainMenu.setFillColor(Color::White);
             }
+            if (oneDead) textMainMenu.setPosition(640, 500);
+            else textMainMenu.setPosition(640, 600);
             window.draw(textMainMenu);
         }
         if (settingsMenu && started && !levelInquire)
