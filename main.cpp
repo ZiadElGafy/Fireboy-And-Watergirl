@@ -45,13 +45,13 @@ using namespace sftools;
 
 // decraing text strings
 string introText = "";
-
+string m = "";
 // loading intro text
 void loadText()
 {
     string temp;
     ifstream introFile;
-    introFile.open("assets/textData/introText.txt");
+    introFile.open(m + "assets/textData/introText.txt");
 
     if (!introFile.fail())
     {
@@ -64,14 +64,87 @@ void loadText()
     }
 }
 
+// Levels map
+String levelsMap [5][9] =
+        {
+                // Level 1
+                {
+                        "                ",
+                        "                ",
+                        "            LMMR",
+                        "          M     ",
+                        "        M       ",
+                        "      M         ",
+                        "    M           ",
+                        "  M             ",
+                        "                ",
+                },
+                // Level 2
+                {
+                        "                ",
+                        "                ",
+                        "LMMR            ",
+                        "     M          ",
+                        "       M        ",
+                        "         M      ",
+                        "           M    ",
+                        "             M  ",
+                        "                ",
+                },
+        };
+
+
+// map<<player1Name, player2Name>, vector<scores>>
+map<pair<string, string>, vector<int>> currentRecords;
+
+int level = 0;
+vector<RectangleShape> platformObjects;
+bool curPlatformObjectLevel = 100;
+
+void fillPlatformObjects()
+{
+    Color color(255, 255, 255, 100);
+    int streak = 0;
+    for (int i = 0; i < 9; i++)
+    {
+        for (int j = 0; j < 16; j++)
+        {
+            if (levelsMap[level][i][j] != ' ')
+            {
+                streak++;
+            }
+            else
+            {
+                if (streak)
+                {
+                    float start = (j - streak) * 80 + 40, end = start+(80*streak);
+                    RectangleShape obj({end-start-5, 40});
+                    obj.setPosition({start, (float)(40 + 80 * i) });
+                    obj.setFillColor(color);
+                    platformObjects.push_back(obj);
+                    streak = 0;
+                }
+            }
+        }
+        if(streak)
+        {
+            float start = (15 - streak) * 80 + 40 + 80, end = start + (80 * streak);
+            RectangleShape obj({ end - start, 40 });
+            obj.setPosition({ start, (float)(40 + 80 * i) });
+            obj.setFillColor(color);
+            platformObjects.push_back(obj);
+            streak = 0;
+        }
+    }
+
+}
 
 //  Declaring fireBoy and waterGirl sprites and textures
-
-string m = "/Users/pluto/Desktop/Fireboy-And-Watergirl/";
 int jumpFactor = 40;
 float gravity = 6.5;
 Texture fireBoyTexture, waterGirlTexture;
-class Player
+
+struct Player
 {
 public:
     int jumpCnt = jumpFactor, ready = 1, groundCheck = 1;
@@ -112,84 +185,36 @@ public:
 
 int main()
 {
+    currentRecords[{"a", "b"}].push_back(10);
     RenderWindow window(VideoMode(1280, 720), "Fireboy and Watergirl", Style::Titlebar | Style::Close);
     window.setFramerateLimit(60);
 
     // Declaring characters
-    fireBoyTexture.loadFromFile("assets/graphics/fireBoy.png");
-    waterGirlTexture.loadFromFile("assets/graphics/waterGirl.png");
+    fireBoyTexture.loadFromFile(m + "assets/graphics/fireBoy.png");
+    waterGirlTexture.loadFromFile(m + "assets/graphics/waterGirl.png");
     Player fireBoy(fireBoyTexture), waterGirl(waterGirlTexture);
+
+    // Ground
+    RectangleShape ground({ 1280, 1 });
+    ground.setPosition({ 0, 680 });
 
     const int H = 9, W = 16;
     // Background
     Texture textureBackground;
-    textureBackground.loadFromFile("assets/graphics/backGroundBrick.png");
+    textureBackground.loadFromFile(m + "assets/graphics/backGroundBrick.png");
 
     RectangleShape spriteBackground(Vector2f(80, 40));
     spriteBackground.setTexture(&textureBackground);
 
-    // Levels map
-    String levelsMap [5][9] =
-            {
-                    // Level one
-                    {
-                            "             M  ",
-                            "                ",
-                            "            LMMR",
-                            "          M     ",
-                            "        M       ",
-                            "      M         ",
-                            "    L           ",
-                            "  M             ",
-                            "                ",
-                    },
-            };
-
-    // Creating Objects for platforms
-    Color color(255, 255, 255, 100);
-    vector<RectangleShape> platformObjects;
-    int streak = 0;
-    for (int i = 0; i < 9; i++)
-    {
-        for (int j = 0; j < 16; j++)
-        {
-            if (levelsMap[0][i][j] != ' ')
-            {
-                streak++;
-            }
-            else
-            {
-                if (streak)
-                {
-                    float start = (j - streak) * 80 + 40, end = start+(80*streak);
-                    RectangleShape obj({end-start-5, 40});
-                    obj.setPosition({start, (float)(40 + 80 * i) });
-                    obj.setFillColor(color);
-                    platformObjects.push_back(obj);
-                    streak = 0;
-                }
-            }
-        }
-        if(streak)
-        {
-            float start = (15 - streak) * 80 + 40 + 80, end = start + (80 * streak);
-            RectangleShape obj({ end - start, 40 });
-            obj.setPosition({ start, (float)(40 + 80 * i) });
-            obj.setFillColor(color);
-            platformObjects.push_back(obj);
-            streak = 0;
-        }
-    }
-
-    RectangleShape ground({ 1280, 1 });
-    ground.setPosition({ 0, 680 });
-    platformObjects.push_back(ground);
+    // Asking for players' names
+    string player1Name,player2Name;
+    Text player1Text,player2Text;
 
     // Borders
     Texture textureSideBorder, textureBottomBorder, textureTopBorder;
-    textureTopBorder.loadFromFile("assets/graphics/topBorder.png");
-    textureSideBorder.loadFromFile("assets/graphics/sideBorder.png");
-    textureBottomBorder.loadFromFile("assets/graphics/bottomBorder.png");
+    textureTopBorder.loadFromFile(m + "assets/graphics/topBorder.png");
+    textureSideBorder.loadFromFile(m + "assets/graphics/sideBorder.png");
+    textureBottomBorder.loadFromFile(m + "assets/graphics/bottomBorder.png");
 
     // 0 -> Top border, 1 -> Bottom border, 2 -> Left border, 3 -> Right border
     RectangleShape borders[4];
@@ -207,23 +232,23 @@ int main()
 
     // Stones
     Texture textureStoneMid;
-    textureStoneMid.loadFromFile("assets/graphics/stoneMid.png");
+    textureStoneMid.loadFromFile(m + "assets/graphics/stoneMid.png");
     RectangleShape spriteStoneMid(Vector2f(80.f, 40.f));
     spriteStoneMid.setTexture(&textureStoneMid);
 
     Texture textureStoneLeft;
-    textureStoneLeft.loadFromFile("assets/graphics/stoneLeft.png");
+    textureStoneLeft.loadFromFile(m + "assets/graphics/stoneLeft.png");
     RectangleShape spriteStoneLeft(Vector2f(80.f, 40.f));
     spriteStoneLeft.setTexture(&textureStoneLeft);
 
     Texture textureStoneRight;
-    textureStoneRight.loadFromFile( "assets/graphics/stoneRight.png");
+    textureStoneRight.loadFromFile(m + "assets/graphics/stoneRight.png");
     RectangleShape spriteStoneRight(Vector2f(80.f, 40.f));
     spriteStoneRight.setTexture(&textureStoneRight);
 
     // Title
     Font fontTitle;
-    fontTitle.loadFromFile("assets/fonts/KOMIKAP_.ttf");
+    fontTitle.loadFromFile(m + "assets/fonts/KOMIKAP_.ttf");
 
     Text textTitle;
     textTitle.setFont(fontTitle);
@@ -237,6 +262,64 @@ int main()
                         textRect.top +
                         textRect.height / 2.0f);
     textTitle.setPosition(640, 100);
+
+    //Enter your name guide
+    Text textEnterYourName;
+    textEnterYourName.setFont(fontTitle);
+
+    textEnterYourName.setFillColor(Color::White);
+
+    textEnterYourName.setCharacterSize(50);
+    textEnterYourName.setString("Enter player 1 name:");
+    textRect = textEnterYourName.getLocalBounds();
+    textEnterYourName.setOrigin(textRect.left +
+                                textRect.width / 2.0f,
+                                textRect.top +
+                                textRect.height / 2.0f);
+    textEnterYourName.setPosition(640,230);
+
+    // Player 1 name
+    player1Text.setFont(fontTitle);
+
+    player1Text.setFillColor(Color::White);
+    textRect = player1Text.getLocalBounds();
+    player1Text.setOrigin(textRect.left +
+                          textRect.width / 2.0f,
+                          textRect.top +
+                          textRect.height / 2.0f);
+
+    player1Text.setPosition(640,350);
+    player1Text.setCharacterSize(40);
+
+    // Player 2 name
+    player2Text.setFont(fontTitle);
+    player2Text.setFillColor(Color::White);
+    textRect = player2Text.getLocalBounds();
+    player2Text.setPosition(640,450);
+    player2Text.setOrigin(textRect.left +
+                          textRect.width / 2.0f,
+                          textRect.top +
+                          textRect.height / 2.0f);
+
+    player2Text.setCharacterSize(40);
+
+    // Players name input boxes
+    RectangleShape enterYourNameRectangle;
+    enterYourNameRectangle.setSize(Vector2f(910,45));
+
+    Color color2 (255,255,255,0);
+    enterYourNameRectangle.setFillColor(color2);
+    enterYourNameRectangle.setOutlineThickness(5);
+    enterYourNameRectangle.setOutlineColor(Color::White);
+    textRect = enterYourNameRectangle.getLocalBounds();
+    enterYourNameRectangle.setOrigin(textRect.left +
+                                     textRect.width / 2.0f,
+                                     textRect.top +
+                                     textRect.height / 2.0f);
+    enterYourNameRectangle.setPosition(640, 350);
+
+    RectangleShape enterYourNameRectangle2 = enterYourNameRectangle;
+    enterYourNameRectangle2.setPosition(640, 450);
 
     // Intro text
     loadText();
@@ -255,7 +338,7 @@ int main()
 
     // Pause background
     Texture texturePauseBackground;
-    texturePauseBackground.loadFromFile("assets/graphics/pauseBackground.png");
+    texturePauseBackground.loadFromFile(m + "assets/graphics/pauseBackground.png");
 
     Sprite spritePauseBackground;
     spritePauseBackground.setTexture(texturePauseBackground);
@@ -280,7 +363,7 @@ int main()
     textStart.setFont(fontTitle);
     textStart.setCharacterSize(50);
     textStart.setFillColor(Color::White);
-    textStart.setString("Press enter to start");
+    textStart.setString("Start");
 
     textRect = textStart.getLocalBounds();
     textStart.setOrigin(textRect.left +
@@ -310,19 +393,19 @@ int main()
     textRetryLevel.setFillColor(Color::White);
     textRetryLevel.setString("Retry Level");
 
-    textRect = textMainMenu.getLocalBounds();
+    textRect = textRetryLevel.getLocalBounds();
     textRetryLevel.setOrigin(textRect.left +
                              textRect.width / 2.0f,
                              textRect.top +
                              textRect.height / 2.0f);
-    textRetryLevel.setPosition(610, 400);
+    textRetryLevel.setPosition(640, 400);
 
     // Continue
     Text textContinue;
     textContinue.setFont(fontTitle);
     textContinue.setCharacterSize(50);
     textContinue.setFillColor(Color::White);
-    textContinue.setString("Press escape to continue");
+    textContinue.setString("Continue");
 
     textRect = textContinue.getLocalBounds();
     textContinue.setOrigin(textRect.left +
@@ -336,7 +419,7 @@ int main()
     textContinueIntro.setFont(fontTitle);
     textContinueIntro.setCharacterSize(60);
     textContinueIntro.setFillColor(Color::White);
-    textContinueIntro.setString("Press enter to continue");
+    textContinueIntro.setString("Continue");
 
     textRect = textContinueIntro.getLocalBounds();
     textContinueIntro.setOrigin(textRect.left +
@@ -358,6 +441,25 @@ int main()
                        textRect.top +
                        textRect.height / 2.0f);
     textExit.setPosition(1200, 680);
+
+    // Level 1 (Test)
+    Text textLevel1;
+    textLevel1.setFont(fontTitle);
+    textLevel1.setString("Level 1 (For testing)");
+    textLevel1.setCharacterSize(70);
+    textLevel1.setFillColor(Color::White);
+
+    textRect = textLevel1.getLocalBounds();
+    textLevel1.setOrigin(textRect.left +
+                         textRect.width / 2.0f,
+                         textRect.top +
+                         textRect.height / 2.0f);
+    textLevel1.setPosition(640, 300);
+
+    // Level 2 (Test)
+    Text textLevel2 = textLevel1;
+    textLevel2.setString("Level 2 (For testing)");
+    textLevel2.setPosition(640, 450);
 
     // Settings
     Text textSettings;
@@ -422,8 +524,8 @@ int main()
     textSoundFx.setPosition(620, 400);
 
     Texture textureWhiteArrow, textureRedArrow;
-    textureRedArrow.loadFromFile("assets/graphics/redArrow.png");
-    textureWhiteArrow.loadFromFile("assets/graphics/whiteArrow.png");
+    textureRedArrow.loadFromFile(m + "assets/graphics/redArrow.png");
+    textureWhiteArrow.loadFromFile(m + "assets/graphics/whiteArrow.png");
 
     RectangleShape arrow;
     arrow.setSize(Vector2f(150,80));
@@ -432,20 +534,17 @@ int main()
 
     // Door
     Texture textureDoor;
-    textureDoor.loadFromFile("assets/graphics/door.png");
+    textureDoor.loadFromFile(m + "assets/graphics/door.png");
 
     Sprite spriteDoor;
     spriteDoor.setTexture(textureDoor);
-    spriteDoor.setScale(1, 1);
-    spriteDoor.setPosition(1160, 95);
-
 
     // Sound effects
     SoundBuffer bufferFireboyJump, bufferWatergirlJump, bufferLevelComplete, bufferButtonHover;
-    bufferFireboyJump.loadFromFile( "assets/audio/fireboyJump.ogg");
-    bufferButtonHover.loadFromFile("assets/audio/buttonHover.ogg");
-    bufferWatergirlJump.loadFromFile("assets/audio/watergirlJump.ogg");
-    bufferLevelComplete.loadFromFile("assets/audio/levelComplete.ogg");
+    bufferFireboyJump.loadFromFile(m + "assets/audio/fireboyJump.ogg");
+    bufferButtonHover.loadFromFile(m + "assets/audio/buttonHover.ogg");
+    bufferWatergirlJump.loadFromFile(m + "assets/audio/watergirlJump.ogg");
+    bufferLevelComplete.loadFromFile(m + "assets/audio/levelComplete.ogg");
 
     Sound soundButtonHover(bufferButtonHover);
     Sound soundLevelComplete(bufferLevelComplete);
@@ -453,8 +552,8 @@ int main()
 
     // Music
     Music musicIntro, musicLevel;
-    musicIntro.openFromFile( "assets/audio/intro.ogg");
-    musicLevel.openFromFile( "assets/audio/level.ogg");
+    musicIntro.openFromFile(m + "assets/audio/intro.ogg");
+    musicLevel.openFromFile(m + "assets/audio/level.ogg");
     musicIntro.setLoop(true), musicLevel.setLoop(true);
 
     musicIntro.setVolume(50);
@@ -472,6 +571,7 @@ int main()
     textTimer.setCharacterSize(35);
     textTimer.setFillColor(Color::White);
 
+
     // Flags
     bool paused = false;
     bool started = false;
@@ -479,11 +579,16 @@ int main()
     bool soundFxMute = false;
     bool gameStarted = false;
     bool settingsMenu = false;
+    bool player1Input = false;
+    bool player2Input = false;
+    bool bothPlayers = false;
     bool hoverExit = false;
     bool hoverStart = false;
     bool hoverArrow = false;
     bool hoverRetry = false;
     bool hoverContinue = false;
+    bool hoverLevel1 = false;
+    bool hoverLevel2 = false;
     bool hoverContinueIntro = false;
     bool hoverSettings = false;
     bool hoverMainMenu = false;
@@ -494,16 +599,24 @@ int main()
     bool pressedMusicMute = false;
     bool pressedSoundFxMute = false;
     bool continueFillColorInc = false;
+    bool enterYourNameFillColorInc = false;
+    bool levelInquire = false;
 
     int continueFillColor = 255;
+    int enterYourNameFillColor = 255;
 
     Clock clock;
+
     // Main game loop
     while (window.isOpen())
     {
         // Check continue fill color increasing
         if (!continueFillColor) continueFillColorInc = true;
         else if (continueFillColor == 255) continueFillColorInc = false;
+
+        // Check enter names fill color increasing
+        if (!enterYourNameFillColor) enterYourNameFillColorInc = true;
+        else if (enterYourNameFillColor == 255) enterYourNameFillColorInc = false;
 
         //Jump cnt increments
         if (fireBoy.jumpCnt < 100) { ++fireBoy.jumpCnt; }
@@ -671,20 +784,23 @@ int main()
                 else
                     paused = true, chron.pause();
             }
-            if (event.type == Event::KeyPressed && event.key.code == Keyboard::Return) {
+            if (event.type == Event::KeyReleased && event.key.code == Keyboard::Return) {
                 if (!started)
                 {
                     started = true;
+                    player1Input = true;
                     textContinueIntro.setFillColor(Color::White);
                 }
-                else if (!gameStarted)
+                else if (!gameStarted && !levelInquire && !player1Input && !player2Input)
                 {
                     chron.reset();
                     chron.resume();
                     gameStarted = true;
                     musicIntro.stop();
                     if (musicLevel.getStatus() != Music::Status::Playing)
+                    {
                         musicLevel.play();
+                    }
                 }
             }
             if(event.type == event.MouseButtonReleased && event.mouseButton.button == Mouse::Left)
@@ -692,6 +808,7 @@ int main()
                 pressedMusicMute = false;
                 pressedSoundFxMute = false;
             }
+
         }
 
         // Clear
@@ -706,7 +823,7 @@ int main()
             }
         }
 
-        if (gameStarted)
+        if (gameStarted && !levelInquire)
         {
             if(musicMute)
                 musicLevel.stop();
@@ -714,35 +831,40 @@ int main()
             // Render door
             window.draw(spriteDoor);
 
+            if (level != curPlatformObjectLevel)
+            {
+                fireBoy.Restart(), waterGirl.Restart();
+                platformObjects.clear();
+                platformObjects.push_back(ground);
+                fillPlatformObjects();
+                curPlatformObjectLevel = level;
+            }
+
             // Render level
             int offset = 40;
-            for (int l = 0; l < 1; l++)
+            for (int i = 0; i < H; i++)
             {
-                for (int i = 0; i < H; i++)
+                for (int j = 0; j < W; j++)
                 {
-                    for (int j = 0; j < W; j++)
-                    {
-                        if (levelsMap[l][i][j] == ' ') continue;
-                        int h = i * 80 + offset, w = j * 80 + offset;
-                        if (i == 8) h -= offset;
-                        if (j == 15) w -= offset;
-                        spriteStoneMid.setPosition(w, h);
-                        spriteStoneRight.setPosition(w, h);
-                        spriteStoneLeft.setPosition(w, h);
-                        if (levelsMap[0][i][j] == 'M')
-                            window.draw(spriteStoneMid);
-                        else if (levelsMap[0][i][j] == 'R')
-                            window.draw(spriteStoneRight);
-                        else if (levelsMap[0][i][j] == 'L')
-                            window.draw(spriteStoneLeft);
-                    }
+                    if (levelsMap[level][i][j] == ' ') continue;
+                    int h = i * 80 + offset, w = j * 80 + offset;
+                    if (i == 8) h -= offset;
+                    if (j == 15) w -= offset;
+                    spriteStoneMid.setPosition(w, h);
+                    spriteStoneRight.setPosition(w, h);
+                    spriteStoneLeft.setPosition(w, h);
+                    if (levelsMap[level][i][j] == 'M')
+                        window.draw(spriteStoneMid);
+                    else if (levelsMap[level][i][j] == 'R')
+                        window.draw(spriteStoneRight);
+                    else if (levelsMap[level][i][j] == 'L')
+                        window.draw(spriteStoneLeft);
                 }
             }
 
             // Check if fireboy and Watergirl is still inside the drawn borders
             fireBoy.Inquire();
             waterGirl.Inquire();
-
 
             // Render border
             for (int i = 0; i < 4; i++) window.draw(borders[i]);
@@ -751,19 +873,23 @@ int main()
             window.draw(fireBoy.playerSprite);
             window.draw(waterGirl.playerSprite);
 
-
             // Render timer
             window.draw(textTimer);
 
             // Level ending
             fireBoy.Inquire(), waterGirl.Inquire();
-            if (fireBoy.dx >= 1160 && fireBoy.dy <= 131 && waterGirl.dx >= 1160 && waterGirl.dy <= 131)
+            float spriteDoorX = spriteDoor.getPosition().x - 20, spriteDoorY = spriteDoor.getPosition().y;
+            if (fireBoy.dx >= spriteDoorX && fireBoy.dx + 80 <= spriteDoorX + 100 && fireBoy.dy <= spriteDoorY + 120 && fireBoy.dy >= spriteDoorY)
             {
-                gameStarted = false;
-                musicLevel.stop();
-                if (!soundFxMute) soundLevelComplete.play();
-                fireBoy.Restart();
-                waterGirl.Restart();
+                if (waterGirl.dx >= spriteDoorX && waterGirl.dx + 80 <= spriteDoorX + 100 && waterGirl.dy <= spriteDoorY + 120 && waterGirl.dy >= spriteDoorY)
+                {
+                    gameStarted = false;
+                    levelInquire = true;
+                    musicLevel.stop();
+                    if (!soundFxMute) soundLevelComplete.play();
+                    fireBoy.Restart();
+                    waterGirl.Restart();
+                }
             }
 
             // Render pause background
@@ -772,7 +898,93 @@ int main()
                 window.draw(spritePauseBackground);
             }
         }
-        if (!gameStarted && !paused && !settingsMenu && started)
+
+        // Player 1 Name
+        if(!gameStarted && !paused && !settingsMenu && started && !bothPlayers && player1Input && !player2Input && !levelInquire)
+        {
+            window.draw(enterYourNameRectangle);
+            window.draw(enterYourNameRectangle2);
+            if(event.type == Event::KeyReleased && event.key.code == Keyboard::Backspace && !player1Name.empty())
+            {
+                player1Name.pop_back();
+                player1Text.setString(player1Name);
+                window.draw(player1Text);
+                continue;
+            }
+            else if(player1Name.size() >= 30)
+            { //
+            }
+            else if(event.type == sf::Event::TextEntered && event.text.unicode <= 128 && event.text.unicode != 8 && !Keyboard::isKeyPressed(Keyboard::Key::Return))
+            {
+
+                player1Name += tolower(event.text.unicode);
+                player1Text.setString(player1Name);
+
+            }
+            // Player has entered player 1 name
+            if(Keyboard::isKeyPressed(Keyboard::Key::Return) && !player1Name.empty())
+            {
+                player1Input = false;
+                player2Input = true;
+            }
+            textRect = player1Text.getLocalBounds();
+            player1Text.setOrigin(textRect.left +
+                                  textRect.width / 2.0f,
+                                  textRect.top +
+                                  textRect.height / 2.0f);
+            player1Text.setPosition(640,350);
+            window.draw(textTitle);
+            window.draw(player1Text);
+            Color colorEnterYourName(255, 255, 255, enterYourNameFillColor -= ((enterYourNameFillColorInc) ? -5 : 5));
+            textEnterYourName.setFillColor(colorEnterYourName);
+            window.draw(textEnterYourName);
+        }
+
+            // Player 2 name
+        else if(!gameStarted && !paused && !settingsMenu && started && !bothPlayers && !player1Input && player2Input && !levelInquire)
+        {
+            window.draw(enterYourNameRectangle);
+            window.draw(enterYourNameRectangle2);
+            if(event.type == Event::KeyReleased && event.key.code == Keyboard::Backspace  && !player2Name.empty())
+            {
+
+                player2Name.pop_back();
+                player2Text.setString(player2Name);
+                window.draw(player2Text);
+                continue;
+            }
+            else if(player2Name.size() >= 30)
+            { //
+            }
+            else if(event.type == sf::Event::TextEntered && event.text.unicode <= 128 && event.text.unicode != 8 && !Keyboard::isKeyPressed(Keyboard::Key::Return))
+            {
+
+                player2Name += tolower(event.text.unicode);
+                player2Text.setString(player2Name);
+
+            }
+            // Player has entered player 2 name
+            if(Keyboard::isKeyPressed(Keyboard::Key::Return) && !player2Name.empty())
+            {
+                player1Input = true, player2Input = true;
+                bothPlayers = true;
+            }
+
+            window.draw(textTitle);
+            window.draw(player1Text);
+            window.draw(player2Text);
+            Color colorEnterYourName(255, 255, 255, enterYourNameFillColor -= ((enterYourNameFillColor) ? -5 : 5));
+            textEnterYourName.setFillColor(colorEnterYourName);
+            textEnterYourName.setString("Enter player 2 name:");
+            textRect = player2Text.getLocalBounds();
+            player2Text.setOrigin(textRect.left +
+                                  textRect.width / 2.0f,
+                                  textRect.top +
+                                  textRect.height / 2.0f);
+            player2Text.setPosition(640,450);
+            window.draw(textEnterYourName);
+        }
+        if (!gameStarted && !paused && !settingsMenu && started && bothPlayers && !levelInquire)
         {
             // Render text title
             window.draw(textTitle);
@@ -788,10 +1000,8 @@ int main()
                 textStart.setFillColor(Color::Green);
                 if (Mouse::isButtonPressed(Mouse::Left))
                 {
-                    gameStarted = true;
+                    levelInquire = true;
                     chron.reset(), chron.resume();
-                    musicIntro.stop();
-                    musicLevel.play();
                 }
             }
             else {
@@ -800,7 +1010,61 @@ int main()
             }
             window.draw(textStart);
         }
-        if ((paused || !gameStarted) && !settingsMenu && started)
+
+        // Level inquire
+        if (levelInquire && started && !gameStarted && !paused && !settingsMenu && bothPlayers)
+        {
+            // Level 1
+            window.draw(textLevel1);
+            if (!gameStarted && mouse_xAxis >= 251 && mouse_xAxis <= 1029 && mouse_yAxis >= 268.5 && mouse_yAxis <= 331.5)
+            {
+                if (!hoverLevel1)
+                {
+                    soundButtonHover.play();
+                    hoverLevel1 = true;
+                }
+                textLevel1.setFillColor(Color::Green);
+                if (Mouse::isButtonPressed(Mouse::Left))
+                {
+                    level = 0;
+                    spriteDoor.setPosition(1160, 95);
+                    gameStarted = true, levelInquire = false;
+                    musicIntro.stop();
+                    musicLevel.play();
+                    chron.reset(), chron.resume();
+                }
+            }
+            else {
+                hoverLevel1 = false;
+                textLevel1.setFillColor(Color::White);
+            }
+            // Level 2
+            window.draw(textLevel2);
+            if (currentRecords[{player1Name, player2Name}].size() > 0 && currentRecords[{player1Name, player2Name}][0] && !gameStarted && mouse_xAxis >= 237 && mouse_xAxis <= 1043 && mouse_yAxis >= 418.5 && mouse_yAxis <= 481.5)
+            {
+                if (!hoverLevel2)
+                {
+                    soundButtonHover.play();
+                    hoverLevel2 = true;
+                }
+                textLevel2.setFillColor(Color::Green);
+                if (Mouse::isButtonPressed(Mouse::Left))
+                {
+                    level = 1;
+                    spriteDoor.setPosition(120, 95);
+                    gameStarted = true, levelInquire = false;
+                    musicIntro.stop();
+                    musicLevel.play();
+                    chron.reset(), chron.resume();
+                }
+            }
+            else {
+                hoverLevel2 = false;
+                textLevel2.setFillColor(Color::White);
+            }
+        }
+
+        if (!gameStarted || paused || settingsMenu)
         {
             // Exit button
             if (mouse_xAxis >= 1145 && mouse_xAxis <= 1250 && mouse_yAxis >= 655 && mouse_yAxis <= 705)
@@ -819,6 +1083,10 @@ int main()
                 textExit.setFillColor(Color::White);
             }
             window.draw(textExit);
+        }
+
+        if ((paused || !gameStarted) && !settingsMenu && started && bothPlayers && !levelInquire)
+        {
 
             // Settings Button
             if (mouse_xAxis >= 518 && mouse_xAxis <= 760 && mouse_yAxis >= 483 && mouse_yAxis <= 520)
@@ -838,7 +1106,7 @@ int main()
             }
             window.draw(textSettings);
         }
-        if (paused && !settingsMenu && started)
+        if (paused && !settingsMenu && started && !levelInquire)
         {
             // Render text paused
             window.draw(textPaused);
@@ -862,7 +1130,7 @@ int main()
             window.draw(textContinue);
 
             // Retry level Button
-            if (mouse_xAxis >= 508.5 && mouse_xAxis <= 801.5 && mouse_yAxis >= 378.5 && mouse_yAxis <= 421.5)
+            if (mouse_xAxis >= 476.5 && mouse_xAxis <= 803.5 && mouse_yAxis >= 379 && mouse_yAxis <= 421)
             {
                 if (!hoverRetry)
                     hoverRetry = true;
@@ -903,7 +1171,7 @@ int main()
             }
             window.draw(textMainMenu);
         }
-        if (settingsMenu && started)
+        if (settingsMenu && started && !levelInquire)
         {
             Text state1, state2;
 
@@ -1024,7 +1292,6 @@ int main()
         if (!started)
         {
             bool currentlyHovering = false;
-
             // Continue button
             if (mouse_xAxis >= 235 && mouse_xAxis <= 1045 && mouse_yAxis >= 405.5 && mouse_yAxis <= 454.5)
             {
@@ -1035,7 +1302,7 @@ int main()
                 }
                 currentlyHovering = true;
                 if (Mouse::isButtonPressed(Mouse::Left))
-                    started = true;
+                    started = true, player1Input = true;
             }
             else {
                 hoverContinueIntro = false;
@@ -1061,3 +1328,5 @@ int main()
 
     return 0;
 }
+
+
