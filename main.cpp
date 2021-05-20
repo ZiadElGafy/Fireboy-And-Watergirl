@@ -43,7 +43,6 @@ using namespace sftools;
 string mHolder = "/Users/pluto/Desktop/Fireboy-And-Watergirl/";
 string m = "";
 
-
 // decraing text strings
 string introText = "";
 
@@ -64,6 +63,175 @@ void loadText()
         }
     }
 }
+
+void split_to_string( vector<string> &vec ,string &str, char splitter)
+{
+    string one_word = " ";
+    for (char c : str)
+    {
+        if (c == splitter) { vec.push_back(one_word);one_word = " ";}
+        else {one_word +=  c;}
+    }
+    vec.push_back(one_word);
+}
+
+int char_to_int(char c) {return (c-'0');}
+
+int str_to_int(string &str)
+{
+    if (str.length() == 1) {return char_to_int(str[0]);}
+    stringstream ans(str);
+    int x = 0;
+    ans >> x;
+    return x;
+}
+
+void writeData(string data)
+{
+    string newData = "";
+    string temp;
+
+    fstream csvData;
+    csvData.open("assets/scores.csv");
+
+    vector<string> newRecord;
+    split_to_string(newRecord,data,',');
+
+    bool found;
+    bool levelExist;
+    bool newRecordFound;
+    bool nameFound = false;
+    while (getline(csvData,temp))
+    {
+        found = false;
+        vector<string> currRecord;
+        split_to_string(currRecord,temp,',');
+
+//        given that the pair of names is sorted so <a,b> is same as <b,a> because both of them will be <a,b>
+        if(currRecord[0] == newRecord[0])
+        {
+            newData += currRecord[0];
+            newData += ',';
+
+            found = true;
+            nameFound = true;
+            newRecordFound = false;
+            vector<string> tempNewRecord;
+            split_to_string(tempNewRecord,newRecord[1],'-');
+            for (int i = 1 ; i < currRecord.size() ; i++)
+            {
+                levelExist = false;
+                vector<string> tempCurrRecord;
+                split_to_string(tempCurrRecord,currRecord[i],'-');
+
+//                given that the levels are sorted
+                if (tempCurrRecord[0] == tempNewRecord[0])
+                {
+                    levelExist = true;
+                    newRecordFound = true;
+                    if (str_to_int(tempCurrRecord[1]) >  str_to_int(tempNewRecord[1]))
+                    {
+                        newData += newRecord[1];
+                        newData += ',';
+                    }
+                    else
+                    {
+                        newData += currRecord[i];
+                        newData += ',';
+                    }
+
+                }
+                if (!levelExist)
+                {
+                    newData += currRecord[i];
+                    newData += ',';
+                }
+            }
+            if (!newRecordFound)
+            {
+                newData += newRecord[1];
+                newData += ',';
+            }
+        }
+        if (!found)
+        {
+            newData += temp ;
+        }
+        else
+        {
+            newData.erase(prev(newData.end()));
+        }
+        newData += '\n';
+    }
+
+    if (!nameFound)
+    {
+        newData.erase(remove(newData.begin(), newData.end(), ' '), newData.end());
+        newData += data;
+    }
+
+//    remove all spaces
+    newData.erase(remove(newData.begin(), newData.end(), ' '), newData.end());
+
+//    the file was initially  opened in read mode
+//    we should close it and open it again in write mode
+    csvData.close();
+    csvData.open("assets/scores.csv");
+
+    csvData << newData;
+    csvData.close();
+}
+
+void updateData(string n1,string n2, int lvl , int sec )
+{
+    string name1 , name2;
+//    soting the names
+    if (n1 > n2) {name1 = n2 ; name2 = n1;}
+    else {name1 = n1 ; name2 = n2;}
+
+//    saving the record as a csv format
+    string data ;
+    data += name1;data += '-';
+    data += name2;data += ',';
+    data += to_string(lvl);
+    data += '-';
+    data += to_string(sec);
+
+    writeData(data);
+}
+
+map<pair<string,string> , vector<int>> currentRecords;
+void initializeCurrentRecords()
+{
+    fstream csvData;
+    string temp;
+    csvData.open("assets/scores.csv");
+    pair<string,string> names;
+    while (getline(csvData,temp))
+    {
+        if (temp != "")
+        {
+            vector<int> time(20);
+            vector<string> record;
+            vector<string>names2;
+            split_to_string(record,temp,',');
+            split_to_string(names2,record[0],'-');
+            names2[0].erase(remove(names2[0].begin(), names2[0].end(), ' '), names2[0].end());
+            names2[1].erase(remove(names2[1].begin(), names2[1].end(), ' '), names2[1].end());
+            names.first = names2[0];
+            names.second = names2[1];
+            for (int i = 1 ; i < record.size() ; i++)
+            {
+                vector<string> levelAndTime;
+                split_to_string(levelAndTime,record[i],'-');
+                time[i-1] = str_to_int(levelAndTime[1]);
+            }
+            currentRecords[names] = time;
+        }
+    }
+    csvData.close();
+}
+
 // Levels map and current level number
 int level = 0;
 String levelsMap [5][9] =
@@ -185,8 +353,6 @@ void fillPlatformObjects()
     }
     
 }
-// map<<player1Name, player2Name>, vector<scores>>
-map<pair<string, string>, vector<int>> currentRecords;
 
 int curPlatformObjectLevel = 100;
 
@@ -245,13 +411,13 @@ struct Player
     void die()
     {
         isDead = 1;
+        playerSprite.setPosition(2000, 2000);
     }
 };
 
 
 int main()
 {
-    currentRecords[{"a", "b"}].push_back(10);
     RenderWindow window(VideoMode(1280, 720), "Fireboy and Watergirl", Style::Titlebar | Style::Close);
     window.setFramerateLimit(60);
 
@@ -440,6 +606,16 @@ int main()
                          textRect.top +
                          textRect.height / 2.0f);
     textPaused.setPosition(640, 100);
+
+    // Game over
+    Text textGameOver = textPaused;
+    textGameOver.setString("Game over");
+    textRect = textGameOver.getLocalBounds();
+    textGameOver.setOrigin(textRect.left +
+                         textRect.width / 2.0f,
+                         textRect.top +
+                         textRect.height / 2.0f);
+    textGameOver.setPosition(640, 100);
 
     // Start
     Text textStart;
@@ -720,7 +896,7 @@ int main()
         float safe = 5.f;
         
         if (fireBoy.isDead || waterGirl.isDead) { deathCounter++; }
-        if (deathCounter >= (1.5 * iterationsPerSecond)) { gameStarted = 0; deathCounter = 0; }
+        if (deathCounter >= (1.5 * iterationsPerSecond)) { paused = 1; deathCounter = 0; }
 
         //Resistance
         for (auto i : platformObjects)
@@ -735,26 +911,24 @@ int main()
                     pushedWaterGirl = false;
                     waterGirl.move({ 0, -gravity });
                     waterGirl.groundCheck = 1;
-                    if (i.second == 1 || i.second == 3) {
+                    if ((i.second == 1 || i.second == 3) && !waterGirl.isDead) {
                         waterGirl.die();
-                        if (!soundFxMute)
-                            soundPlayerDeath.play();
+                        soundPlayerDeath.play();
                     }
                 }
             }
             fireBoy.Inquire();
             if (fireBoy.bounds.intersects(i.first.getGlobalBounds()))
             {
-                pushedFireBoy = false;
                 fireBoy.jumpCnt = jumpFactor + 1;
                 if (fireBoy.dy < i.first.getPosition().y)
                 {
+                    pushedFireBoy = false;
                     fireBoy.move({ 0, -gravity });
                     fireBoy.groundCheck = 1;
-                    if (i.second == 2 || i.second == 3) {
+                    if ((i.second == 2 || i.second == 3) && !fireBoy.isDead) {
                         fireBoy.die();
-                        if (!soundFxMute)
-                            soundPlayerDeath.play();
+                        soundPlayerDeath.play();
                     }
                 }
             }
@@ -1220,7 +1394,10 @@ int main()
         if (paused && !settingsMenu && started && !levelInquire)
         {
             // Render text paused
-            window.draw(textPaused);
+            if (!fireBoy.isDead && !waterGirl.isDead) window.draw(textPaused);
+
+            // Render text game over
+            if (fireBoy.isDead || waterGirl.isDead) window.draw(textGameOver);
 
             // Continue button
             if (mouse_xAxis >= 278.5 && mouse_xAxis <= 1001.5 && mouse_yAxis >= 278.5 && mouse_yAxis <= 321.5)
