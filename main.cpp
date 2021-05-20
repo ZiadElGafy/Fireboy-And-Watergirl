@@ -45,7 +45,7 @@ using namespace sftools;
 
 // decraing text strings
 string introText = "";
-string m = "";
+string m = "/Users/pluto/Desktop/Fireboy-And-Watergirl/";
 // loading intro text
 void loadText()
 {
@@ -961,7 +961,7 @@ int main()
             }
             else if(event.type == sf::Event::TextEntered && event.text.unicode <= 128 && event.text.unicode != 8 && !Keyboard::isKeyPressed(Keyboard::Key::Return) && canType)
             {
-
+                canType = false;
                 player2Name += tolower(event.text.unicode);
                 player2Text.setString(player2Name);
 
