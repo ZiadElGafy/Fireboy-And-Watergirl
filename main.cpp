@@ -238,16 +238,16 @@ String levelsMap [5][9] =
         {
                 // Level 1
                 {
-                    
-                            "                ",
-                            "                ",
-                            "           LfirR",
-                            "                ",
-                            "                ",
-                            "     LMMWMMR    ",
-                            "    F           ",
-                            "  M             ",
-                            "                ",
+
+                        "                ",
+                        "                ",
+                        "            LMMR",
+                        "          M     ",
+                        "        M       ",
+                        "      M         ",
+                        "    M           ",
+                        "  M             ",
+                        "                ",
                 },
                 // Level 2
                 {
@@ -420,6 +420,8 @@ int main()
 {
     RenderWindow window(VideoMode(1280, 720), "Fireboy and Watergirl", Style::Titlebar | Style::Close);
     window.setFramerateLimit(60);
+
+    initializeCurrentRecords();
 
     // Declaring characters
     fireBoyTexture.loadFromFile(m + "assets/graphics/fireBoy.png");
@@ -1171,6 +1173,8 @@ int main()
                     if (!soundFxMute) soundLevelComplete.play();
                     fireBoy.Restart();
                     waterGirl.Restart();
+                    updateData(player1Name, player2Name, level, seconds + minutes * 60);
+                    initializeCurrentRecords();
                 }
             }
 
@@ -1299,6 +1303,9 @@ int main()
         // Level inquire
         if (levelInquire && started && !gameStarted && !paused && !settingsMenu && bothPlayers)
         {
+            string currentPlayer1 = min({player1Name, player2Name});
+            string currentPlayer2 = max({player1Name, player2Name});
+
             // Level 1
             window.draw(textLevel1);
             if (!gameStarted && mouse_xAxis >= 251 && mouse_xAxis <= 1029 && mouse_yAxis >= 268.5 && mouse_yAxis <= 331.5)
@@ -1325,7 +1332,7 @@ int main()
             }
             // Level 2
             window.draw(textLevel2);
-            if (currentRecords[{player1Name, player2Name}].size() > 0 && currentRecords[{player1Name, player2Name}][0] && !gameStarted && mouse_xAxis >= 237 && mouse_xAxis <= 1043 && mouse_yAxis >= 418.5 && mouse_yAxis <= 481.5)
+            if (currentRecords[{currentPlayer1, currentPlayer2}].size() > 0 && currentRecords[{currentPlayer1, currentPlayer2}][0] && !gameStarted && mouse_xAxis >= 237 && mouse_xAxis <= 1043 && mouse_yAxis >= 418.5 && mouse_yAxis <= 481.5)
             {
                 if (!hoverLevel2)
                 {
