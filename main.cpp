@@ -40,13 +40,13 @@
 using namespace std;
 using namespace sf;
 using namespace sftools;
+string mHolder = "/Users/pluto/Desktop/Fireboy-And-Watergirl/";
+string m = "";
 
-//  /Users/pluto/Desktop/Fireboy-And-Watergirl/
 
 // decraing text strings
 string introText = "";
-string mHolder = "/Users/pluto/Desktop/Fireboy-And-Watergirl/";
-string m = "";
+
 // loading intro text
 void loadText()
 {
@@ -64,20 +64,22 @@ void loadText()
         }
     }
 }
-// Levels map
+// Levels map and current level number
+int level = 0;
 String levelsMap [5][9] =
         {
                 // Level 1
                 {
-                        "                ",
-                        "                ",
-                        "            LMMR",
-                        "          M     ",
-                        "        M       ",
-                        "      M         ",
-                        "    M           ",
-                        "  M             ",
-                        "                ",
+                    
+                            "                ",
+                            "                ",
+                            "           LfirR",
+                            "                ",
+                            "                ",
+                            "     LMMWMMR    ",
+                            "    F           ",
+                            "  M             ",
+                            "                ",
                 },
                 // Level 2
                 {
@@ -92,24 +94,69 @@ String levelsMap [5][9] =
                         "                ",
                 },
         };
-
-
-// map<<player1Name, player2Name>, vector<scores>>
-map<pair<string, string>, vector<int>> currentRecords;
-
-int level = 0;
-vector<RectangleShape> platformObjects;
-int curPlatformObjectLevel = 100;
-
+//Pools Textures
+Texture waterLeftText, waterMidText, waterRightText, lavaLeftText, lavaMidText, lavaRightText, acidLeftText, acidMidText, acidRightText;
+Texture smallLavaText, smallAcidText, smallWaterText;
+//Drawing platforms
+Color color(0, 0, 0, 0);
+vector<pair<RectangleShape, int> > platformObjects;
 void fillPlatformObjects()
 {
-    Color color(255, 255, 255, 100);
+    //Registering pools as platforms
+    for (int i = 0; i < 9; i++)
+    {
+        for (int j = 0; j < 16; j++)
+        {
+            //Fire -> 1
+            if (levelsMap[level][i][j] == 'f' || levelsMap[level][i][j] == 'i' || levelsMap[level][i][j] == 'r' || levelsMap[level][i][j] == 'F')
+            {
+                RectangleShape obj({ 80,40 });
+                float posX = 40 + (80 * j), posY = 40 + (80 * i);
+                obj.setPosition({ posX, posY });
+
+                if (levelsMap[level][i][j] == 'f') { obj.setTexture(&lavaLeftText); }
+                if (levelsMap[level][i][j] == 'i') { obj.setTexture(&lavaMidText); }
+                if (levelsMap[level][i][j] == 'r') { obj.setTexture(&lavaRightText); }
+                if (levelsMap[level][i][j] == 'F') { obj.setTexture(&smallLavaText); }
+                platformObjects.push_back({ obj, 1 });
+            }
+            //Water -> 2
+            if (levelsMap[level][i][j] == 'w' || levelsMap[level][i][j] == 'a' || levelsMap[level][i][j] == 't' || levelsMap[level][i][j] == 'W')
+            {
+                RectangleShape obj({ 80,40 });
+                float posX = 40 + (80 * j), posY = 40 + (80 * i);
+                obj.setPosition({ posX, posY });
+
+                if (levelsMap[level][i][j] == 'w') { obj.setTexture(&waterLeftText); }
+                if (levelsMap[level][i][j] == 'a') { obj.setTexture(&waterMidText); }
+                if (levelsMap[level][i][j] == 't') { obj.setTexture(&waterRightText); }
+                if (levelsMap[level][i][j] == 'W') { obj.setTexture(&smallWaterText); }
+
+                platformObjects.push_back({ obj,2 });
+            }
+            //Mud -> 3
+            if (levelsMap[level][i][j] == 'm' || levelsMap[level][i][j] == 'u' || levelsMap[level][i][j] == 'd' || levelsMap[level][i][j] == 'A')
+            {
+                RectangleShape obj({ 80,40 });
+                float posX = 40 + (80 * j), posY = 40 + (80 * i);
+                obj.setPosition({ posX, posY });
+
+                if (levelsMap[level][i][j] == 'm') { obj.setTexture(&acidLeftText); }
+                if (levelsMap[level][i][j] == 'u') { obj.setTexture(&acidMidText); }
+                if (levelsMap[level][i][j] == 'd') { obj.setTexture(&acidRightText); }
+                if (levelsMap[level][i][j] == 'A') { obj.setTexture(&smallAcidText); }
+
+                platformObjects.push_back({ obj, 3 });
+            }
+        }
+    }
+    // Creating Objects for platforms
     int streak = 0;
     for (int i = 0; i < 9; i++)
     {
         for (int j = 0; j < 16; j++)
         {
-            if (levelsMap[level][i][j] != ' ')
+            if (levelsMap[level][i][j] == 'L' || levelsMap[level][i][j] == 'M' || levelsMap[level][i][j] == 'R')
             {
                 streak++;
             }
@@ -117,47 +164,60 @@ void fillPlatformObjects()
             {
                 if (streak)
                 {
-                    float start = (j - streak) * 80 + 40, end = start+(80*streak);
-                    RectangleShape obj({end-start-5, 40});
-                    obj.setPosition({start, (float)(40 + 80 * i) });
+                    float start = (j - streak) * 80 + 40, end = start + (80 * streak);
+                    RectangleShape obj({ end - start - 5, 40 });
+                    obj.setPosition({ start, (float)(40 + 80 * i) });
                     obj.setFillColor(color);
-                    platformObjects.push_back(obj);
+                    platformObjects.push_back({ obj, 0 });
                     streak = 0;
                 }
             }
         }
-        if(streak)
+        if (streak)
         {
             float start = (15 - streak) * 80 + 40 + 80, end = start + (80 * streak);
             RectangleShape obj({ end - start, 40 });
             obj.setPosition({ start, (float)(40 + 80 * i) });
             obj.setFillColor(color);
-            platformObjects.push_back(obj);
+            platformObjects.push_back({ obj, 0 });
             streak = 0;
         }
     }
-
+    
 }
+// map<<player1Name, player2Name>, vector<scores>>
+map<pair<string, string>, vector<int>> currentRecords;
+
+int curPlatformObjectLevel = 100;
 
 //  Declaring fireBoy and waterGirl sprites and textures
-int jumpFactor = 40;
+int jumpFactor = 42;
 float gravity = 6.5;
 Texture fireBoyTexture, waterGirlTexture;
 
+int deathCounter = 0;
+//Player struct
 struct Player
 {
-public:
     int jumpCnt = jumpFactor, ready = 1, groundCheck = 1;
     Sprite playerSprite;
+    //character death
     // Declaring variable to store local bounds
     FloatRect bounds;
     // Declaring variables to store character's x and y coordinates
     float dx, dy;
+    //Declaring type (1: fire, 2: water)
+    int type;
+    //Declaring state (dead or alive)
+    bool isDead = 0;
     // Declaring waterGirl or fireBoy sprite for the first time and taking a texture as a parameter
-    Player(Texture &image)
+    //Constructor
+    Player(Texture& image, int element)
     {
         playerSprite.setTexture(image);
         playerSprite.setPosition({ 41.f, 599.f });
+
+        type = element;
 
     }
     void Inquire()
@@ -170,18 +230,24 @@ public:
         if (dx > 1160)
             playerSprite.setPosition({ 1160, dy });
         if (dx < 40)
-            playerSprite.setPosition({ 40, dy});
+            playerSprite.setPosition({ 40, dy });
 
     }
     void Restart()
     {
         playerSprite.setPosition({ 41.f, 599.f });
+        isDead = 0;
     }
-    void move( pair < float, float> coordinates)
+    void move(pair < float, float> coordinates)
     {
-        playerSprite.move({coordinates.first,coordinates.second});
+        playerSprite.move({ coordinates.first,coordinates.second });
+    }
+    void die()
+    {
+        isDead = 1;
     }
 };
+
 
 int main()
 {
@@ -192,10 +258,29 @@ int main()
     // Declaring characters
     fireBoyTexture.loadFromFile(m + "assets/graphics/fireBoy.png");
     waterGirlTexture.loadFromFile(m + "assets/graphics/waterGirl.png");
-    Player fireBoy(fireBoyTexture), waterGirl(waterGirlTexture);
-
+    Player fireBoy(fireBoyTexture,1), waterGirl(waterGirlTexture,2);
+    
+    //Pools Textures
+    Texture waterLeftText, waterMidText, waterRightText, lavaLeftText, lavaMidText, lavaRightText, acidLeftText, acidMidText, acidRightText;
+    Texture smallLavaText, smallAcidText, smallWaterText;
+    waterLeftText.loadFromFile(m + "assets/graphics/waterLeft.png");
+    waterMidText.loadFromFile(m + "assets/graphics/waterMid.png");
+    waterRightText.loadFromFile(m + "assets/graphics/waterRight.png");
+    lavaLeftText.loadFromFile(m + "assets/graphics/lavaLeft.png");
+    lavaMidText.loadFromFile(m + "assets/graphics/lavaMid.png");
+    lavaRightText.loadFromFile(m + "assets/graphics/lavaRight.png");
+    acidLeftText.loadFromFile(m + "assets/graphics/acidLeft.png");
+    acidMidText.loadFromFile(m + "assets/graphics/acidMid.png");
+    acidRightText.loadFromFile(m + "assets/graphics/acidRight.png");
+    smallWaterText.loadFromFile(m + "assets/graphics/SmallWater.png");
+    smallAcidText.loadFromFile(m + "assets/graphics/smallAcid.png");
+    smallLavaText.loadFromFile(m + "assets/graphics/smallLava.png");
+    
+    
+    
     // Ground
     RectangleShape ground({ 1280, 1 });
+    ground.setFillColor(color);
     ground.setPosition({ 0, 680 });
 
     const int H = 9, W = 16;
@@ -540,15 +625,18 @@ int main()
     spriteDoor.setTexture(textureDoor);
 
     // Sound effects
-    SoundBuffer bufferFireboyJump, bufferWatergirlJump, bufferLevelComplete, bufferButtonHover;
+    SoundBuffer bufferFireboyJump, bufferWatergirlJump, bufferLevelComplete, bufferButtonHover, bufferPlayerDeath;
     bufferFireboyJump.loadFromFile(m + "assets/audio/fireboyJump.ogg");
     bufferButtonHover.loadFromFile(m + "assets/audio/buttonHover.ogg");
     bufferWatergirlJump.loadFromFile(m + "assets/audio/watergirlJump.ogg");
     bufferLevelComplete.loadFromFile(m + "assets/audio/levelComplete.ogg");
+    bufferPlayerDeath.loadFromFile(m + "assets/audio/death.ogg");
 
     Sound soundButtonHover(bufferButtonHover);
     Sound soundLevelComplete(bufferLevelComplete);
     Sound soundFireboyJump(bufferFireboyJump), soundWatergirlJump(bufferWatergirlJump);
+    Sound soundPlayerDeath(bufferPlayerDeath);
+
 
     // Music
     Music musicIntro, musicLevel;
@@ -632,54 +720,67 @@ int main()
         float pixelsPerIteration = speed / iterationsPerSecond;
 
         float safe = 5.f;
+        
+        if (fireBoy.isDead || waterGirl.isDead) { deathCounter++; }
+        if (deathCounter >= (1.5 * iterationsPerSecond)) { gameStarted = 0; deathCounter = 0; }
 
         //Resistance
         for (auto i : platformObjects)
         {
             waterGirl.Inquire();
             //Y-axis
-            if (waterGirl.bounds.intersects(i.getGlobalBounds()))
+            if (waterGirl.bounds.intersects(i.first.getGlobalBounds()))
             {
                 waterGirl.jumpCnt = jumpFactor + 1;
-                if(waterGirl.dy < i.getPosition().y)
+                if (waterGirl.dy < i.first.getPosition().y)
                 {
                     pushedWaterGirl = false;
-                    waterGirl.move( {0, -gravity} );
+                    waterGirl.move({ 0, -gravity });
                     waterGirl.groundCheck = 1;
+                    if (i.second == 1 || i.second == 3) {
+                        waterGirl.die();
+                        if (!soundFxMute)
+                            soundPlayerDeath.play();
+                    }
                 }
             }
-
-            if (fireBoy.bounds.intersects(i.getGlobalBounds()))
+            fireBoy.Inquire();
+            if (fireBoy.bounds.intersects(i.first.getGlobalBounds()))
             {
                 pushedFireBoy = false;
                 fireBoy.jumpCnt = jumpFactor + 1;
-                if(fireBoy.dy < i.getPosition().y)
+                if (fireBoy.dy < i.first.getPosition().y)
                 {
                     fireBoy.move({ 0, -gravity });
                     fireBoy.groundCheck = 1;
+                    if (i.second == 2 || i.second == 3) {
+                        fireBoy.die();
+                        if (!soundFxMute)
+                            soundPlayerDeath.play();
+                    }
                 }
             }
 
             //X-axis
             waterGirl.Inquire();
-            if (waterGirl.bounds.intersects(i.getGlobalBounds()) && waterGirl.dy + 80 - safe >= i.getPosition().y && waterGirl.dx + 80 - safe >= i.getPosition().x)
+            if (waterGirl.bounds.intersects(i.first.getGlobalBounds()) && waterGirl.dy + 80 - safe >= i.first.getPosition().y && waterGirl.dx + 80 - safe >= i.first.getPosition().x)
             {
                 pushedWaterGirl = true;
                 waterGirl.move({ pixelsPerIteration, 0 });
             }
             waterGirl.Inquire();
-            if (waterGirl.bounds.intersects(i.getGlobalBounds()) && waterGirl.dy + 80 - safe >= i.getPosition().y && waterGirl.dx+ safe <= i.getPosition().x + i.getGlobalBounds().width)
+            if (waterGirl.bounds.intersects(i.first.getGlobalBounds()) && waterGirl.dy + 80 - safe >= i.first.getPosition().y && waterGirl.dx + safe <= i.first.getPosition().x + i.first.getGlobalBounds().width)
             {
                 pushedWaterGirl = true;
                 waterGirl.move({ -pixelsPerIteration, 0 });
             }
             fireBoy.Inquire();
-            if (fireBoy.bounds.intersects(i.getGlobalBounds()) && fireBoy.dy + 80 - safe >= i.getPosition().y && fireBoy.dx + 80 - safe >= i.getPosition().x)
+            if (fireBoy.bounds.intersects(i.first.getGlobalBounds()) && fireBoy.dy + 80 - safe >= i.first.getPosition().y && fireBoy.dx + 80 - safe >= i.first.getPosition().x)
             {
                 pushedFireBoy = true;
                 fireBoy.move({ pixelsPerIteration, 0 });
             }
-            if (fireBoy.bounds.intersects(i.getGlobalBounds()) && fireBoy.dy + 80 - safe >= i.getPosition().y && fireBoy.dx + safe <= i.getPosition().x + i.getGlobalBounds().width)
+            if (fireBoy.bounds.intersects(i.first.getGlobalBounds()) && fireBoy.dy + 80 - safe >= i.first.getPosition().y && fireBoy.dx + safe <= i.first.getPosition().x + i.first.getGlobalBounds().width)
             {
                 pushedFireBoy = true;
                 fireBoy.move({ -pixelsPerIteration, 0 });
@@ -691,19 +792,21 @@ int main()
 
         if (Keyboard::isKeyPressed(Keyboard::Key::D) && !paused && gameStarted)
         {
-            if (!pushedWaterGirl) waterGirl.move({ pixelsPerIteration , 0});
+            if (!pushedWaterGirl) waterGirl.move({  1.825*pixelsPerIteration , 0});
         }
         if (Keyboard::isKeyPressed(Keyboard::Key::A) && !paused && gameStarted)
         {
-            if (!pushedWaterGirl) waterGirl.move({-pixelsPerIteration , 0});
+            if (!pushedWaterGirl) waterGirl.move({-1.825*pixelsPerIteration , 0});
         }
         if (Keyboard::isKeyPressed(Keyboard::Key::Right) && !paused && gameStarted)
         {
-            if (!pushedFireBoy) fireBoy.move({ pixelsPerIteration , 0});
+            if (!pushedFireBoy && fireBoy.jumpCnt >= jumpFactor) fireBoy.move({ pixelsPerIteration , 0 });
+            else if(!pushedFireBoy)fireBoy.move({ 1.825*pixelsPerIteration , 0 });
         }
         if (Keyboard::isKeyPressed(Keyboard::Key::Left) && !paused && gameStarted)
         {
-            if (!pushedFireBoy) fireBoy.move({ -pixelsPerIteration , 0 });
+            if (!pushedFireBoy && fireBoy.jumpCnt >= jumpFactor) fireBoy.move({ -pixelsPerIteration , 0 });
+            else if(!pushedFireBoy) fireBoy.move({ -1.825*pixelsPerIteration , 0 });
         }
         if (Keyboard::isKeyPressed(Keyboard::Key::W) && !paused && gameStarted)
         {
@@ -836,7 +939,7 @@ int main()
             {
                 fireBoy.Restart(), waterGirl.Restart();
                 platformObjects.clear();
-                platformObjects.push_back(ground);
+                platformObjects.push_back({ground,0});
                 fillPlatformObjects();
                 curPlatformObjectLevel = level;
             }
@@ -866,7 +969,13 @@ int main()
             // Check if fireboy and Watergirl is still inside the drawn borders
             fireBoy.Inquire();
             waterGirl.Inquire();
-
+            
+            
+            //Render pools
+            for (auto i : platformObjects)
+            {
+                window.draw(i.first);
+            }
             // Render border
             for (int i = 0; i < 4; i++) window.draw(borders[i]);
 
@@ -1332,6 +1441,8 @@ int main()
 
     return 0;
 }
+
+
 
 
 
