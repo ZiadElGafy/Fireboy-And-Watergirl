@@ -803,10 +803,13 @@ int main()
     textureRedArrow.loadFromFile(m + "assets/graphics/redArrow.png");
     textureWhiteArrow.loadFromFile(m + "assets/graphics/whiteArrow.png");
 
+    // Arrows
     RectangleShape arrow;
     arrow.setSize(Vector2f(150,80));
     arrow.setPosition(30,40);
     arrow.setTexture(&textureWhiteArrow);
+
+    RectangleShape arrowLevelInquire = arrow;
 
     // Door
     Texture textureDoor;
@@ -865,6 +868,7 @@ int main()
     bool hoverExit = false;
     bool hoverStart = false;
     bool hoverArrow = false;
+    bool hoverArrowLevelInquire = false;
     bool hoverRetry = false;
     bool hoverContinue = false;
     bool hoverLevel1 = false;
@@ -1352,6 +1356,24 @@ int main()
         // Level inquire
         if (levelInquire && started && !gameStarted && !paused && !settingsMenu && bothPlayers)
         {
+            // Back arrow
+            if (mouse_xAxis >= 44 && mouse_xAxis <= 163 && mouse_yAxis >= 51 && mouse_yAxis <= 104)
+            {
+                if (!hoverArrowLevelInquire)
+                {
+                    soundButtonHover.play();
+                    hoverArrowLevelInquire = true;
+                }
+                arrowLevelInquire.setTexture(&textureRedArrow);
+                if (Mouse::isButtonPressed(Mouse::Left))
+                    levelInquire = false;
+            }
+            else {
+                hoverArrowLevelInquire = false;
+                arrowLevelInquire.setTexture(&textureWhiteArrow);
+            }
+            window.draw(arrowLevelInquire);
+
             string currentPlayer1 = min({player1Name, player2Name});
             string currentPlayer2 = max({player1Name, player2Name});
 
