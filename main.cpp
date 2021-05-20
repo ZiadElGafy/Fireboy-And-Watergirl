@@ -245,7 +245,7 @@ String levelsMap [5][9] =
                         "            LMMR",
                         "          M     ",
                         "        M       ",
-                        "      M         ",
+                        "      W         ",
                         "    M           ",
                         "  M             ",
                         "                ",
@@ -987,11 +987,13 @@ int main()
 
         if (Keyboard::isKeyPressed(Keyboard::Key::D) && !paused && gameStarted)
         {
-            if (!pushedWaterGirl) waterGirl.move({  1.825*pixelsPerIteration , 0});
+            if (!pushedWaterGirl && waterGirl.jumpCnt >= jumpFactor) waterGirl.move({ pixelsPerIteration , 0 });
+            else if (!pushedWaterGirl) waterGirl.move({  1.825*pixelsPerIteration , 0});
         }
         if (Keyboard::isKeyPressed(Keyboard::Key::A) && !paused && gameStarted)
         {
-            if (!pushedWaterGirl) waterGirl.move({-1.825*pixelsPerIteration , 0});
+            if (!pushedWaterGirl && waterGirl.jumpCnt >= jumpFactor) waterGirl.move({ -pixelsPerIteration , 0 });
+            else if (!pushedWaterGirl) waterGirl.move({ -1.825 * pixelsPerIteration , 0 });
         }
         if (Keyboard::isKeyPressed(Keyboard::Key::Right) && !paused && gameStarted)
         {

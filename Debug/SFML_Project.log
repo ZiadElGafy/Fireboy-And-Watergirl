@@ -1,25 +1,33 @@
 ﻿  main.cpp
-C:\SFML\Fireboy-And-Watergirl\main.cpp(164,33): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-C:\SFML\Fireboy-And-Watergirl\main.cpp(175,25): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-C:\SFML\Fireboy-And-Watergirl\main.cpp(643,21): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-C:\SFML\Fireboy-And-Watergirl\main.cpp(647,27): warning C4244: 'initializing': conversion from 'T' to 'float', possible loss of data
+C:\Users\heyth\Desktop\Fireboy-And-Watergirl\main.cpp(121,32): warning C4018: '<': signed/unsigned mismatch
+C:\Users\heyth\Desktop\Fireboy-And-Watergirl\main.cpp(224,32): warning C4018: '<': signed/unsigned mismatch
+C:\Users\heyth\Desktop\Fireboy-And-Watergirl\main.cpp(283,28): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+C:\Users\heyth\Desktop\Fireboy-And-Watergirl\main.cpp(283,50): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+C:\Users\heyth\Desktop\Fireboy-And-Watergirl\main.cpp(296,28): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+C:\Users\heyth\Desktop\Fireboy-And-Watergirl\main.cpp(296,50): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+C:\Users\heyth\Desktop\Fireboy-And-Watergirl\main.cpp(310,28): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+C:\Users\heyth\Desktop\Fireboy-And-Watergirl\main.cpp(310,50): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+C:\Users\heyth\Desktop\Fireboy-And-Watergirl\main.cpp(336,33): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+C:\Users\heyth\Desktop\Fireboy-And-Watergirl\main.cpp(347,25): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+C:\Users\heyth\Desktop\Fireboy-And-Watergirl\main.cpp(1057,21): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Users\heyth\Desktop\Fireboy-And-Watergirl\main.cpp(1061,27): warning C4244: 'initializing': conversion from 'T' to 'float', possible loss of data
           with
           [
               T=int
           ]
-C:\SFML\Fireboy-And-Watergirl\main.cpp(647,71): warning C4244: 'initializing': conversion from 'T' to 'float', possible loss of data
+C:\Users\heyth\Desktop\Fireboy-And-Watergirl\main.cpp(1061,71): warning C4244: 'initializing': conversion from 'T' to 'float', possible loss of data
           with
           [
               T=int
           ]
-C:\SFML\Fireboy-And-Watergirl\main.cpp(704,49): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\SFML\Fireboy-And-Watergirl\main.cpp(704,46): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\SFML\Fireboy-And-Watergirl\main.cpp(729,55): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\SFML\Fireboy-And-Watergirl\main.cpp(729,52): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\SFML\Fireboy-And-Watergirl\main.cpp(730,57): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\SFML\Fireboy-And-Watergirl\main.cpp(730,54): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\SFML\Fireboy-And-Watergirl\main.cpp(731,56): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\SFML\Fireboy-And-Watergirl\main.cpp(731,53): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\heyth\Desktop\Fireboy-And-Watergirl\main.cpp(1122,49): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\heyth\Desktop\Fireboy-And-Watergirl\main.cpp(1122,46): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\heyth\Desktop\Fireboy-And-Watergirl\main.cpp(1154,51): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\heyth\Desktop\Fireboy-And-Watergirl\main.cpp(1154,48): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\heyth\Desktop\Fireboy-And-Watergirl\main.cpp(1155,53): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\heyth\Desktop\Fireboy-And-Watergirl\main.cpp(1155,50): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\heyth\Desktop\Fireboy-And-Watergirl\main.cpp(1156,52): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\heyth\Desktop\Fireboy-And-Watergirl\main.cpp(1156,49): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
 C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29910\include\utility(193,16): warning C4244: 'initializing': conversion from '_Ty' to '_Ty1', possible loss of data
           with
           [
@@ -29,13 +37,13 @@ C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.2
           [
               _Ty1=float
           ]
-C:\SFML\Fireboy-And-Watergirl\main.cpp(533): message : see reference to function template instantiation 'std::pair<float,float>::pair<int,float,0>(_Other1 &&,_Other2 &&) noexcept' being compiled
+C:\Users\heyth\Desktop\Fireboy-And-Watergirl\main.cpp(935): message : see reference to function template instantiation 'std::pair<float,float>::pair<int,float,0>(_Other1 &&,_Other2 &&) noexcept' being compiled
           with
           [
               _Other1=int,
               _Other2=float
           ]
-C:\SFML\Fireboy-And-Watergirl\main.cpp(533): message : see reference to function template instantiation 'std::pair<float,float>::pair<int,float,0>(_Other1 &&,_Other2 &&) noexcept' being compiled
+C:\Users\heyth\Desktop\Fireboy-And-Watergirl\main.cpp(935): message : see reference to function template instantiation 'std::pair<float,float>::pair<int,float,0>(_Other1 &&,_Other2 &&) noexcept' being compiled
           with
           [
               _Other1=int,
@@ -50,17 +58,38 @@ C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.2
           [
               _Ty2=float
           ]
-C:\SFML\Fireboy-And-Watergirl\main.cpp(554): message : see reference to function template instantiation 'std::pair<float,float>::pair<float&,int,0>(_Other1,_Other2 &&) noexcept' being compiled
+C:\Users\heyth\Desktop\Fireboy-And-Watergirl\main.cpp(964): message : see reference to function template instantiation 'std::pair<float,float>::pair<float&,int,0>(_Other1,_Other2 &&) noexcept' being compiled
           with
           [
               _Other1=float &,
               _Other2=int
           ]
-C:\SFML\Fireboy-And-Watergirl\main.cpp(554): message : see reference to function template instantiation 'std::pair<float,float>::pair<float&,int,0>(_Other1,_Other2 &&) noexcept' being compiled
+C:\Users\heyth\Desktop\Fireboy-And-Watergirl\main.cpp(964): message : see reference to function template instantiation 'std::pair<float,float>::pair<float&,int,0>(_Other1,_Other2 &&) noexcept' being compiled
           with
           [
               _Other1=float &,
               _Other2=int
           ]
-C:\SFML\Fireboy-And-Watergirl\External\include\sftools\Chronometer.hpp(172): warning C4715: 'sftools::Chronometer::getElapsedTime': not all control paths return a value
-  SFML_Project.vcxproj -> C:\SFML\Fireboy-And-Watergirl\Debug\SFML_Project.exe
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29910\include\utility(193,16): warning C4244: 'initializing': conversion from '_Ty' to '_Ty1', possible loss of data
+          with
+          [
+              _Ty=double
+          ]
+          and
+          [
+              _Ty1=float
+          ]
+C:\Users\heyth\Desktop\Fireboy-And-Watergirl\main.cpp(991): message : see reference to function template instantiation 'std::pair<float,float>::pair<double,int,0>(_Other1 &&,_Other2 &&) noexcept' being compiled
+          with
+          [
+              _Other1=double,
+              _Other2=int
+          ]
+C:\Users\heyth\Desktop\Fireboy-And-Watergirl\main.cpp(991): message : see reference to function template instantiation 'std::pair<float,float>::pair<double,int,0>(_Other1 &&,_Other2 &&) noexcept' being compiled
+          with
+          [
+              _Other1=double,
+              _Other2=int
+          ]
+C:\Users\heyth\Desktop\Fireboy-And-Watergirl\External\include\sftools\Chronometer.hpp(172): warning C4715: 'sftools::Chronometer::getElapsedTime': not all control paths return a value
+  SFML_Project.vcxproj -> C:\Users\heyth\Desktop\Fireboy-And-Watergirl\Debug\SFML_Project.exe
