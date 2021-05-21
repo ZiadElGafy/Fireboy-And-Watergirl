@@ -265,11 +265,11 @@ String levelsMap [5][9] =
 
                         "                ",
                         "                ",
-                        "            LMMR",
-                        "          M     ",
-                        "        M       ",
-                        "      M         ",
-                        "    LMMR        ",
+                        "    M       LMMR",
+                        "      M   M     ",
+                        "LMMWMMMR      LR",
+                        "            LR  ",
+                        "    LMMMBMFMR   ",
                         "  M             ",
                         "                ",
                 },
@@ -1022,6 +1022,9 @@ int main()
     // Main game loop
     while (window.isOpen())
     {
+
+        cout << deathX << " " << deathY << endl;
+
         // Check if on level leaderboard page
         for (int i = 0; i < 10; i++)
         {
@@ -1073,7 +1076,10 @@ int main()
                     waterGirl.groundCheck = 1;
                     if ((i.first.second == 1 || i.first.second == 3) && !waterGirl.isDead) {
                         waterGirl.die();
-                        soundPlayerDeath.play();
+                        if(!soundFxMute)soundPlayerDeath.play();
+                        deathX = i.first.first.getPosition().x; deathY = i.first.first.getPosition().y - 40;
+                        smoke1.setPosition({ deathX, deathY });
+                        smoke2.setPosition({ deathX, deathY });
                     }
                     if (i.first.second == 4)
                     {
@@ -1096,7 +1102,10 @@ int main()
                     fireBoy.groundCheck = 1;
                     if ((i.first.second == 2 || i.first.second == 3) && !fireBoy.isDead) {
                         fireBoy.die();
-                        soundPlayerDeath.play();
+                        if (!soundFxMute)soundPlayerDeath.play();
+                        deathX = i.first.first.getPosition().x; deathY = i.first.first.getPosition().y - 40;
+                        smoke1.setPosition({ deathX, deathY });
+                        smoke2.setPosition({ deathX, deathY });
                     }
                     if (i.first.second == 4)
                     {
