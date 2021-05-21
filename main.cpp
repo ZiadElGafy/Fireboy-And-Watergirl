@@ -398,7 +398,7 @@ int jumpFactor = 42;
 float gravity = 7;
 
 //  Declaring fireBoy and waterGirl sprites and textures
-Texture fireBoyTextureLeft,fireBoyTextureRight, waterGirlTexture;
+Texture fireBoyTexture, fireBoyTextureLeft,fireBoyTextureRight, waterGirlTexture, waterGirlTextureLeft, waterGirlTextureRight;
 
 int deathCounter = 0;
 //Player struct
@@ -467,10 +467,13 @@ int main()
     memset(buttonPressed,0,sizeof(buttonPressed));
 
     // Declaring characters
+    fireBoyTexture.loadFromFile(m + "assets/graphics/fireBoy.png");
     fireBoyTextureLeft.loadFromFile(m + "assets/graphics/fireBoyLeft.png");
     fireBoyTextureRight.loadFromFile(m + "assets/graphics/fireBoyRight.png");
     waterGirlTexture.loadFromFile(m + "assets/graphics/waterGirl.png");
-    Player fireBoy(fireBoyTextureLeft,1), waterGirl(waterGirlTexture,2);
+    waterGirlTextureLeft.loadFromFile(m + "assets/graphics/waterGirlLeft.png");
+    waterGirlTextureRight.loadFromFile(m + "assets/graphics/waterGirlRight.png");
+    Player fireBoy(fireBoyTexture,1), waterGirl(waterGirlTexture,2);
     
     //Pools Textures
     waterLeftText.loadFromFile(m + "assets/graphics/waterLeft.png");
@@ -1023,7 +1026,7 @@ int main()
     while (window.isOpen())
     {
 
-        cout << deathX << " " << deathY << endl;
+       // cout << deathX << " " << deathY << endl;
 
         // Check if on level leaderboard page
         for (int i = 0; i < 10; i++)
@@ -1149,11 +1152,13 @@ int main()
 
         if (Keyboard::isKeyPressed(Keyboard::Key::D) && !paused && gameStarted)
         {
+            waterGirl.playerSprite.setTexture(waterGirlTextureRight);
             if (!pushedWaterGirl && waterGirl.jumpCnt >= jumpFactor) waterGirl.move({ pixelsPerIteration , 0 });
             else if (!pushedWaterGirl) waterGirl.move({  1.825*pixelsPerIteration , 0});
         }
         if (Keyboard::isKeyPressed(Keyboard::Key::A) && !paused && gameStarted)
         {
+            waterGirl.playerSprite.setTexture(waterGirlTextureLeft);
             if (!pushedWaterGirl && waterGirl.jumpCnt >= jumpFactor) waterGirl.move({ -pixelsPerIteration , 0 });
             else if (!pushedWaterGirl) waterGirl.move({ -1.825 * pixelsPerIteration , 0 });
         }
