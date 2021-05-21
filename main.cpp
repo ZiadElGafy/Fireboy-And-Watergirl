@@ -269,7 +269,7 @@ String levelsMap [5][9] =
                         "          M     ",
                         "        M       ",
                         "                ",
-                        "    MBMB        ",
+                        "    LBMB        ",
                         "  M             ",
                         "                ",
                 },
@@ -292,6 +292,7 @@ Texture smallLavaText, smallAcidText, smallWaterText;
 
 //Button
 Texture textureButtonOff,textureButtonOn;
+Texture textureStoneMid;
 
 //Drawing platforms
 Color color(0, 0, 0, 0);
@@ -349,11 +350,10 @@ void fillPlatformObjects()
             if (levelsMap[level][i][j] == 'B')
             {
                 ++buttonCnt;
-                RectangleShape obj({ 80,40 });
+                RectangleShape obj;
+                obj.setSize({80, 40});
                 float posX = 40 + (80 * j), posY = 40 + (80 * i);
-                obj.setFillColor(sf::Color(100, 100, 200));
                 obj.setPosition({ posX, posY });
-                obj.setTexture(&textureButtonOff);
                 platformObjects.push_back({{obj, 4 },buttonCnt});
             }
         }
@@ -384,7 +384,7 @@ void fillPlatformObjects()
         if (streak)
         {
             float start = (15 - streak) * 80 + 40 + 80, end = start + (80 * streak);
-            RectangleShape obj({ end - start, 40 });
+            RectangleShape obj({ end - start - 5, 40 });
             obj.setPosition({ start, (float)(40 + 80 * i) });
             obj.setFillColor(color);
             platformObjects.push_back({{ obj, 0 },0});
@@ -421,9 +421,7 @@ struct Player
     {
         playerSprite.setTexture(image);
         playerSprite.setPosition({ 41.f, 599.f });
-
         type = element;
-
     }
     void Inquire()
     {
@@ -491,7 +489,7 @@ int main()
     // Button
     textureButtonOff.loadFromFile(m + "assets/graphics/btnoff.png");
     textureButtonOn.loadFromFile(m + "assets/graphics/btnon.png");
-    RectangleShape buttonOn({80,40}),buttonOff({80,40});
+    RectangleShape buttonOn({80,60}),buttonOff({80,60});
     buttonOn.setTexture(&textureButtonOn);
     buttonOff.setTexture(&textureButtonOff);
     
@@ -533,7 +531,6 @@ int main()
     borders[0].setTexture(&textureTopBorder), borders[1].setTexture(&textureBottomBorder);
 
     // Stones
-    Texture textureStoneMid;
     textureStoneMid.loadFromFile(m + "assets/graphics/stoneMid.png");
     RectangleShape spriteStoneMid(Vector2f(80.f, 40.f));
     spriteStoneMid.setTexture(&textureStoneMid);
@@ -1332,9 +1329,9 @@ int main()
             //Render pools
             for (auto i : platformObjects)
             {
-                if(!buttonPressed[i.second])
+                if(!i.second)
                     window.draw(i.first.first);
-                else
+                else //Button Block
                 {
                     if (!waterGirl.bounds.intersects(i.first.first.getGlobalBounds()) && !fireBoy.bounds.intersects(i.first.first.getGlobalBounds()))
                     {
@@ -1343,12 +1340,12 @@ int main()
 
                     if(buttonPressed[i.second])
                     {
-                        buttonOn.setPosition(i.first.first.getPosition().x, i.first.first.getPosition().y);
+                        buttonOn.setPosition(i.first.first.getPosition().x, i.first.first.getPosition().y - 20);
                         window.draw(buttonOn);
                     }
                     if(!buttonPressed[i.second])
                     {
-                        buttonOff.setPosition(i.first.first.getPosition().x, i.first.first.getPosition().y);
+                        buttonOff.setPosition(i.first.first.getPosition().x, i.first.first.getPosition().y - 20);
                         window.draw(buttonOff);
                     }
                 }
