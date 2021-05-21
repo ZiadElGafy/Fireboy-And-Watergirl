@@ -267,7 +267,7 @@ String levelsMap [5][9] =
                         "                ",
                         "    M       LMMR",
                         "      M   M     ",
-                        "LMMWMMMR      LR",
+                        "MMMWMMMR      LM",
                         "            LR  ",
                         "    LMMMBMFMR   ",
                         "  M             ",
@@ -464,7 +464,9 @@ int main()
 
     //Booleans for buttons
     bool buttonPressed[10 + 2];
+    bool buttonSoundPlayed[10 + 2];
     memset(buttonPressed,0,sizeof(buttonPressed));
+    memset(buttonSoundPlayed,0,sizeof(buttonSoundPlayed));
 
     // Declaring characters
     fireBoyTexture.loadFromFile(m + "assets/graphics/fireBoy.png");
@@ -941,17 +943,19 @@ int main()
     spriteDoor.setTexture(textureDoor);
 
     // Sound effects
-    SoundBuffer bufferFireboyJump, bufferWatergirlJump, bufferLevelComplete, bufferButtonHover, bufferPlayerDeath;
+    SoundBuffer bufferFireboyJump, bufferWatergirlJump, bufferLevelComplete, bufferButtonHover, bufferPlayerDeath, bufferButtonSound;
     bufferFireboyJump.loadFromFile(m + "assets/audio/fireboyJump.ogg");
     bufferButtonHover.loadFromFile(m + "assets/audio/buttonHover.ogg");
     bufferWatergirlJump.loadFromFile(m + "assets/audio/watergirlJump.ogg");
     bufferLevelComplete.loadFromFile(m + "assets/audio/levelComplete.ogg");
     bufferPlayerDeath.loadFromFile(m + "assets/audio/death.ogg");
+    bufferButtonSound.loadFromFile(m + "assets/audio/buttonSound.wav");
 
     Sound soundButtonHover(bufferButtonHover);
     Sound soundLevelComplete(bufferLevelComplete);
     Sound soundFireboyJump(bufferFireboyJump), soundWatergirlJump(bufferWatergirlJump);
     Sound soundPlayerDeath(bufferPlayerDeath);
+    Sound buttonSound(bufferButtonSound);
 
 
     // Music
@@ -1359,11 +1363,17 @@ int main()
                     {
                         buttonOn.setPosition(i.first.first.getPosition().x, i.first.first.getPosition().y - 20);
                         window.draw(buttonOn);
+                        if(!buttonSoundPlayed[i.second] && !soundFxMute)
+                        {
+                            buttonSound.play();
+                            buttonSoundPlayed[i.second] = true;
+                        }
                     }
                     if(!buttonPressed[i.second])
                     {
                         buttonOff.setPosition(i.first.first.getPosition().x, i.first.first.getPosition().y - 20);
                         window.draw(buttonOff);
+                        buttonSoundPlayed[i.second] = false;
                     }
                 }
             }
