@@ -99,4 +99,5 @@ C:\Users\heyth\Desktop\Fireboy-And-Watergirl\main.cpp(238): message : see refere
               _Other2=int
           ]
 C:\Users\heyth\Desktop\Fireboy-And-Watergirl\External\include\sftools\Chronometer.hpp(172): warning C4715: 'sftools::Chronometer::getElapsedTime': not all control paths return a value
+  LINK : C:\Users\heyth\Desktop\Fireboy-And-Watergirl\Debug\SFML_Project.exe not found or not built by the last incremental link; performing full link
   SFML_Project.vcxproj -> C:\Users\heyth\Desktop\Fireboy-And-Watergirl\Debug\SFML_Project.exe
