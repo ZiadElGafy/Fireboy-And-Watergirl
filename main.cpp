@@ -26,6 +26,7 @@
 #include <stdexcept>
 #include <streambuf>
 #include <string>
+#include <cstring>
 #include <typeinfo>
 #include <utility>
 #include <valarray>
@@ -267,8 +268,8 @@ String levelsMap [5][9] =
                         "            LMMR",
                         "          M     ",
                         "        M       ",
-                        "      W         ",
-                        "    M           ",
+                        "                ",
+                        "    MBMB        ",
                         "  M             ",
                         "                ",
                 },
@@ -288,9 +289,14 @@ String levelsMap [5][9] =
 //Pools Textures
 Texture waterLeftText, waterMidText, waterRightText, lavaLeftText, lavaMidText, lavaRightText, acidLeftText, acidMidText, acidRightText;
 Texture smallLavaText, smallAcidText, smallWaterText;
+
+//Button
+Texture textureButtonOff,textureButtonOn;
+
 //Drawing platforms
 Color color(0, 0, 0, 0);
-vector<pair<RectangleShape, int> > platformObjects;
+vector<pair<pair<RectangleShape, int>,int> > platformObjects;
+int buttonCnt = 0;
 void fillPlatformObjects()
 {
     //Registering pools as platforms
@@ -309,7 +315,7 @@ void fillPlatformObjects()
                 if (levelsMap[level][i][j] == 'i') { obj.setTexture(&lavaMidText); }
                 if (levelsMap[level][i][j] == 'r') { obj.setTexture(&lavaRightText); }
                 if (levelsMap[level][i][j] == 'F') { obj.setTexture(&smallLavaText); }
-                platformObjects.push_back({ obj, 1 });
+                platformObjects.push_back({{ obj, 1 },0});
             }
             //Water -> 2
             if (levelsMap[level][i][j] == 'w' || levelsMap[level][i][j] == 'a' || levelsMap[level][i][j] == 't' || levelsMap[level][i][j] == 'W')
@@ -323,7 +329,7 @@ void fillPlatformObjects()
                 if (levelsMap[level][i][j] == 't') { obj.setTexture(&waterRightText); }
                 if (levelsMap[level][i][j] == 'W') { obj.setTexture(&smallWaterText); }
 
-                platformObjects.push_back({ obj,2 });
+                platformObjects.push_back({{ obj,2 },0});
             }
             //Mud -> 3
             if (levelsMap[level][i][j] == 'm' || levelsMap[level][i][j] == 'u' || levelsMap[level][i][j] == 'd' || levelsMap[level][i][j] == 'A')
@@ -337,7 +343,18 @@ void fillPlatformObjects()
                 if (levelsMap[level][i][j] == 'd') { obj.setTexture(&acidRightText); }
                 if (levelsMap[level][i][j] == 'A') { obj.setTexture(&smallAcidText); }
 
-                platformObjects.push_back({ obj, 3 });
+                platformObjects.push_back({{ obj, 3 },0});
+            }
+//            //Button -> 4
+            if (levelsMap[level][i][j] == 'B')
+            {
+                ++buttonCnt;
+                RectangleShape obj({ 80,40 });
+                float posX = 40 + (80 * j), posY = 40 + (80 * i);
+                obj.setFillColor(sf::Color(100, 100, 200));
+                obj.setPosition({ posX, posY });
+                obj.setTexture(&textureButtonOff);
+                platformObjects.push_back({{obj, 4 },buttonCnt});
             }
         }
     }
@@ -359,7 +376,7 @@ void fillPlatformObjects()
                     RectangleShape obj({ end - start - 5, 40 });
                     obj.setPosition({ start, (float)(40 + 80 * i) });
                     obj.setFillColor(color);
-                    platformObjects.push_back({ obj, 0 });
+                    platformObjects.push_back({{ obj, 0 },0});
                     streak = 0;
                 }
             }
@@ -370,11 +387,10 @@ void fillPlatformObjects()
             RectangleShape obj({ end - start, 40 });
             obj.setPosition({ start, (float)(40 + 80 * i) });
             obj.setFillColor(color);
-            platformObjects.push_back({ obj, 0 });
+            platformObjects.push_back({{ obj, 0 },0});
             streak = 0;
         }
     }
-    
 }
 
 int curPlatformObjectLevel = 100;
@@ -382,7 +398,7 @@ int jumpFactor = 42;
 float gravity = 7;
 
 //  Declaring fireBoy and waterGirl sprites and textures
-Texture fireBoyTexture, waterGirlTexture;
+Texture fireBoyTextureLeft,fireBoyTextureRight, waterGirlTexture;
 
 int deathCounter = 0;
 //Player struct
@@ -448,10 +464,15 @@ int main()
 
     initializeCurrentRecords();
 
+    //Booleans for buttons
+    bool buttonPressed[buttonCnt + 2];
+    memset(buttonPressed,0,sizeof(buttonPressed));
+
     // Declaring characters
-    fireBoyTexture.loadFromFile(m + "assets/graphics/fireBoy.png");
+    fireBoyTextureLeft.loadFromFile(m + "assets/graphics/fireBoyLeft.png");
+    fireBoyTextureRight.loadFromFile(m + "assets/graphics/fireBoyRight.png");
     waterGirlTexture.loadFromFile(m + "assets/graphics/waterGirl.png");
-    Player fireBoy(fireBoyTexture,1), waterGirl(waterGirlTexture,2);
+    Player fireBoy(fireBoyTextureLeft,1), waterGirl(waterGirlTexture,2);
     
     //Pools Textures
     waterLeftText.loadFromFile(m + "assets/graphics/waterLeft.png");
@@ -466,8 +487,13 @@ int main()
     smallWaterText.loadFromFile(m + "assets/graphics/smallWater.png");
     smallAcidText.loadFromFile(m + "assets/graphics/smallAcid.png");
     smallLavaText.loadFromFile(m + "assets/graphics/smallLava.png");
-    
-    
+
+    // Button
+    textureButtonOff.loadFromFile(m + "assets/graphics/btnoff.png");
+    textureButtonOn.loadFromFile(m + "assets/graphics/btnon.png");
+    RectangleShape buttonOn({80,40}),buttonOff({80,40});
+    buttonOn.setTexture(&textureButtonOn);
+    buttonOff.setTexture(&textureButtonOff);
     
     // Ground
     RectangleShape ground({ 1280, 1 });
@@ -755,7 +781,7 @@ int main()
     textLeaderboards.setFont(fontTitle);
     textLeaderboards.setCharacterSize(50);
     textLeaderboards.setFillColor(Color::White);
-    textLeaderboards.setString("Leaderboards");
+    textLeaderboards.setString("Leaderboard");
 
     textRect = textLeaderboards.getLocalBounds();
     textLeaderboards.setOrigin(textRect.left +
@@ -763,6 +789,52 @@ int main()
                          textRect.top +
                          textRect.height / 2.0f);
     textLeaderboards.setPosition(640, 500);
+
+    Text textLeaderboard;
+    textLeaderboard.setFont(fontTitle);
+    textLeaderboard.setCharacterSize(70);
+    textLeaderboard.setFillColor(Color::White);
+    textLeaderboard.setString("Leaderboard");
+
+    textRect = textLeaderboard.getLocalBounds();
+    textLeaderboard.setOrigin(textRect.left +
+                               textRect.width / 2.0f,
+                               textRect.top +
+                               textRect.height / 2.0f);
+    textLeaderboard.setPosition(640, 100);
+
+    // Player names and scores
+    Text textLevels[10];
+    for (int i = 0; i < 10; i++)
+    {
+        textLevels[i].setFont(fontTitle);
+        textLevels[i].setCharacterSize(50);
+        textLevels[i].setFillColor(Color::White);
+        textLevels[i].setString("Level " + to_string(i + 1));
+
+        textRect = textLevels[i].getLocalBounds();
+        textLevels[i].setOrigin(textRect.left +
+                                   textRect.width / 2.0f,
+                                   textRect.top +
+                                   textRect.height / 2.0f);
+        textLevels[i].setPosition(((i < 5) ? 440 : 840), (i < 5) ? (i + 1) * 100 + 130 : (i - 5 + 1) * 100 + 130);
+    }
+
+    Text textMainLevels[10];
+    for (int i = 0; i < 10; i++)
+    {
+        textMainLevels[i].setFont(fontTitle);
+        textMainLevels[i].setCharacterSize(70);
+        textMainLevels[i].setFillColor(Color::White);
+        textMainLevels[i].setString("Level " + to_string(i + 1) + " leaderboard");
+
+        textRect = textMainLevels[i].getLocalBounds();
+        textMainLevels[i].setOrigin(textRect.left +
+                                textRect.width / 2.0f,
+                                textRect.top +
+                                textRect.height / 2.0f);
+        textMainLevels[i].setPosition(640, 100);
+    }
 
     // Level 1 (Test)
     Text textLevel1;
@@ -859,6 +931,8 @@ int main()
 
     RectangleShape arrowLeaderboards = arrow;
 
+    RectangleShape arrowLevelLeaderboard = arrow;
+
     // Door
     Texture textureDoor;
     textureDoor.loadFromFile(m + "assets/graphics/door.png");
@@ -938,7 +1012,11 @@ int main()
     bool leaderboards = false;
     bool hoverLeaderboards = false;
     bool canClick = true;
+    bool hoverArrowLevelLeaderboard = false;
+    bool hoverTextLevels[10] = {};
+    bool levelLeaderboardPage[10] = {};
 
+    int currentLevelLeaderboardPage = 0;
     int continueFillColor = 255;
     int enterYourNameFillColor = 255;
 
@@ -947,6 +1025,17 @@ int main()
     // Main game loop
     while (window.isOpen())
     {
+        // Check if on level leaderboard page
+        for (int i = 0; i < 10; i++)
+        {
+            if (levelLeaderboardPage[i])
+            {
+                currentLevelLeaderboardPage = i + 1;
+                leaderboards = false;
+                break;
+            }
+        }
+
         // Check continue fill color increasing
         if (!continueFillColor) continueFillColorInc = true;
         else if (continueFillColor == 255) continueFillColorInc = false;
@@ -977,62 +1066,72 @@ int main()
         {
             waterGirl.Inquire();
             //Y-axis
-            if (waterGirl.bounds.intersects(i.first.getGlobalBounds()))
+            if (waterGirl.bounds.intersects(i.first.first.getGlobalBounds()))
             {
                 waterGirl.jumpCnt = jumpFactor + 1;
-                if (waterGirl.dy < i.first.getPosition().y)
+                if (waterGirl.dy < i.first.first.getPosition().y)
                 {
                     pushedWaterGirl = false;
                     waterGirl.move({ 0, -gravity });
                     waterGirl.groundCheck = 1;
-                    if ((i.second == 1 || i.second == 3) && !waterGirl.isDead) {
-                        deathX = i.first.getPosition().x , deathY = i.first.getPosition().y;
-                        smoke1.setPosition({ deathX, deathY - 40 });
-                        smoke2.setPosition({ deathX, deathY - 40 });
+                    if ((i.first.second == 1 || i.first.second == 3) && !waterGirl.isDead) {
                         waterGirl.die();
                         soundPlayerDeath.play();
+                    }
+                    if (i.first.second == 4)
+                    {
+                        buttonPressed[i.second] = true;
+                    }
+                    else
+                    {
+                        buttonPressed[i.second] = false;
                     }
                 }
             }
             fireBoy.Inquire();
-            if (fireBoy.bounds.intersects(i.first.getGlobalBounds()))
+            if (fireBoy.bounds.intersects(i.first.first.getGlobalBounds()))
             {
                 fireBoy.jumpCnt = jumpFactor + 1;
-                if (fireBoy.dy < i.first.getPosition().y)
+                if (fireBoy.dy < i.first.first.getPosition().y)
                 {
                     pushedFireBoy = false;
                     fireBoy.move({ 0, -gravity });
                     fireBoy.groundCheck = 1;
-                    if ((i.second == 2 || i.second == 3) && !fireBoy.isDead) {
-                        deathX = i.first.getPosition().x, deathY = i.first.getPosition().y;
-                        smoke1.setPosition({ deathX, deathY - 40 });
-                        smoke2.setPosition({ deathX, deathY - 40 });
+                    if ((i.first.second == 2 || i.first.second == 3) && !fireBoy.isDead) {
                         fireBoy.die();
                         soundPlayerDeath.play();
+                    }
+                    if (i.first.second == 4)
+                    {
+                        buttonPressed[i.second] = true;
+                    }
+                    else
+                    {
+                        buttonPressed[i.second] = false;
                     }
                 }
             }
 
             //X-axis
             waterGirl.Inquire();
-            if (waterGirl.bounds.intersects(i.first.getGlobalBounds()) && waterGirl.dy + 80 - safe >= i.first.getPosition().y && waterGirl.dx + 80 - safe >= i.first.getPosition().x)
+            if (waterGirl.bounds.intersects(i.first.first.getGlobalBounds()) && waterGirl.dy + 80 - safe >= i.first.first.getPosition().y && waterGirl.dx + 80 - safe >= i.first.first.getPosition().x)
             {
                 pushedWaterGirl = true;
                 waterGirl.move({ pixelsPerIteration, 0 });
             }
             waterGirl.Inquire();
-            if (waterGirl.bounds.intersects(i.first.getGlobalBounds()) && waterGirl.dy + 80 - safe >= i.first.getPosition().y && waterGirl.dx + safe <= i.first.getPosition().x + i.first.getGlobalBounds().width)
+            if (waterGirl.bounds.intersects(i.first.first.getGlobalBounds()) && waterGirl.dy + 80 - safe >= i.first.first.getPosition().y && waterGirl.dx + safe <= i.first.first.getPosition().x + i.first.first.getGlobalBounds().width)
             {
                 pushedWaterGirl = true;
                 waterGirl.move({ -pixelsPerIteration, 0 });
             }
             fireBoy.Inquire();
-            if (fireBoy.bounds.intersects(i.first.getGlobalBounds()) && fireBoy.dy + 80 - safe >= i.first.getPosition().y && fireBoy.dx + 80 - safe >= i.first.getPosition().x)
+            if (fireBoy.bounds.intersects(i.first.first.getGlobalBounds()) && fireBoy.dy + 80 - safe >= i.first.first.getPosition().y && fireBoy.dx + 80 - safe >= i.first.first.getPosition().x)
             {
                 pushedFireBoy = true;
                 fireBoy.move({ pixelsPerIteration, 0 });
             }
-            if (fireBoy.bounds.intersects(i.first.getGlobalBounds()) && fireBoy.dy + 80 - safe >= i.first.getPosition().y && fireBoy.dx + safe <= i.first.getPosition().x + i.first.getGlobalBounds().width)
+            if (fireBoy.bounds.intersects(i.first.first.getGlobalBounds()) && fireBoy.dy + 80 - safe >= i.first.first.getPosition().y && fireBoy.dx + safe <= i.first.first.getPosition().x + i.first.first.getGlobalBounds().width)
             {
                 pushedFireBoy = true;
                 fireBoy.move({ -pixelsPerIteration, 0 });
@@ -1054,11 +1153,13 @@ int main()
         }
         if (Keyboard::isKeyPressed(Keyboard::Key::Right) && !paused && gameStarted)
         {
+            fireBoy.playerSprite.setTexture(fireBoyTextureRight);
             if (!pushedFireBoy && fireBoy.jumpCnt >= jumpFactor) fireBoy.move({ pixelsPerIteration , 0 });
             else if(!pushedFireBoy)fireBoy.move({ 1.825*pixelsPerIteration , 0 });
         }
         if (Keyboard::isKeyPressed(Keyboard::Key::Left) && !paused && gameStarted)
         {
+            fireBoy.playerSprite.setTexture(fireBoyTextureLeft);
             if (!pushedFireBoy && fireBoy.jumpCnt >= jumpFactor) fireBoy.move({ -pixelsPerIteration , 0 });
             else if(!pushedFireBoy) fireBoy.move({ -1.825*pixelsPerIteration , 0 });
         }
@@ -1182,7 +1283,7 @@ int main()
             }
         }
 
-        if (gameStarted && !levelInquire && !leaderboards)
+        if (gameStarted && !levelInquire && !leaderboards && !currentLevelLeaderboardPage)
         {
             if(musicMute)
                 musicLevel.stop();
@@ -1194,8 +1295,9 @@ int main()
             {
                 fireBoy.Restart(), waterGirl.Restart();
                 platformObjects.clear();
-                platformObjects.push_back({ground,0});
+                platformObjects.push_back({{ground,0},0});
                 fillPlatformObjects();
+                memset(buttonPressed,0,sizeof(buttonPressed));
                 curPlatformObjectLevel = level;
                 deathX = deathY = -1.f;
             }
@@ -1230,7 +1332,26 @@ int main()
             //Render pools
             for (auto i : platformObjects)
             {
-                window.draw(i.first);
+                if(!buttonPressed[i.second])
+                    window.draw(i.first.first);
+                else
+                {
+                    if (!waterGirl.bounds.intersects(i.first.first.getGlobalBounds()) && !fireBoy.bounds.intersects(i.first.first.getGlobalBounds()))
+                    {
+                        buttonPressed[i.second] = false;
+                    }
+
+                    if(buttonPressed[i.second])
+                    {
+                        buttonOn.setPosition(i.first.first.getPosition().x, i.first.first.getPosition().y);
+                        window.draw(buttonOn);
+                    }
+                    if(!buttonPressed[i.second])
+                    {
+                        buttonOff.setPosition(i.first.first.getPosition().x, i.first.first.getPosition().y);
+                        window.draw(buttonOff);
+                    }
+                }
             }
             // Render border
             for (int i = 0; i < 4; i++) window.draw(borders[i]);
@@ -1292,7 +1413,7 @@ int main()
             canClick = true;
 
         // Guest
-        if (!gameStarted && !paused && !settingsMenu && started && !bothPlayers && !levelInquire && !leaderboards)
+        if (!gameStarted && !paused && !settingsMenu && started && !bothPlayers && !levelInquire && !leaderboards && !currentLevelLeaderboardPage)
         {
             if (mouse_xAxis >= 412.5 && mouse_xAxis <= 867.5 && mouse_yAxis >= 554 && mouse_yAxis <= 596)
             {
@@ -1317,7 +1438,7 @@ int main()
         }
 
         // Player 1 Name
-        if(!gameStarted && !paused && !settingsMenu && started && !bothPlayers && player1Input && !player2Input && !levelInquire && !leaderboards)
+        if(!gameStarted && !paused && !settingsMenu && started && !bothPlayers && player1Input && !player2Input && !levelInquire && !leaderboards && !currentLevelLeaderboardPage)
         {
             window.draw(enterYourNameRectangle);
             window.draw(enterYourNameRectangle2);
@@ -1359,7 +1480,7 @@ int main()
         }
 
             // Player 2 name
-        else if(!gameStarted && !paused && !settingsMenu && started && !bothPlayers && !player1Input && player2Input && !levelInquire && !leaderboards)
+        else if(!gameStarted && !paused && !settingsMenu && started && !bothPlayers && !player1Input && player2Input && !levelInquire && !leaderboards && !currentLevelLeaderboardPage)
         {
             window.draw(enterYourNameRectangle);
             window.draw(enterYourNameRectangle2);
@@ -1402,9 +1523,13 @@ int main()
             player2Text.setPosition(640,450);
             window.draw(textEnterYourName);
         }
+
         // Leaderboards page
-        if (!gameStarted && !paused && !settingsMenu && started && bothPlayers && player1Input && player2Input && !levelInquire && leaderboards)
+        if (!gameStarted && !paused && !settingsMenu && started && bothPlayers && player1Input && player2Input && !levelInquire && leaderboards && !currentLevelLeaderboardPage)
         {
+            // Leaderboard text
+            window.draw(textLeaderboard);
+
             // Back arrow
             if (mouse_xAxis >= 44 && mouse_xAxis <= 163 && mouse_yAxis >= 51 && mouse_yAxis <= 104)
             {
@@ -1425,10 +1550,84 @@ int main()
                 arrowLeaderboards.setTexture(&textureWhiteArrow);
             }
             window.draw(arrowLeaderboards);
+
+            for (int i = 0; i < 10; i++) window.draw(textLevels[i]);
+
+            for (int i = 0; i < 10; i++)
+            {
+                float textLevelCoordinatesW = textLevels[i].getLocalBounds().width, textLevelCoordinatesH = textLevels[i].getLocalBounds().height;
+                if (mouse_xAxis >= ((i < 5) ? 440 : 840) - textLevelCoordinatesW / 2 && mouse_xAxis <= ((i < 5) ? 440 : 840) + textLevelCoordinatesW / 2 && mouse_yAxis >= ((i < 5) ? (i + 1) * 100 + 130 : (i - 5 + 1) * 100 + 130) - textLevelCoordinatesH / 2 && mouse_yAxis <= ((i < 5) ? (i + 1) * 100 + 130 : (i - 5 + 1) * 100 + 130) + textLevelCoordinatesH / 2)
+                {
+                    if (!hoverTextLevels[i])
+                    {
+                        soundButtonHover.play();
+                        hoverTextLevels[i] = true;
+                    }
+                    textLevels[i].setFillColor(Color::Green);
+                    if (Mouse::isButtonPressed(Mouse::Left) && canClick)
+                    {
+                        levelLeaderboardPage[i] = true;
+                        canClick = false;
+                        break;
+                    }
+                }
+                else {
+                    hoverTextLevels[i] = false;
+                    textLevels[i].setFillColor(Color::White);
+                }
+            }
+        }
+
+        // Current level leaderboard page
+        if (currentLevelLeaderboardPage)
+        {
+            // Render title for this page
+            window.draw(textMainLevels[currentLevelLeaderboardPage - 1]);
+
+            // Retrieve high scores for this level
+            getTopTenOfLevel(currentLevelLeaderboardPage);
+
+            Text currentLevelRecord;
+            currentLevelRecord.setFont(fontTitle);
+            currentLevelRecord.setCharacterSize(50);
+            currentLevelRecord.setFillColor(Color::White);
+
+            for (int i = 0; i < min((int)topTen.size(), 5); i++)
+            {
+                string levelRecordMinutes = to_string(topTen[i].first / 60), levelRecordSeconds = to_string(topTen[i].first % 60);
+                if (levelRecordMinutes.size() == 1) levelRecordMinutes = "0" + levelRecordMinutes;
+                if (levelRecordSeconds.size() == 1) levelRecordSeconds = "0" + levelRecordSeconds;
+                currentLevelRecord.setString("#" + to_string(i + 1) + " " + topTen[i].second.first + " & " + topTen[i].second.second + " (Score: " + levelRecordMinutes + ":" + levelRecordSeconds + ")");
+                currentLevelRecord.setPosition(230, (i + 1) * 100 + 100);
+                window.draw(currentLevelRecord);
+            }
+
+            // Back arrow
+            if (mouse_xAxis >= 44 && mouse_xAxis <= 163 && mouse_yAxis >= 51 && mouse_yAxis <= 104)
+            {
+                if (!hoverArrowLevelLeaderboard)
+                {
+                    soundButtonHover.play();
+                    hoverArrowLevelLeaderboard = true;
+                }
+                arrowLevelLeaderboard.setTexture(&textureRedArrow);
+                if (Mouse::isButtonPressed(Mouse::Left) && canClick)
+                {
+                    canClick = false;
+                    levelLeaderboardPage[currentLevelLeaderboardPage - 1] = false;
+                    currentLevelLeaderboardPage = 0;
+                    leaderboards = true;
+                }
+            }
+            else {
+                hoverArrowLevelLeaderboard = false;
+                arrowLevelLeaderboard.setTexture(&textureWhiteArrow);
+            }
+            window.draw(arrowLevelLeaderboard);
         }
 
         // Level inquire
-        if (levelInquire && started && !gameStarted && !paused && !settingsMenu && bothPlayers && !leaderboards)
+        if (levelInquire && started && !gameStarted && !paused && !settingsMenu && bothPlayers && !leaderboards && !currentLevelLeaderboardPage)
         {
             // Back arrow
             if (mouse_xAxis >= 44 && mouse_xAxis <= 163 && mouse_yAxis >= 51 && mouse_yAxis <= 104)
@@ -1510,7 +1709,7 @@ int main()
         }
 
 
-        if (!gameStarted && !paused && !settingsMenu && started && bothPlayers && !levelInquire && !leaderboards)
+        if (!gameStarted && !paused && !settingsMenu && started && bothPlayers && !levelInquire && !leaderboards && !currentLevelLeaderboardPage)
         {
             // Render text title
             window.draw(textTitle);
@@ -1561,7 +1760,7 @@ int main()
 
         bool oneDead = (fireBoy.isDead || waterGirl.isDead);
 
-        if (!gameStarted || paused || settingsMenu || leaderboards)
+        if (!gameStarted || paused || settingsMenu || leaderboards || currentLevelLeaderboardPage)
         {
             // Exit button
             if (mouse_xAxis >= 1145 && mouse_xAxis <= 1250 && mouse_yAxis >= 655 && mouse_yAxis <= 705)
@@ -1585,7 +1784,7 @@ int main()
             window.draw(textExit);
         }
 
-        if ((paused || !gameStarted) && !settingsMenu && started && bothPlayers && !levelInquire && !leaderboards)
+        if ((paused || !gameStarted) && !settingsMenu && started && bothPlayers && !levelInquire && !leaderboards && !currentLevelLeaderboardPage)
         {
 
             // Settings Button
@@ -1611,7 +1810,7 @@ int main()
             else textSettings.setPosition(640, 500);
             window.draw(textSettings);
         }
-        if (paused && !settingsMenu && started && !levelInquire && !leaderboards)
+        if (paused && !settingsMenu && started && !levelInquire && !leaderboards && !currentLevelLeaderboardPage)
         {
             // Render text paused
             if (!fireBoy.isDead && !waterGirl.isDead) window.draw(textPaused);
@@ -1694,7 +1893,7 @@ int main()
             else textMainMenu.setPosition(640, 600);
             window.draw(textMainMenu);
         }
-        if (settingsMenu && started && !levelInquire && !leaderboards)
+        if (settingsMenu && started && !levelInquire && !leaderboards && !currentLevelLeaderboardPage)
         {
             Text state1, state2;
 
