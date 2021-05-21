@@ -233,6 +233,28 @@ void initializeCurrentRecords()
     csvData.close();
 }
 
+vector<pair<int,pair<string,string>>> topTen;
+void getTopTenOfLevel(int level)
+{
+//    just to make sure the map is initialized
+    initializeCurrentRecords();
+
+//    clearing the vector to avoid past data existence
+    topTen.clear();
+
+    map<pair<string,string>,vector<int>>::iterator it;
+    for (it = currentRecords.begin(); it != currentRecords.end(); it++)
+    {
+        if (it->second[level-1] != 0)
+        {
+            topTen.push_back({it->second[level-1],{it->first.first,it->first.second}});
+        }
+    }
+    sort (topTen.begin(),topTen.end());
+
+//    topTen may contains more or less than 10 records so take that into consideration
+}
+
 // Levels map and current level number
 int level = 0;
 String levelsMap [5][9] =
@@ -356,10 +378,10 @@ void fillPlatformObjects()
 }
 
 int curPlatformObjectLevel = 100;
+int jumpFactor = 42;
+float gravity = 7;
 
 //  Declaring fireBoy and waterGirl sprites and textures
-int jumpFactor = 42;
-float gravity = 6.5;
 Texture fireBoyTexture, waterGirlTexture;
 
 int deathCounter = 0;
@@ -416,6 +438,8 @@ struct Player
     }
 };
 
+// Declaring character death positions
+float deathX=-1.f, deathY = -1.f;
 
 int main()
 {
@@ -497,6 +521,14 @@ int main()
     textureStoneRight.loadFromFile(m + "assets/graphics/stoneRight.png");
     RectangleShape spriteStoneRight(Vector2f(80.f, 40.f));
     spriteStoneRight.setTexture(&textureStoneRight);
+
+    // Smoke
+    Texture smoke1Text, smoke2Text;
+    smoke1Text.loadFromFile(m + "assets/graphics/smoke1.png");
+    smoke2Text.loadFromFile(m + "assets/graphics/smoke2.png");
+    Sprite smoke1, smoke2;
+    smoke1.setTexture(smoke1Text);
+    smoke2.setTexture(smoke2Text);
 
     // Title
     Font fontTitle;
@@ -632,7 +664,7 @@ int main()
                         textRect.width / 2.0f,
                         textRect.top +
                         textRect.height / 2.0f);
-    textStart.setPosition(640, 400);
+    textStart.setPosition(640, 300);
 
     // Main menu
     Text textMainMenu;
@@ -717,6 +749,20 @@ int main()
                        textRect.top +
                        textRect.height / 2.0f);
     textGuest.setPosition(640, 575);
+
+    // Leaderboards
+    Text textLeaderboards;
+    textLeaderboards.setFont(fontTitle);
+    textLeaderboards.setCharacterSize(50);
+    textLeaderboards.setFillColor(Color::White);
+    textLeaderboards.setString("Leaderboards");
+
+    textRect = textLeaderboards.getLocalBounds();
+    textLeaderboards.setOrigin(textRect.left +
+                         textRect.width / 2.0f,
+                         textRect.top +
+                         textRect.height / 2.0f);
+    textLeaderboards.setPosition(640, 500);
 
     // Level 1 (Test)
     Text textLevel1;
@@ -811,6 +857,8 @@ int main()
 
     RectangleShape arrowLevelInquire = arrow;
 
+    RectangleShape arrowLeaderboards = arrow;
+
     // Door
     Texture textureDoor;
     textureDoor.loadFromFile(m + "assets/graphics/door.png");
@@ -853,7 +901,6 @@ int main()
     textTimer.setCharacterSize(35);
     textTimer.setFillColor(Color::White);
 
-
     // Flags
     bool paused = false;
     bool guest = false;
@@ -869,6 +916,7 @@ int main()
     bool hoverStart = false;
     bool hoverArrow = false;
     bool hoverArrowLevelInquire = false;
+    bool hoverArrowLeaderboards = false;
     bool hoverRetry = false;
     bool hoverContinue = false;
     bool hoverLevel1 = false;
@@ -887,6 +935,9 @@ int main()
     bool enterYourNameFillColorInc = false;
     bool levelInquire = false;
     bool canType = true;
+    bool leaderboards = false;
+    bool hoverLeaderboards = false;
+    bool canClick = true;
 
     int continueFillColor = 255;
     int enterYourNameFillColor = 255;
@@ -935,6 +986,9 @@ int main()
                     waterGirl.move({ 0, -gravity });
                     waterGirl.groundCheck = 1;
                     if ((i.second == 1 || i.second == 3) && !waterGirl.isDead) {
+                        deathX = i.first.getPosition().x , deathY = i.first.getPosition().y;
+                        smoke1.setPosition({ deathX, deathY - 40 });
+                        smoke2.setPosition({ deathX, deathY - 40 });
                         waterGirl.die();
                         soundPlayerDeath.play();
                     }
@@ -950,6 +1004,9 @@ int main()
                     fireBoy.move({ 0, -gravity });
                     fireBoy.groundCheck = 1;
                     if ((i.second == 2 || i.second == 3) && !fireBoy.isDead) {
+                        deathX = i.first.getPosition().x, deathY = i.first.getPosition().y;
+                        smoke1.setPosition({ deathX, deathY - 40 });
+                        smoke2.setPosition({ deathX, deathY - 40 });
                         fireBoy.die();
                         soundPlayerDeath.play();
                     }
@@ -1104,8 +1161,9 @@ int main()
                     }
                 }
             }
-            if(event.type == event.MouseButtonReleased && event.mouseButton.button == Mouse::Left)
+            if(event.type == event.MouseButtonReleased && event.mouseButton.button == Mouse::Left && canClick)
             {
+                canClick = false;
                 pressedMusicMute = false;
                 pressedSoundFxMute = false;
             }
@@ -1124,7 +1182,7 @@ int main()
             }
         }
 
-        if (gameStarted && !levelInquire)
+        if (gameStarted && !levelInquire && !leaderboards)
         {
             if(musicMute)
                 musicLevel.stop();
@@ -1139,6 +1197,7 @@ int main()
                 platformObjects.push_back({ground,0});
                 fillPlatformObjects();
                 curPlatformObjectLevel = level;
+                deathX = deathY = -1.f;
             }
 
             // Render level
@@ -1176,6 +1235,14 @@ int main()
             // Render border
             for (int i = 0; i < 4; i++) window.draw(borders[i]);
 
+            // Render Smoke
+            if (deathCounter)
+            {
+                if (deathCounter < 30) { window.draw(smoke1); }
+                else if (deathCounter < 60) { window.draw(smoke2); }
+                else if (deathCounter < 90) { window.draw(smoke1); }
+            }
+
             // Render characters
             window.draw(fireBoy.playerSprite);
             window.draw(waterGirl.playerSprite);
@@ -1196,10 +1263,13 @@ int main()
                     if (!soundFxMute) soundLevelComplete.play();
                     fireBoy.Restart();
                     waterGirl.Restart();
+                    deathX = deathY = -1.f;
+                    deathCounter = 0;
                     if (!guest)
                     {
                         updateData(player1Name, player2Name, level, seconds + minutes * 60);
                         initializeCurrentRecords();
+                        getTopTenOfLevel(level);
                     }
                     else
                     {
@@ -1218,8 +1288,11 @@ int main()
         if(event.type == Event::KeyReleased)
             canType = true;
 
+        if (event.type == Event::MouseButtonReleased)
+            canClick = true;
+
         // Guest
-        if (!gameStarted && !paused && !settingsMenu && started && !bothPlayers && !levelInquire)
+        if (!gameStarted && !paused && !settingsMenu && started && !bothPlayers && !levelInquire && !leaderboards)
         {
             if (mouse_xAxis >= 412.5 && mouse_xAxis <= 867.5 && mouse_yAxis >= 554 && mouse_yAxis <= 596)
             {
@@ -1229,10 +1302,11 @@ int main()
                     hoverGuest = true;
                 }
                 textGuest.setFillColor(Color::Green);
-                if (Mouse::isButtonPressed(Mouse::Left))
+                if (Mouse::isButtonPressed(Mouse::Left) && canClick)
                 {
                     player1Input = true, player2Input = true;
                     bothPlayers = true, guest = true;
+                    canClick = false;
                 }
             }
             else {
@@ -1243,7 +1317,7 @@ int main()
         }
 
         // Player 1 Name
-        if(!gameStarted && !paused && !settingsMenu && started && !bothPlayers && player1Input && !player2Input && !levelInquire)
+        if(!gameStarted && !paused && !settingsMenu && started && !bothPlayers && player1Input && !player2Input && !levelInquire && !leaderboards)
         {
             window.draw(enterYourNameRectangle);
             window.draw(enterYourNameRectangle2);
@@ -1285,7 +1359,7 @@ int main()
         }
 
             // Player 2 name
-        else if(!gameStarted && !paused && !settingsMenu && started && !bothPlayers && !player1Input && player2Input && !levelInquire)
+        else if(!gameStarted && !paused && !settingsMenu && started && !bothPlayers && !player1Input && player2Input && !levelInquire && !leaderboards)
         {
             window.draw(enterYourNameRectangle);
             window.draw(enterYourNameRectangle2);
@@ -1328,35 +1402,33 @@ int main()
             player2Text.setPosition(640,450);
             window.draw(textEnterYourName);
         }
-        if (!gameStarted && !paused && !settingsMenu && started && bothPlayers && !levelInquire)
+        // Leaderboards page
+        if (!gameStarted && !paused && !settingsMenu && started && bothPlayers && player1Input && player2Input && !levelInquire && leaderboards)
         {
-            // Render text title
-            window.draw(textTitle);
-
-            // Start button
-            if (!gameStarted && mouse_xAxis >= 330 && mouse_xAxis <= 950 && mouse_yAxis >= 378.5 && mouse_yAxis <= 421.5)
+            // Back arrow
+            if (mouse_xAxis >= 44 && mouse_xAxis <= 163 && mouse_yAxis >= 51 && mouse_yAxis <= 104)
             {
-                if (!hoverStart)
+                if (!hoverArrowLeaderboards)
                 {
                     soundButtonHover.play();
-                    hoverStart = true;
+                    hoverArrowLeaderboards = true;
                 }
-                textStart.setFillColor(Color::Green);
-                if (Mouse::isButtonPressed(Mouse::Left))
+                arrowLeaderboards.setTexture(&textureRedArrow);
+                if (Mouse::isButtonPressed(Mouse::Left) && canClick)
                 {
-                    levelInquire = true;
-                    chron.reset(), chron.resume();
+                    leaderboards = false;
+                    canClick = false;
                 }
             }
             else {
-                hoverStart = false;
-                textStart.setFillColor(Color::White);
+                hoverArrowLeaderboards = false;
+                arrowLeaderboards.setTexture(&textureWhiteArrow);
             }
-            window.draw(textStart);
+            window.draw(arrowLeaderboards);
         }
 
         // Level inquire
-        if (levelInquire && started && !gameStarted && !paused && !settingsMenu && bothPlayers)
+        if (levelInquire && started && !gameStarted && !paused && !settingsMenu && bothPlayers && !leaderboards)
         {
             // Back arrow
             if (mouse_xAxis >= 44 && mouse_xAxis <= 163 && mouse_yAxis >= 51 && mouse_yAxis <= 104)
@@ -1367,8 +1439,11 @@ int main()
                     hoverArrowLevelInquire = true;
                 }
                 arrowLevelInquire.setTexture(&textureRedArrow);
-                if (Mouse::isButtonPressed(Mouse::Left))
+                if (Mouse::isButtonPressed(Mouse::Left) && canClick)
+                {
+                    canClick = false;
                     levelInquire = false;
+                }
             }
             else {
                 hoverArrowLevelInquire = false;
@@ -1389,9 +1464,10 @@ int main()
                     hoverLevel1 = true;
                 }
                 textLevel1.setFillColor(Color::Green);
-                if (Mouse::isButtonPressed(Mouse::Left))
+                if (Mouse::isButtonPressed(Mouse::Left) && canClick)
                 {
                     level = 0;
+                    canClick = false;
                     spriteDoor.setPosition(1160, 95);
                     gameStarted = true, levelInquire = false;
                     musicIntro.stop();
@@ -1415,8 +1491,9 @@ int main()
                         hoverLevel2 = true;
                     }
                     textLevel2.setFillColor(Color::Green);
-                    if (Mouse::isButtonPressed(Mouse::Left))
+                    if (Mouse::isButtonPressed(Mouse::Left) && canClick)
                     {
+                        canClick = false;
                         level = 1;
                         spriteDoor.setPosition(120, 95);
                         gameStarted = true, levelInquire = false;
@@ -1432,9 +1509,59 @@ int main()
             }
         }
 
+
+        if (!gameStarted && !paused && !settingsMenu && started && bothPlayers && !levelInquire && !leaderboards)
+        {
+            // Render text title
+            window.draw(textTitle);
+
+            // Start button
+            if (!gameStarted && mouse_xAxis >= 561 && mouse_xAxis <= 719 && mouse_yAxis >= 279 && mouse_yAxis <= 321)
+            {
+                if (!hoverStart)
+                {
+                    soundButtonHover.play();
+                    hoverStart = true;
+                }
+                textStart.setFillColor(Color::Green);
+                if (Mouse::isButtonPressed(Mouse::Left) && canClick)
+                {
+                    canClick = false;
+                    levelInquire = true;
+                    chron.reset(), chron.resume();
+                }
+            }
+            else {
+                hoverStart = false;
+                textStart.setFillColor(Color::White);
+            }
+            window.draw(textStart);
+
+            // Leaderboards button
+            if (!gameStarted && mouse_xAxis >= 447.5 && mouse_xAxis <= 832.5 && mouse_yAxis >= 479 && mouse_yAxis <= 521)
+            {
+                if (!hoverLeaderboards)
+                {
+                    soundButtonHover.play();
+                    hoverLeaderboards = true;
+                }
+                textLeaderboards.setFillColor(Color::Green);
+                if (Mouse::isButtonPressed(Mouse::Left) && canClick)
+                {
+                    canClick = false;
+                    leaderboards = true;
+                }
+            }
+            else {
+                hoverLeaderboards = false;
+                textLeaderboards.setFillColor(Color::White);
+            }
+            window.draw(textLeaderboards);
+        }
+
         bool oneDead = (fireBoy.isDead || waterGirl.isDead);
 
-        if (!gameStarted || paused || settingsMenu)
+        if (!gameStarted || paused || settingsMenu || leaderboards)
         {
             // Exit button
             if (mouse_xAxis >= 1145 && mouse_xAxis <= 1250 && mouse_yAxis >= 655 && mouse_yAxis <= 705)
@@ -1445,8 +1572,11 @@ int main()
                     hoverExit = true;
                 }
                 textExit.setFillColor(Color::Red);
-                if (Mouse::isButtonPressed(Mouse::Left))
+                if (Mouse::isButtonPressed(Mouse::Left) && canClick)
+                {
+                    canClick = false;
                     window.close();
+                }
             }
             else {
                 hoverExit = false;
@@ -1455,11 +1585,11 @@ int main()
             window.draw(textExit);
         }
 
-        if ((paused || !gameStarted) && !settingsMenu && started && bothPlayers && !levelInquire)
+        if ((paused || !gameStarted) && !settingsMenu && started && bothPlayers && !levelInquire && !leaderboards)
         {
 
             // Settings Button
-            if (mouse_xAxis >= 518 && mouse_xAxis <= 760 && mouse_yAxis >= ((oneDead) ? 383 : 483) && mouse_yAxis <= ((oneDead) ? 420 : 520))
+            if (mouse_xAxis >= 518 && mouse_xAxis <= 760 && mouse_yAxis >= ((oneDead || !gameStarted) ? 383 : 483) && mouse_yAxis <= ((oneDead || !gameStarted) ? 420 : 520))
             {
                 if (!hoverSettings)
                 {
@@ -1467,18 +1597,21 @@ int main()
                     hoverSettings = true;
                 }
                 textSettings.setFillColor(Color::Green);
-                if (Mouse::isButtonPressed(Mouse::Left))
+                if (Mouse::isButtonPressed(Mouse::Left) && canClick)
+                {
+                    canClick = false;
                     settingsMenu = true;
+                }
             }
             else {
                 hoverSettings = false;
                 textSettings.setFillColor(Color::White);
             }
-            if (oneDead) textSettings.setPosition(640, 400);
+            if (oneDead || !gameStarted) textSettings.setPosition(640, 400);
             else textSettings.setPosition(640, 500);
             window.draw(textSettings);
         }
-        if (paused && !settingsMenu && started && !levelInquire)
+        if (paused && !settingsMenu && started && !levelInquire && !leaderboards)
         {
             // Render text paused
             if (!fireBoy.isDead && !waterGirl.isDead) window.draw(textPaused);
@@ -1497,8 +1630,11 @@ int main()
                         hoverContinue = true;
                     }
                     textContinue.setFillColor(Color::Green);
-                    if (Mouse::isButtonPressed(Mouse::Left))
+                    if (Mouse::isButtonPressed(Mouse::Left) && canClick)
+                    {
+                        canClick = false;
                         paused = false, chron.resume();
+                    }
                 }
                 else {
                     hoverContinue = false;
@@ -1513,11 +1649,14 @@ int main()
                     hoverRetry = true;
 
                 textRetryLevel.setFillColor(Color::Green);
-                if (Mouse::isButtonPressed(Mouse::Left))
+                if (Mouse::isButtonPressed(Mouse::Left) && canClick)
                 {
+                    canClick = false;
                     waterGirl.Restart(), fireBoy.Restart();
                     chron.reset(), chron.resume(), paused = false;
                     musicLevel.stop(), musicLevel.play();
+                    deathX = deathY = -1.f;
+                    deathCounter = 0;
                 }
             }
             else {
@@ -1537,11 +1676,14 @@ int main()
                     hoverMainMenu = true;
                 }
                 textMainMenu.setFillColor(Color::Green);
-                if (Mouse::isButtonPressed(Mouse::Left))
+                if (Mouse::isButtonPressed(Mouse::Left) && canClick)
                 {
+                    canClick = false;
                     gameStarted = false, paused = false;
                     fireBoy.Restart(), waterGirl.Restart();
                     musicLevel.stop();
+                    deathX = deathY = -1.f;
+                    deathCounter = 0;
                 }
             }
             else {
@@ -1552,7 +1694,7 @@ int main()
             else textMainMenu.setPosition(640, 600);
             window.draw(textMainMenu);
         }
-        if (settingsMenu && started && !levelInquire)
+        if (settingsMenu && started && !levelInquire && !leaderboards)
         {
             Text state1, state2;
 
@@ -1585,7 +1727,7 @@ int main()
                     state1 = textOn;
                     state1.setFillColor(Color::Red);
                 }
-                if (Mouse::isButtonPressed(Mouse::Left) && !pressedMusicMute)
+                if (Mouse::isButtonPressed(Mouse::Left) && !pressedMusicMute && canClick)
                 {
                     if(musicMute)
                     {
@@ -1599,6 +1741,7 @@ int main()
                         else musicIntro.stop();
                         musicMute = true;
                     }
+                    canClick = false;
                     pressedMusicMute = true;
                 }
             }
@@ -1627,13 +1770,14 @@ int main()
                     state2 = textOn;
                     state2.setFillColor(Color::Red);
                 }
-                if (Mouse::isButtonPressed(Mouse::Left) && !pressedSoundFxMute)
+                if (Mouse::isButtonPressed(Mouse::Left) && !pressedSoundFxMute && canClick)
                 {
                     if(soundFxMute)
                         soundFxMute = false;
                     else
                         soundFxMute = true;
 
+                    canClick = false;
                     pressedSoundFxMute = true;
                 }
             }
@@ -1653,8 +1797,11 @@ int main()
                     hoverArrow = true;
                 }
                 arrow.setTexture(&textureRedArrow);
-                if (Mouse::isButtonPressed(Mouse::Left))
+                if (Mouse::isButtonPressed(Mouse::Left) && canClick)
+                {
+                    canClick = false;
                     settingsMenu = false;
+                }
             }
             else {
                 hoverSoundFxMute = false;
@@ -1682,8 +1829,11 @@ int main()
                     hoverContinueIntro = true;
                 }
                 currentlyHovering = true;
-                if (Mouse::isButtonPressed(Mouse::Left))
+                if (Mouse::isButtonPressed(Mouse::Left) && canClick)
+                {
+                    canClick = false;
                     started = true, player1Input = true;
+                }
             }
             else {
                 hoverContinueIntro = false;
