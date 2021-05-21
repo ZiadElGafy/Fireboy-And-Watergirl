@@ -61,9 +61,7 @@ int main()
 
     initializeCurrentRecords();
 
-    //memset(buttonPressed,0,sizeof(buttonPressed));
-    //memset(buttonSoundPlayed,0,sizeof(buttonSoundPlayed));
-
+    initButtonSound();
 
     Clock clock;
 
@@ -141,7 +139,6 @@ int main()
                     {
                         buttonGatePressed[i.second] = true;
                     }
-
                     if (i.first.second == 5)
                     {
                         buttonBridgePressed[i.second] = true;
@@ -390,6 +387,11 @@ int main()
                     {
                         buttonOn.setPosition(i.first.first.getPosition().x, i.first.first.getPosition().y - 20);
                         gateOpened[((i.second - 1) / 2) + 1] = true;
+                        if(!gateButtonSoundPlayed[i.second])
+                        {
+                            buttonSound.play();
+                            gateButtonSoundPlayed[i.second] = true;
+                        }
                         window.draw(buttonOn);
                     }
 
@@ -397,6 +399,7 @@ int main()
                     {
                         buttonOff.setPosition(i.first.first.getPosition().x, i.first.first.getPosition().y - 20);
                         window.draw(buttonOff);
+                        gateButtonSoundPlayed[i.second] = false;
                     }
 
                     if (!waterGirl.bounds.intersects(i.first.first.getGlobalBounds()) && !fireBoy.bounds.intersects(i.first.first.getGlobalBounds()) && i.first.second == 5)
@@ -417,12 +420,18 @@ int main()
 
                         buttonOn.setPosition(i.first.first.getPosition().x, i.first.first.getPosition().y - 20);
                         bridgeOpened[((i.second - 1) / 2) + 1] = true;
+                        if(!bridgeButtonSoundPlayed[i.second])
+                        {
+                            buttonSound.play();
+                            bridgeButtonSoundPlayed[i.second] = true;
+                        }
                         window.draw(buttonOn);
                     }
                     if (i.first.second == 5 && !buttonBridgePressed[i.second])
                     {
                         buttonOff.setPosition(i.first.first.getPosition().x, i.first.first.getPosition().y - 20);
                         window.draw(buttonOff);
+                        bridgeButtonSoundPlayed[i.second] = false;
                     }
                 }
             }

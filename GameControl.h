@@ -44,42 +44,42 @@ using namespace sf;
 using namespace sftools;
 
 // Flags
-bool paused = false;
 bool guest = false;
+bool canType = true;
+bool paused = false;
 bool started = false;
+bool canClick = true;
 bool musicMute = false;
-bool soundFxMute = false;
-bool gameStarted = false;
-bool settingsMenu = false;
-bool player1Input = false;
-bool player2Input = false;
-bool bothPlayers = false;
 bool hoverExit = false;
 bool hoverStart = false;
+bool hoverGuest = false;
 bool hoverArrow = false;
-bool hoverArrowLevelInquire = false;
-bool hoverArrowLeaderboards = false;
 bool hoverRetry = false;
-bool hoverContinue = false;
 bool hoverLevel1 = false;
 bool hoverLevel2 = false;
-bool hoverContinueIntro = false;
+bool bothPlayers = false;
+bool soundFxMute = false;
+bool gameStarted = false;
+bool leaderboards = false;
+bool settingsMenu = false;
+bool levelInquire = false;
+bool player1Input = false;
+bool player2Input = false;
+bool pushedFireBoy = false;
+bool hoverContinue = false;
 bool hoverSettings = false;
 bool hoverMainMenu = false;
 bool hoverMusicMute = false;
-bool hoverGuest = false;
-bool hoverSoundFxMute = false;
-bool pushedFireBoy = false;
 bool pushedWaterGirl = false;
 bool pressedMusicMute = false;
-bool pressedSoundFxMute = false;
-bool continueFillColorInc = false;
-bool enterYourNameFillColorInc = false;
-bool levelInquire = false;
-bool canType = true;
-bool leaderboards = false;
+bool hoverSoundFxMute = false;
 bool hoverLeaderboards = false;
-bool canClick = true;
+bool pressedSoundFxMute = false;
+bool hoverContinueIntro = false;
+bool continueFillColorInc = false;
+bool hoverArrowLevelInquire = false;
+bool hoverArrowLeaderboards = false;
+bool enterYourNameFillColorInc = false;
 bool hoverArrowLevelLeaderboard = false;
 bool hoverTextLevels[10] = {};
 bool levelLeaderboardPage[10] = {};
@@ -93,16 +93,20 @@ bool bridgeOpened[13];
 // Booleans for gate and bridge buttons
 bool buttonGatePressed[13], buttonBridgePressed[13];
 
-//Booleans for buttons
-bool buttonSoundPlayed[13];
+//Booleans for button sounds
+bool gateButtonSoundPlayed[13];
+bool bridgeButtonSoundPlayed[13];
 
 RenderWindow window(VideoMode(1280, 720), "Fireboy and Watergirl", Style::Titlebar | Style::Close);
 void initWindow()
 {
     window.setFramerateLimit(60);
 }
-
-
+void initButtonSound()
+{
+    memset(bridgeButtonSoundPlayed, false, 13);
+    memset(gateButtonSoundPlayed, false, 13);
+}
 Event event;
 void gamePolling()
 {
