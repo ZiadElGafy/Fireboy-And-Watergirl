@@ -268,8 +268,8 @@ String levelsMap [5][9] =
                         "            LMMR",
                         "          M     ",
                         "        M       ",
-                        "                ",
-                        "    LBMB        ",
+                        "      M         ",
+                        "    LMMR        ",
                         "  M             ",
                         "                ",
                 },
@@ -297,7 +297,7 @@ Texture textureStoneMid;
 //Drawing platforms
 Color color(0, 0, 0, 0);
 vector<pair<pair<RectangleShape, int>,int> > platformObjects;
-int buttonCnt = 0;
+int buttonCnt = 10;
 void fillPlatformObjects()
 {
     //Registering pools as platforms
@@ -463,7 +463,7 @@ int main()
     initializeCurrentRecords();
 
     //Booleans for buttons
-    bool buttonPressed[buttonCnt + 2];
+    bool buttonPressed[10 + 2];
     memset(buttonPressed,0,sizeof(buttonPressed));
 
     // Declaring characters
@@ -612,7 +612,7 @@ int main()
 
     // Players name input boxes
     RectangleShape enterYourNameRectangle;
-    enterYourNameRectangle.setSize(Vector2f(910,45));
+    enterYourNameRectangle.setSize(Vector2f(400,45));
 
     Color color2 (255,255,255,0);
     enterYourNameRectangle.setFillColor(color2);
@@ -1324,8 +1324,11 @@ int main()
             // Check if fireboy and Watergirl is still inside the drawn borders
             fireBoy.Inquire();
             waterGirl.Inquire();
-            
-            
+
+            // Render characters
+            window.draw(fireBoy.playerSprite);
+            window.draw(waterGirl.playerSprite);
+
             //Render pools
             for (auto i : platformObjects)
             {
@@ -1360,10 +1363,6 @@ int main()
                 else if (deathCounter < 60) { window.draw(smoke2); }
                 else if (deathCounter < 90) { window.draw(smoke1); }
             }
-
-            // Render characters
-            window.draw(fireBoy.playerSprite);
-            window.draw(waterGirl.playerSprite);
 
             // Render timer
             window.draw(textTimer);
@@ -1447,7 +1446,7 @@ int main()
                 window.draw(player1Text);
                 continue;
             }
-            else if(player1Name.size() >= 30)
+            else if(player1Name.size() >= 10)
             { //
             }
             else if(event.type == sf::Event::TextEntered && event.text.unicode <= 128 && event.text.unicode != 8 && !Keyboard::isKeyPressed(Keyboard::Key::Return) && canType)
@@ -1489,7 +1488,7 @@ int main()
                 window.draw(player2Text);
                 continue;
             }
-            else if(player2Name.size() >= 30)
+            else if(player2Name.size() >= 10)
             { //
             }
             else if(event.type == sf::Event::TextEntered && event.text.unicode <= 128 && event.text.unicode != 8 && !Keyboard::isKeyPressed(Keyboard::Key::Return) && canType)
@@ -1586,7 +1585,7 @@ int main()
 
             Text currentLevelRecord;
             currentLevelRecord.setFont(fontTitle);
-            currentLevelRecord.setCharacterSize(50);
+            currentLevelRecord.setCharacterSize(40);
             currentLevelRecord.setFillColor(Color::White);
 
             for (int i = 0; i < min((int)topTen.size(), 5); i++)
@@ -1595,7 +1594,7 @@ int main()
                 if (levelRecordMinutes.size() == 1) levelRecordMinutes = "0" + levelRecordMinutes;
                 if (levelRecordSeconds.size() == 1) levelRecordSeconds = "0" + levelRecordSeconds;
                 currentLevelRecord.setString("#" + to_string(i + 1) + " " + topTen[i].second.first + " & " + topTen[i].second.second + " (Score: " + levelRecordMinutes + ":" + levelRecordSeconds + ")");
-                currentLevelRecord.setPosition(230, (i + 1) * 100 + 100);
+                currentLevelRecord.setPosition(100, (i + 1) * 100 + 100);
                 window.draw(currentLevelRecord);
             }
 
