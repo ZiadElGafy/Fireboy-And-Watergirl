@@ -47,6 +47,11 @@ using namespace sftools;
 int level = 0;
 String levelsMap[5][9] =
 {
+    /*
+        MAP KEY
+        G: gate button
+        B: bridge button
+    */
     // Level 1
     {
 
@@ -74,6 +79,15 @@ String levelsMap[5][9] =
     },
 };
 
+
+/*
+    Map Key
+    T: gate top
+    M: gate mid
+    B: gate bottom
+    L: bridge start
+    W: bridge mid
+*/
 String objectsMap[5][36] =
 {
     // Level 1
@@ -104,10 +118,10 @@ String objectsMap[5][36] =
             "                  M                                             ",
             "                  B                                             ",
             "                                                                ",
-            "                                LWWWWWWWWWWWWWWWW               ",
+            "                                 LWWWWWWWWWWWWWWWW              ",
             "                                                                ",
             "                                                                ",
-            "                                LWWWWWW                         ",
+            "                                                                ",
             "                                                                ",
             "                                                                ",
             "                                                                ",
@@ -274,7 +288,6 @@ void fillGateObjects()
     {
         for (int j = 0; j < 64; ++j)
         {
-            //
             RectangleShape obj({ 20,20 });
             float posX = 40 + (20 * j), posY = 40 + (20 * i);
             obj.setPosition({ posX, posY });

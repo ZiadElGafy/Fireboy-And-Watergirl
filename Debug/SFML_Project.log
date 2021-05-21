@@ -1,38 +1,40 @@
 ﻿  main.cpp
-C:\Users\heyth\Desktop\Fireboy-And-Watergirl\main.cpp(122,32): warning C4018: '<': signed/unsigned mismatch
-C:\Users\heyth\Desktop\Fireboy-And-Watergirl\main.cpp(225,32): warning C4018: '<': signed/unsigned mismatch
-C:\Users\heyth\Desktop\Fireboy-And-Watergirl\main.cpp(312,28): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-C:\Users\heyth\Desktop\Fireboy-And-Watergirl\main.cpp(312,50): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-C:\Users\heyth\Desktop\Fireboy-And-Watergirl\main.cpp(325,28): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-C:\Users\heyth\Desktop\Fireboy-And-Watergirl\main.cpp(325,50): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-C:\Users\heyth\Desktop\Fireboy-And-Watergirl\main.cpp(339,28): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-C:\Users\heyth\Desktop\Fireboy-And-Watergirl\main.cpp(339,50): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-C:\Users\heyth\Desktop\Fireboy-And-Watergirl\main.cpp(355,28): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-C:\Users\heyth\Desktop\Fireboy-And-Watergirl\main.cpp(355,50): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-C:\Users\heyth\Desktop\Fireboy-And-Watergirl\main.cpp(375,33): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-C:\Users\heyth\Desktop\Fireboy-And-Watergirl\main.cpp(386,25): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-C:\Users\heyth\Desktop\Fireboy-And-Watergirl\main.cpp(817,61): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\heyth\Desktop\Fireboy-And-Watergirl\main.cpp(817,39): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\heyth\Desktop\Fireboy-And-Watergirl\main.cpp(1221,21): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-C:\Users\heyth\Desktop\Fireboy-And-Watergirl\main.cpp(1225,27): warning C4244: 'initializing': conversion from 'T' to 'float', possible loss of data
+C:\Users\heyth\Desktop\Fireboy-And-Watergirl\DataRetrieval.h(125,31): warning C4018: '<': signed/unsigned mismatch
+C:\Users\heyth\Desktop\Fireboy-And-Watergirl\DataRetrieval.h(228,31): warning C4018: '<': signed/unsigned mismatch
+C:\Users\heyth\Desktop\Fireboy-And-Watergirl\Visuals.h(220,61): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\heyth\Desktop\Fireboy-And-Watergirl\Visuals.h(220,39): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\heyth\Desktop\Fireboy-And-Watergirl\LevelGeneration.h(193,28): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+C:\Users\heyth\Desktop\Fireboy-And-Watergirl\LevelGeneration.h(193,50): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+C:\Users\heyth\Desktop\Fireboy-And-Watergirl\LevelGeneration.h(206,28): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+C:\Users\heyth\Desktop\Fireboy-And-Watergirl\LevelGeneration.h(206,50): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+C:\Users\heyth\Desktop\Fireboy-And-Watergirl\LevelGeneration.h(220,28): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+C:\Users\heyth\Desktop\Fireboy-And-Watergirl\LevelGeneration.h(220,50): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+C:\Users\heyth\Desktop\Fireboy-And-Watergirl\LevelGeneration.h(236,28): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+C:\Users\heyth\Desktop\Fireboy-And-Watergirl\LevelGeneration.h(236,50): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+C:\Users\heyth\Desktop\Fireboy-And-Watergirl\LevelGeneration.h(265,33): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+C:\Users\heyth\Desktop\Fireboy-And-Watergirl\LevelGeneration.h(276,25): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+C:\Users\heyth\Desktop\Fireboy-And-Watergirl\LevelGeneration.h(292,24): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+C:\Users\heyth\Desktop\Fireboy-And-Watergirl\LevelGeneration.h(292,46): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+C:\Users\heyth\Desktop\Fireboy-And-Watergirl\GameControl.h(191,34): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+C:\Users\heyth\Desktop\Fireboy-And-Watergirl\Render.h(56,45): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\heyth\Desktop\Fireboy-And-Watergirl\Render.h(56,42): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\heyth\Desktop\Fireboy-And-Watergirl\Render.h(74,43): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\heyth\Desktop\Fireboy-And-Watergirl\Render.h(74,40): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\heyth\Desktop\Fireboy-And-Watergirl\Render.h(75,45): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\heyth\Desktop\Fireboy-And-Watergirl\Render.h(75,42): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\heyth\Desktop\Fireboy-And-Watergirl\Render.h(76,44): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\heyth\Desktop\Fireboy-And-Watergirl\Render.h(76,41): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\heyth\Desktop\Fireboy-And-Watergirl\main.cpp(492,27): warning C4244: 'initializing': conversion from 'T' to 'float', possible loss of data
           with
           [
               T=int
           ]
-C:\Users\heyth\Desktop\Fireboy-And-Watergirl\main.cpp(1225,71): warning C4244: 'initializing': conversion from 'T' to 'float', possible loss of data
+C:\Users\heyth\Desktop\Fireboy-And-Watergirl\main.cpp(492,71): warning C4244: 'initializing': conversion from 'T' to 'float', possible loss of data
           with
           [
               T=int
           ]
-C:\Users\heyth\Desktop\Fireboy-And-Watergirl\main.cpp(1287,49): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\heyth\Desktop\Fireboy-And-Watergirl\main.cpp(1287,46): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\heyth\Desktop\Fireboy-And-Watergirl\main.cpp(1321,51): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\heyth\Desktop\Fireboy-And-Watergirl\main.cpp(1321,48): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\heyth\Desktop\Fireboy-And-Watergirl\main.cpp(1322,53): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\heyth\Desktop\Fireboy-And-Watergirl\main.cpp(1322,50): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\heyth\Desktop\Fireboy-And-Watergirl\main.cpp(1323,52): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\heyth\Desktop\Fireboy-And-Watergirl\main.cpp(1323,49): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\heyth\Desktop\Fireboy-And-Watergirl\main.cpp(1606,67): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\heyth\Desktop\Fireboy-And-Watergirl\main.cpp(678,67): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
 C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29910\include\utility(193,16): warning C4244: 'initializing': conversion from '_Ty' to '_Ty1', possible loss of data
           with
           [
@@ -42,13 +44,13 @@ C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.2
           [
               _Ty1=float
           ]
-C:\Users\heyth\Desktop\Fireboy-And-Watergirl\main.cpp(1075): message : see reference to function template instantiation 'std::pair<float,float>::pair<int,float,0>(_Other1 &&,_Other2 &&) noexcept' being compiled
+C:\Users\heyth\Desktop\Fireboy-And-Watergirl\main.cpp(101): message : see reference to function template instantiation 'std::pair<float,float>::pair<int,float,0>(_Other1 &&,_Other2 &&) noexcept' being compiled
           with
           [
               _Other1=int,
               _Other2=float
           ]
-C:\Users\heyth\Desktop\Fireboy-And-Watergirl\main.cpp(1075): message : see reference to function template instantiation 'std::pair<float,float>::pair<int,float,0>(_Other1 &&,_Other2 &&) noexcept' being compiled
+C:\Users\heyth\Desktop\Fireboy-And-Watergirl\main.cpp(101): message : see reference to function template instantiation 'std::pair<float,float>::pair<int,float,0>(_Other1 &&,_Other2 &&) noexcept' being compiled
           with
           [
               _Other1=int,
@@ -63,13 +65,13 @@ C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.2
           [
               _Ty2=float
           ]
-C:\Users\heyth\Desktop\Fireboy-And-Watergirl\main.cpp(1126): message : see reference to function template instantiation 'std::pair<float,float>::pair<float&,int,0>(_Other1,_Other2 &&) noexcept' being compiled
+C:\Users\heyth\Desktop\Fireboy-And-Watergirl\main.cpp(156): message : see reference to function template instantiation 'std::pair<float,float>::pair<float&,int,0>(_Other1,_Other2 &&) noexcept' being compiled
           with
           [
               _Other1=float &,
               _Other2=int
           ]
-C:\Users\heyth\Desktop\Fireboy-And-Watergirl\main.cpp(1126): message : see reference to function template instantiation 'std::pair<float,float>::pair<float&,int,0>(_Other1,_Other2 &&) noexcept' being compiled
+C:\Users\heyth\Desktop\Fireboy-And-Watergirl\main.cpp(156): message : see reference to function template instantiation 'std::pair<float,float>::pair<float&,int,0>(_Other1,_Other2 &&) noexcept' being compiled
           with
           [
               _Other1=float &,
@@ -84,13 +86,13 @@ C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.2
           [
               _Ty1=float
           ]
-C:\Users\heyth\Desktop\Fireboy-And-Watergirl\main.cpp(1153): message : see reference to function template instantiation 'std::pair<float,float>::pair<double,int,0>(_Other1 &&,_Other2 &&) noexcept' being compiled
+C:\Users\heyth\Desktop\Fireboy-And-Watergirl\main.cpp(238): message : see reference to function template instantiation 'std::pair<float,float>::pair<double,int,0>(_Other1 &&,_Other2 &&) noexcept' being compiled
           with
           [
               _Other1=double,
               _Other2=int
           ]
-C:\Users\heyth\Desktop\Fireboy-And-Watergirl\main.cpp(1153): message : see reference to function template instantiation 'std::pair<float,float>::pair<double,int,0>(_Other1 &&,_Other2 &&) noexcept' being compiled
+C:\Users\heyth\Desktop\Fireboy-And-Watergirl\main.cpp(238): message : see reference to function template instantiation 'std::pair<float,float>::pair<double,int,0>(_Other1 &&,_Other2 &&) noexcept' being compiled
           with
           [
               _Other1=double,
