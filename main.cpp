@@ -386,7 +386,7 @@ int main()
                     // Opens Gate if the gate's button is pressed
                     if (i.first.second == 4 && buttonGatePressed[i.second])
                     {
-                        if (!gateButtonSoundPlayed[i.second])
+                        if (!gateButtonSoundPlayed[i.second] && !soundFxMute)
                         {
                             buttonSound.play();
                             gateButtonSoundPlayed[i.second] = true;
@@ -418,7 +418,7 @@ int main()
                     }
                     if (i.first.second == 5 && buttonBridgePressed[i.second])
                     {
-                        if (!bridgeButtonSoundPlayed[i.second])
+                        if (!bridgeButtonSoundPlayed[i.second] && !soundFxMute)
                         {
                             buttonSound.play();
                             bridgeButtonSoundPlayed[i.second] = true;
