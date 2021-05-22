@@ -43,14 +43,13 @@ using namespace std;
 using namespace sf;
 using namespace sftools;
 
-
 string mHolder = "/Users/pluto/Desktop/Fireboy-And-Watergirl/";
 string m = "";
 
-// decraing text strings
+// Declaring intro text
 string introText = "";
 
-// loading intro text
+// Loading intro text
 void loadText()
 {
     string temp;
@@ -79,7 +78,10 @@ void split_to_string(vector<string>& vec, string& str, char splitter)
     vec.push_back(one_word);
 }
 
-int char_to_int(char c) { return (c - '0'); }
+int char_to_int(char c)
+{
+    return (c - '0');
+}
 
 int str_to_int(string& str)
 {
@@ -111,7 +113,7 @@ void writeData(string data)
         vector<string> currRecord;
         split_to_string(currRecord, temp, ',');
 
-        //        given that the pair of names is sorted so <a,b> is same as <b,a> because both of them will be <a,b>
+        // Given that the pair of names is sorted so <a,b> is same as <b,a> because both of them will be <a,b>
         if (currRecord[0] == newRecord[0])
         {
             newData += currRecord[0];
@@ -128,7 +130,7 @@ void writeData(string data)
                 vector<string> tempCurrRecord;
                 split_to_string(tempCurrRecord, currRecord[i], '-');
 
-                //                given that the levels are sorted
+                // Given that the levels are sorted
                 if (tempCurrRecord[0] == tempNewRecord[0])
                 {
                     levelExist = true;
@@ -174,11 +176,11 @@ void writeData(string data)
         newData += data;
     }
 
-    //    remove all spaces
+    // Remove all spaces
     newData.erase(remove(newData.begin(), newData.end(), ' '), newData.end());
 
-    //    the file was initially  opened in read mode
-    //    we should close it and open it again in write mode
+    // The file was initially  opened in read mode
+    // We should close it and open it again in write mode
     csvData.close();
     csvData.open("assets/scores.csv");
 
@@ -189,11 +191,11 @@ void writeData(string data)
 void updateData(string n1, string n2, int lvl, int sec)
 {
     string name1, name2;
-    //    soting the names
+    // Sorting the names
     if (n1 > n2) { name1 = n2; name2 = n1; }
     else { name1 = n1; name2 = n2; }
 
-    //    saving the record as a csv format
+    // Saving the record as a csv format
     string data;
     data += name1; data += '-';
     data += name2; data += ',';
@@ -206,6 +208,7 @@ void updateData(string n1, string n2, int lvl, int sec)
 
 vector<int> guestRecords(20, 0);
 map<pair<string, string>, vector<int>> currentRecords;
+
 void initializeCurrentRecords()
 {
     fstream csvData;
@@ -238,12 +241,13 @@ void initializeCurrentRecords()
 }
 
 vector<pair<int, pair<string, string>>> topTen;
+
 void getTopTenOfLevel(int level)
 {
-    //    just to make sure the map is initialized
+    // Just to make sure the map is initialized
     initializeCurrentRecords();
 
-    //    clearing the vector to avoid past data existence
+    // Clearing the vector to avoid past data existence
     topTen.clear();
 
     map<pair<string, string>, vector<int>>::iterator it;
@@ -256,5 +260,5 @@ void getTopTenOfLevel(int level)
     }
     sort(topTen.begin(), topTen.end());
 
-    //    topTen may contains more or less than 10 records so take that into consideration
+    // topTen may contains more or less than 10 records so take that into consideration
 }

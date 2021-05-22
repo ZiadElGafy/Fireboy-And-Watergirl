@@ -39,88 +39,129 @@
 #include <SFML/Network.hpp>
 #include <sftools/Chronometer.hpp>
 #include <fstream>
+#include "Players.h"
+#include "LevelGeneration.h"
 using namespace std;
 using namespace sf;
 using namespace sftools;
 
 // Flags
-bool paused = false;
-bool guest = false;
-bool started = false;
-bool musicMute = false;
-bool soundFxMute = false;
-bool gameStarted = false;
-bool settingsMenu = false;
-bool player1Input = false;
-bool player2Input = false;
-bool bothPlayers = false;
+
+// Hover flags
 bool hoverExit = false;
 bool hoverStart = false;
+bool hoverGuest = false;
 bool hoverArrow = false;
-bool hoverArrowLevelInquire = false;
-bool hoverArrowLeaderboards = false;
 bool hoverRetry = false;
-bool hoverContinue = false;
 bool hoverLevel1 = false;
 bool hoverLevel2 = false;
-bool hoverContinueIntro = false;
+bool hoverContinue = false;
 bool hoverSettings = false;
 bool hoverMainMenu = false;
 bool hoverMusicMute = false;
-bool hoverGuest = false;
-bool hoverSoundFxMute = false;
-bool pushedFireBoy = false;
-bool pushedWaterGirl = false;
-bool pressedMusicMute = false;
-bool pressedSoundFxMute = false;
-bool continueFillColorInc = false;
-bool enterYourNameFillColorInc = false;
-bool levelInquire = false;
-bool canType = true;
-bool leaderboards = false;
-bool hoverLeaderboards = false;
-bool canClick = true;
-bool hoverArrowLevelLeaderboard = false;
 bool hoverTextLevels[10] = {};
+bool hoverSoundFxMute = false;
+bool hoverLeaderboards = false;
+bool hoverContinueIntro = false;
+bool hoverArrowLevelInquire = false;
+bool hoverArrowLeaderboards = false;
+bool hoverArrowLevelLeaderboard = false;
+
+// Pages
+bool guest = false;
+bool paused = false;
+bool started = false;
+bool mainMenu = false;
+bool gameStarted = false;
+bool levelInquire = false;
+bool leaderboards = false;
+bool settingsMenu = false;
 bool levelLeaderboardPage[10] = {};
 
-// Booleans for Gates
-bool gateOpened[13];
-
-// Booleans for bridges
-bool bridgeOpened[13];
-
-// Booleans for gate and bridge buttons
-bool buttonGatePressed[13], buttonBridgePressed[13];
-
-//Booleans for button sounds
+// Music
+bool musicMute = false;
+bool soundFxMute = false;
+bool pressedMusicMute = false;
 bool gateButtonSoundPlayed[13];
+bool pressedSoundFxMute = false;
 bool bridgeButtonSoundPlayed[13];
 
+// Input
+bool bothPlayers = false;
+bool player1Input = false;
+bool player2Input = false;
+
+// Coloring
+bool continueFillColorInc = false;
+bool enterYourNameFillColorInc = false;
+
+// Event handling
+bool canType = true;
+bool canClick = true;
+
+// Platform collision
+bool pushedFireBoy = false;
+bool pushedWaterGirl = false;
+
+// Gates
+bool gateOpened[13];
+bool buttonGatePressed[13];
+
+// Gems
+bool gemsTaken[11];
+
+// Bridges
+bool bridgeOpened[13];
+bool buttonBridgePressed[13];
+
+// Booleans for boxes
+bool boxWatergirlPushed[13], boxFireboyPushed[13];
+
+// Characters
+bool FBDead = 0;
+bool WGDead = 0;
+bool oneDead = false;
+
+// Mouse coordinate
+float mouse_xAxis, mouse_yAxis;
+
+// Safe zone
+float safe = 5.f;
+
+// Enemy
+bool enemyMoveRight[10] = {};
+
+// Window
 RenderWindow window(VideoMode(1280, 720), "Fireboy and Watergirl", Style::Titlebar | Style::Close);
+
 void initWindow()
 {
     window.setFramerateLimit(60);
 }
 
-
+// Event
 Event event;
+
 void gamePolling()
 {
     while (window.pollEvent(event))
     {
+        // Close window
         if (event.type == Event::Closed) {
             window.close();
         }
+
         if (event.type == Event::KeyPressed && event.key.code == Keyboard::Escape && gameStarted) {
-            if (settingsMenu)
-                settingsMenu = false;
-            else if (paused)
+            // Resume
+            if (paused)
                 paused = false, chron.resume();
+            // Pause
             else
                 paused = true, chron.pause();
         }
-        if (event.type == Event::KeyReleased && event.key.code == Keyboard::Return) {
+
+        // Remove if the game works fine
+        /*if (event.type == Event::KeyReleased && event.key.code == Keyboard::Return) {
             if (!started)
             {
                 started = true;
@@ -144,12 +185,9 @@ void gamePolling()
             canClick = false;
             pressedMusicMute = false;
             pressedSoundFxMute = false;
-        }
-
+        }*/
     }
 }
-
-bool FBDead = 0, WGDead = 0;
 
 void leaderboardAndTextFlickering()
 {
@@ -180,7 +218,6 @@ void checkMusic()
         musicIntro.play();
 }
 
-
 Time gameTime;
 int secondst, minutes;
 
@@ -190,7 +227,6 @@ void gameTimer()
     gameTime = chron.getElapsedTime();
     secondst = gameTime.asSeconds(); minutes = secondst / 60;
     secondst %= 60;
-
 
     // Adding the elapsed time into a string
     if (minutes <= 9)
@@ -206,11 +242,15 @@ void gameTimer()
 
 void getEndingTime()
 {
+    int gemsCollected = 0;
+    for (auto i : gemsTaken)
+    {
+        gemsCollected += i;
+    }
     if (!guest)
     {
-        updateData(player1Name, player2Name, level, secondst + minutes * 60);
+        updateData(player1Name, player2Name, level, (secondst + minutes * 60));
         initializeCurrentRecords();
-        //getTopTenOfLevel(level);
     }
     else
     {
@@ -222,5 +262,548 @@ void initButtonSound()
 {
     memset(bridgeButtonSoundPlayed, false, 13);
     memset(gateButtonSoundPlayed, false, 13);
+    memset(gemsTaken, false, 11);
 }
 
+void getMouseCoordinates()
+{
+    mouse_xAxis = Mouse::getPosition(window).x, mouse_yAxis = Mouse::getPosition(window).y;
+}
+
+void fillBool()
+{
+    mainMenu = !gameStarted && !paused && !settingsMenu && started && bothPlayers && !levelInquire && !leaderboards && !currentLevelLeaderboardPage;
+    oneDead = FBDead || WGDead;
+}
+
+void checkCurrentLevelOnScreen(Player& fireBoy, Player& waterGirl)
+{
+    if (level != curPlatformObjectLevel)
+    {
+        // Reset characters (Players)
+        fireBoy.Restart();
+        waterGirl.Restart();
+
+        // Clearing all platforms from the old level
+        platformObjects.clear();
+        gatesObjects.clear();
+        gemObjects.clear();
+
+        // Pushing all platforms from the new level
+        platformObjects.push_back({{ground,0},0});
+        fillPlatformObjects();
+        fillGateObjects();
+        fillGemObjects();
+
+        // Reset boolean arrays
+        memset(gateOpened, 0, sizeof(gateOpened));
+        memset(buttonGatePressed, 0, sizeof(bridgeOpened));
+        memset(buttonGatePressed, 0, sizeof(buttonGatePressed));
+
+        // Assign new level to current level
+        curPlatformObjectLevel = level;
+
+        deathX = deathY = -100.f;
+    }
+}
+
+// Load idle texture into fireboy
+void initFireBoyIdle(Player& fireBoy)
+{
+    fireBoy.playerSprite.setTexture(fireBoyTexture);
+}
+
+// Load idle texture into watergirl
+void initWaterGirlIdle(Player& waterGirl)
+{
+    waterGirl.playerSprite.setTexture(waterGirlTexture);
+}
+
+// Letting characters fall due to gravity
+void fall(Player& player, float gravity)
+{
+    player.move({0, gravity});
+}
+
+// jump mechanics
+void jumpMechanics(Player& player, float gravity)
+{
+    if (player.jumpCnt <= jumpFactor)
+    {
+        player.move({ 0, ((player.jumpCnt - (jumpFactor / 2)) / 2) });
+        player.move({ 0, -gravity });
+    }
+}
+
+// Fireboy jumping
+void fireBoyJumping(Player& fireBoy, float iterationsPerSecond)
+{
+    if (Keyboard::isKeyPressed(Keyboard::Key::Up) && !paused && gameStarted)
+    {
+        // Check if fireboy is ready to jump
+        if (!pushedFireBoy && fireBoy.jumpCnt > jumpFactor && fireBoy.ready >= iterationsPerSecond / 2 && fireBoy.groundCheck)
+        {
+            fireBoy.jumpCnt = 0;
+            fireBoy.ready = 0;
+            fireBoy.groundCheck = 0;
+            if (!soundFxMute)
+                soundFireboyJump.play();
+        }
+    }
+}
+
+// Watergirl jumping
+void waterGirlJumping(Player& waterGirl, float iterationsPerSecond)
+{
+    if (Keyboard::isKeyPressed(Keyboard::Key::W) && !paused && gameStarted)
+    {
+        // Check if watergirl is ready to jump
+        if (!pushedWaterGirl && waterGirl.jumpCnt > jumpFactor && waterGirl.ready >= iterationsPerSecond / 2 && waterGirl.groundCheck)
+        {
+            waterGirl.jumpCnt = 0;
+            waterGirl.ready = 0;
+            waterGirl.groundCheck = 0;
+            if (!soundFxMute)
+                soundWatergirlJump.play();
+        }
+    }
+}
+
+// Fireboy moving left
+void fireBoyMovingLeft(Player& fireBoy, float pixelsPerIteration)
+{
+    if (Keyboard::isKeyPressed(Keyboard::Key::Left) && !paused && gameStarted)
+    {
+        // Applying left facing fireboy texture to fireboy
+        fireBoy.playerSprite.setTexture(fireBoyTextureLeft);
+
+        if (!pushedFireBoy && fireBoy.jumpCnt >= jumpFactor) fireBoy.move({-pixelsPerIteration , 0});
+        else if (!pushedFireBoy) fireBoy.move({-1.825 * pixelsPerIteration , 0});
+    }
+}
+
+// Fireboy moving right
+void fireBoyMovingRight(Player& fireBoy, float pixelsPerIteration)
+{
+    if (Keyboard::isKeyPressed(Keyboard::Key::Right) && !paused && gameStarted)
+    {
+        // Applying right facing fireboy texture to fireboy
+        fireBoy.playerSprite.setTexture(fireBoyTextureRight);
+
+        if (!pushedFireBoy && fireBoy.jumpCnt >= jumpFactor) fireBoy.move({pixelsPerIteration , 0});
+        else if (!pushedFireBoy)fireBoy.move({1.825 * pixelsPerIteration , 0});
+    }
+}
+
+// Watergirl moving left
+void waterGirlMovingLeft(Player& waterGirl, float pixelsPerIteration)
+{
+    if (Keyboard::isKeyPressed(Keyboard::Key::A) && !paused && gameStarted)
+    {
+        // Applying left facing watergirl texture to watergirl
+        waterGirl.playerSprite.setTexture(waterGirlTextureLeft);
+
+        if (!pushedWaterGirl && waterGirl.jumpCnt >= jumpFactor) waterGirl.move({-pixelsPerIteration , 0});
+        else if (!pushedWaterGirl) waterGirl.move({-1.825 * pixelsPerIteration , 0});
+    }
+}
+
+// Watergirl moving right
+void waterGirlMovingRight(Player& waterGirl, float pixelsPerIteration)
+{
+    if (Keyboard::isKeyPressed(Keyboard::Key::D) && !paused && gameStarted)
+    {
+        // Applying right facing watergirl texture to watergirl
+        waterGirl.playerSprite.setTexture(waterGirlTextureRight);
+
+        if (!pushedWaterGirl && waterGirl.jumpCnt >= jumpFactor) waterGirl.move({pixelsPerIteration , 0});
+        else if (!pushedWaterGirl) waterGirl.move({1.825 * pixelsPerIteration , 0});
+    }
+}
+
+// Jump cnt increments
+void incrementJumpCnts(Player& fireBoy, Player& waterGirl)
+{
+    if (fireBoy.jumpCnt < 100)
+    {
+        fireBoy.jumpCnt++;
+    }
+    if (waterGirl.jumpCnt < 100)
+    {
+        waterGirl.jumpCnt++;
+    }
+}
+
+// Watergirl Y-axis platform collision
+void waterGirlPlatformCollision(Player& waterGirl, pair<pair<RectangleShape, int>, int> i, float gravity)
+{
+    if (waterGirl.bounds.intersects(i.first.first.getGlobalBounds()))
+    {
+        waterGirl.jumpCnt = jumpFactor + 1;
+        if (waterGirl.dy < i.first.first.getPosition().y)
+        {
+            pushedWaterGirl = false;
+            waterGirl.move({0, -gravity});
+            waterGirl.groundCheck = 1;
+
+            // Watergirl death (Players)
+            if ((i.first.second == 1 || i.first.second == 3) && !waterGirl.isDead)
+            {
+                waterGirl.die();
+                if (!soundFxMute) soundPlayerDeath.play();
+                deathX = i.first.first.getPosition().x; deathY = i.first.first.getPosition().y - 40;
+                smoke1.setPosition({deathX, deathY});
+                smoke2.setPosition({deathX, deathY});
+            }
+
+            // Gate opening (Game control)
+            if (i.first.second == 4)
+            {
+                buttonGatePressed[i.second] = true;
+            }
+
+            // Bridge opening (Game control)
+            if (i.first.second == 5)
+            {
+                buttonBridgePressed[i.second] = true;
+            }
+        }
+    }
+}
+
+// Fireboy Y-axis platform collision
+void fireBoyPlatformCollision(Player& fireBoy, pair<pair<RectangleShape, int>, int> i, float gravity)
+{
+    if (fireBoy.bounds.intersects(i.first.first.getGlobalBounds()))
+    {
+        fireBoy.jumpCnt = jumpFactor + 1;
+        if (fireBoy.dy < i.first.first.getPosition().y)
+        {
+            pushedFireBoy = false;
+            fireBoy.move({0, -gravity});
+            fireBoy.groundCheck = 1;
+
+            // Fireboy death (Players)
+            if ((i.first.second == 2 || i.first.second == 3) && !fireBoy.isDead)
+            {
+                fireBoy.die();
+                if (!soundFxMute)soundPlayerDeath.play();
+                deathX = i.first.first.getPosition().x; deathY = i.first.first.getPosition().y - 40;
+                smoke1.setPosition({deathX, deathY});
+                smoke2.setPosition({deathX, deathY});
+            }
+            // Gate opening (Game control)
+            if (i.first.second == 4)
+            {
+                buttonGatePressed[i.second] = true;
+            }
+
+            // Bridge opening (Game control)
+            if (i.first.second == 5)
+            {
+                buttonBridgePressed[i.second] = true;
+            }
+
+        }
+    }
+}
+
+// Watergirl pushed right
+void waterGirlPushedRight(Player& waterGirl, pair<pair<RectangleShape, int>, int> i, float pixelsPerIteration)
+{
+    if (waterGirl.bounds.intersects(i.first.first.getGlobalBounds()) && waterGirl.dy + 80 - safe >= i.first.first.getPosition().y && waterGirl.dx + 80 - safe >= i.first.first.getPosition().x)
+    {
+        pushedWaterGirl = true;
+        waterGirl.move({pixelsPerIteration, 0});
+    }
+}
+
+// Watergirl pushed left
+void waterGirlPushedLeft(Player& waterGirl, pair<pair<RectangleShape, int>, int> i, float pixelsPerIteration)
+{
+    if (waterGirl.bounds.intersects(i.first.first.getGlobalBounds()) && waterGirl.dy + 80 - safe >= i.first.first.getPosition().y && waterGirl.dx + safe <= i.first.first.getPosition().x + i.first.first.getGlobalBounds().width)
+    {
+        pushedWaterGirl = true;
+        waterGirl.move({-pixelsPerIteration, 0});
+    }
+
+}
+
+// Fireboy pushed right
+void fireBoyPushedRight(Player& fireBoy, pair<pair<RectangleShape, int>, int> i, float pixelsPerIteration)
+{
+    if (fireBoy.bounds.intersects(i.first.first.getGlobalBounds()) && fireBoy.dy + 80 - safe >= i.first.first.getPosition().y && fireBoy.dx + 80 - safe >= i.first.first.getPosition().x)
+    {
+        pushedFireBoy = true;
+        fireBoy.move({pixelsPerIteration, 0});
+    }
+
+}
+
+// Fireboy pushed left
+void fireBoyPushedLeft(Player& fireBoy, pair<pair<RectangleShape, int>, int> i, float pixelsPerIteration)
+{
+    if (fireBoy.bounds.intersects(i.first.first.getGlobalBounds()) && fireBoy.dy + 80 - safe >= i.first.first.getPosition().y && fireBoy.dx + safe <= i.first.first.getPosition().x + i.first.first.getGlobalBounds().width)
+    {
+        pushedFireBoy = true;
+        fireBoy.move({-pixelsPerIteration, 0});
+    }
+}
+
+// Watergirl Y-axis bridge collision
+void waterGirlBridgeCollision(Player& waterGirl, pair<pair<RectangleShape, int>, int> i, float gravity)
+{
+    if ((i.first.second == 3 || i.first.second == 4) && waterGirl.bounds.intersects(i.first.first.getGlobalBounds()))
+    {
+        if (abs(waterGirl.dy - i.first.first.getPosition().y) < 70 && bridgeOpened[i.second])
+        {
+            waterGirl.jumpCnt = jumpFactor + 1;
+        }
+        if (waterGirl.dy < i.first.first.getPosition().y && bridgeOpened[i.second])
+        {
+            pushedWaterGirl = false;
+            waterGirl.move({0, -gravity});
+            waterGirl.groundCheck = 1;
+        }
+    }
+}
+
+// Fireboy Y-axis bridge collision
+void fireBoyBridgeCollision(Player& fireBoy, pair<pair<RectangleShape, int>, int> i, float gravity)
+{
+    if ((i.first.second == 3 || i.first.second == 4) && fireBoy.bounds.intersects(i.first.first.getGlobalBounds()))
+    {
+        if (abs(fireBoy.dy - i.first.first.getPosition().y) < 70 && bridgeOpened[i.second])
+        {
+            fireBoy.jumpCnt = jumpFactor + 1;
+        }
+        if (fireBoy.dy < i.first.first.getPosition().y && bridgeOpened[i.second])
+        {
+            pushedFireBoy = false;
+            fireBoy.move({0, -gravity});
+            fireBoy.groundCheck = 1;
+        }
+    }
+}
+
+// Watergirl pushed right bridge
+void waterGirlPushedRightBridge(Player& waterGirl, pair<pair<RectangleShape, int>, int> i, float pixelsPerIteration)
+{
+    if (waterGirl.bounds.intersects(i.first.first.getGlobalBounds()) && waterGirl.dy + 80 - safe >= i.first.first.getPosition().y && waterGirl.dx + 20 - safe >= i.first.first.getPosition().x && !gateOpened[i.second] && i.first.second != 3 && i.first.second != 4)
+    {
+        pushedWaterGirl = true;
+        waterGirl.move({pixelsPerIteration, 0});
+    }
+}
+
+// Watergirl pushed left bridge
+void waterGirlPushedLeftBridge(Player& waterGirl, pair<pair<RectangleShape, int>, int> i, float pixelsPerIteration)
+{
+    if (waterGirl.bounds.intersects(i.first.first.getGlobalBounds()) && waterGirl.dy + 80 - safe >= i.first.first.getPosition().y && waterGirl.dx + safe <= i.first.first.getPosition().x + i.first.first.getGlobalBounds().width && !gateOpened[i.second] && i.first.second != 3 && i.first.second != 4)
+    {
+        pushedWaterGirl = true;
+        waterGirl.move({-pixelsPerIteration, 0});
+    }
+}
+
+// Fireboy pushed right bridge
+void fireBoyPushedRightBridge(Player& fireBoy, pair<pair<RectangleShape, int>, int> i, float pixelsPerIteration)
+{
+    if (fireBoy.bounds.intersects(i.first.first.getGlobalBounds()) && fireBoy.dy + 80 - safe >= i.first.first.getPosition().y && fireBoy.dx + 20 - safe >= i.first.first.getPosition().x && !gateOpened[i.second] && i.first.second != 3 && i.first.second != 4)
+    {
+        pushedFireBoy = true;
+        fireBoy.move({pixelsPerIteration, 0});
+    }
+}
+
+// Fireboy pushed left bridge
+void fireBoyPushedLeftBridge(Player& fireBoy, pair<pair<RectangleShape, int>, int> i, float pixelsPerIteration)
+{
+    if (fireBoy.bounds.intersects(i.first.first.getGlobalBounds()) && fireBoy.dy + 80 - safe >= i.first.first.getPosition().y && fireBoy.dx + safe <= i.first.first.getPosition().x + i.first.first.getGlobalBounds().width && !gateOpened[i.second] && i.first.second != 3 && i.first.second != 4)
+    {
+        pushedFireBoy = true;
+        fireBoy.move({-pixelsPerIteration, 0});
+    }
+}
+
+// gem collision
+void gemCollision(Player& player, pair<pair<RectangleShape, int>, int> i)
+{
+    if (player.bounds.intersects(i.first.first.getGlobalBounds()))
+    {
+        if (!gemsTaken[i.second] && !soundFxMute)
+        {
+            Time fadeTime;
+            fadeTime = seconds(-2);
+            chron.add(fadeTime);
+            soundGem.play();
+        }
+        gemsTaken[i.second] = true;
+    }
+}
+
+// Restart enemies
+void restartEnemies() {
+    for (int i = 0; i < enemies.size(); i++) {
+        enemies[i].first.setPosition({ enemies[i].second.first,enemies[i].second.second });
+        enemies[i].first.setTexture(&enemyRightText);
+    }
+}
+
+// Enemy motion and collision with characters
+void enemyMotionAndCollision(Player& fireBoy, Player& waterGirl)
+{
+    // Enemy motion FireBoy
+    for (int i = 0; i < enemies.size(); i++) {
+        float startPos = enemies[i].second.first;
+        float endPos = startPos + 320;
+        if (fireBoy.dx >= enemies[i].second.first && fireBoy.dx <= enemies[i].second.first + 320) {
+            if (fireBoy.dx < enemies[i].first.getPosition().x) {
+                enemies[i].first.setTexture(&enemyLeftText);
+                enemies[i].first.move({ -0.8,0 });
+            }
+            else {
+                enemies[i].first.setTexture(&enemyRightText);
+                enemies[i].first.move({ 0.8,0 });
+            }
+        }
+            // Enemy motion WaterGirl
+        else if (waterGirl.dx >= enemies[i].second.first && waterGirl.dx <= enemies[i].second.first + 320) {
+            if (waterGirl.dx < enemies[i].first.getPosition().x) {
+                enemies[i].first.setTexture(&enemyLeftText);
+                enemies[i].first.move({ -0.8,0 });
+            }
+            else {
+                enemies[i].first.setTexture(&enemyRightText);
+                enemies[i].first.move({ 0.8,0 });
+            }
+        }
+        else {
+            if (!enemyMoveRight[i]) {
+                enemies[i].first.setTexture(&enemyLeftText);
+                enemies[i].first.move({ -0.8,0 });
+            }
+            else if (enemyMoveRight[i]) {
+                enemies[i].first.setTexture(&enemyRightText);
+                enemies[i].first.move({ 0.8,0 });
+            }
+
+        }
+        if (enemies[i].first.getPosition().x <= startPos) {
+            enemyMoveRight[i] = 1;
+        }
+        if (enemies[i].first.getPosition().x >= endPos) {
+            enemyMoveRight[i] = 0;
+        }
+        if (fireBoy.bounds.intersects(enemies[i].first.getGlobalBounds())) {
+            fireBoy.die();
+            if (!soundFxMute)
+                soundPlayerDeath.play();
+        }
+
+        if (waterGirl.bounds.intersects(enemies[i].first.getGlobalBounds())) {
+            waterGirl.die();
+            if (!soundFxMute)
+                soundPlayerDeath.play();
+        }
+    }
+}
+
+// Boxes motion and collision
+void boxesMotionAndCollision(Player& fireBoy, Player& waterGirl, float pixelsPerIteration, float gravity)
+{
+    for (int i = 0; i < boxes.size(); ++i)
+    {
+        // X-axis
+        fireBoy.Inquire();
+        waterGirl.Inquire();
+        if ((waterGirl.bounds.intersects(boxes[i].getGlobalBounds()) && waterGirl.dy + 60 - safe >= boxes[i].getPosition().y && waterGirl.dx + 75 <= boxes[i].getPosition().x) )
+        {
+
+            pushedWaterGirl = true;
+            boxWatergirlPushed[i] = true;
+            if(!boxFireboyPushed[i])
+            {
+
+                waterGirl.move({- pixelsPerIteration/20, 0 });
+                boxes[i].move({ pixelsPerIteration, 0 });
+            }
+            else
+            {
+                waterGirl.move({- pixelsPerIteration, 0 });
+            }
+        }
+        else if ((waterGirl.bounds.intersects(boxes[i].getGlobalBounds()) && waterGirl.dy + 60 - safe >= boxes[i].getPosition().y && waterGirl.dx + safe >= boxes[i].getPosition().x + boxes[i].getGlobalBounds().width))
+        {
+
+            pushedWaterGirl = true;
+            boxWatergirlPushed[i] = true;
+            if(!boxFireboyPushed[i])
+            {
+                waterGirl.move({ pixelsPerIteration/20, 0 });
+                boxes[i].move({ -pixelsPerIteration, 0 });
+            }
+            else
+            {
+                waterGirl.move({ pixelsPerIteration, 0 });
+            }
+
+        }
+        else
+        {
+            boxWatergirlPushed[i] = false;
+        }
+        if ((fireBoy.bounds.intersects(boxes[i].getGlobalBounds()) && fireBoy.dy + 60 - safe >= boxes[i].getPosition().y && fireBoy.dx + 75 <= boxes[i].getPosition().x))
+        {
+
+            pushedFireBoy = true;
+            boxFireboyPushed[i] = true;
+            if(!boxWatergirlPushed[i])
+            {
+                fireBoy.move({- pixelsPerIteration/20, 0 });
+                boxes[i].move({ pixelsPerIteration, 0 });
+            }
+            else{
+                fireBoy.move({- pixelsPerIteration, 0 });
+            }
+        }
+        else if ((fireBoy.bounds.intersects(boxes[i].getGlobalBounds()) && fireBoy.dy + 60 - safe >= boxes[i].getPosition().y && fireBoy.dx + safe >= boxes[i].getPosition().x + boxes[i].getGlobalBounds().width))
+        {
+
+            pushedFireBoy = true;
+            boxFireboyPushed[i] = true;
+            if(!boxWatergirlPushed[i])
+            {
+                fireBoy.move({ pixelsPerIteration/20, 0 });
+                boxes[i].move({ -pixelsPerIteration, 0 });
+            }
+            else{
+                fireBoy.move({ pixelsPerIteration, 0 });
+            }
+        }
+        else
+        {
+            boxFireboyPushed[i] = false;
+        }
+        //Y-axis
+
+        if ( waterGirl.bounds.intersects(boxes[i].getGlobalBounds()))
+        {
+            if (waterGirl.dy < boxes[i].getPosition().y )
+            {
+                pushedFireBoy = false;
+                waterGirl.move({ 0, -gravity });
+                waterGirl.groundCheck = 1;
+            }
+        }
+        if ( fireBoy.bounds.intersects(boxes[i].getGlobalBounds()))
+        {
+            if (fireBoy.dy < boxes[i].getPosition().y )
+            {
+                pushedFireBoy = false;
+                fireBoy.move({ 0, -gravity });
+                fireBoy.groundCheck = 1;
+            }
+        }
+    }
+}

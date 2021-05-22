@@ -45,112 +45,319 @@ using namespace sf;
 using namespace sftools;
 
 
-//Pools Textures
-Texture waterLeftText, waterMidText, waterRightText, lavaLeftText, lavaMidText, lavaRightText, acidLeftText, acidMidText, acidRightText;
-Texture smallLavaText, smallAcidText, smallWaterText;
-
-//Button
-Texture textureButtonOff, textureButtonOn;
-Texture textureStoneMid;
-
-
-//  Declaring fireBoy and waterGirl sprites and textures
-Texture fireBoyTexture, fireBoyTextureLeft, fireBoyTextureRight, waterGirlTexture, waterGirlTextureLeft, waterGirlTextureRight;
-
-
-RectangleShape buttonOn({ 80,60 }), buttonOff({ 80,60 });
-RectangleShape ground({ 1280, 1 });
-Color color(0, 0, 0, 0);
-
-
-Texture textureBackground;
-RectangleShape spriteBackground(Vector2f(80, 40));
-
-// Asking for players' names
-string player1Name, player2Name;
-Text player1Text, player2Text;
-Texture textureSideBorder, textureBottomBorder, textureTopBorder;
-
-
-// 0 -> Top border, 1 -> Bottom border, 2 -> Left border, 3 -> Right border
-RectangleShape borders[4];
+// Vector2f's
 Vector2f vec1(1280, 40), vec2(40, 720);
 
-RectangleShape spriteStoneMid(Vector2f(80.f, 40.f));
-RectangleShape spriteStoneLeft(Vector2f(80.f, 40.f));
-RectangleShape spriteStoneRight(Vector2f(80.f, 40.f));
-Texture smoke1Text, smoke2Text;
-Sprite smoke1, smoke2;
+
+
+
+// Textures
+
+// Pools Textures
+Texture waterMidText;
+Texture waterLeftText;
+Texture waterRightText;
+Texture lavaMidText;
+Texture lavaLeftText;
+Texture lavaRightText;
+Texture acidMidText;
+Texture acidLeftText;
+Texture acidRightText;
+Texture smallAcidText;
+Texture smallLavaText;
+Texture smallWaterText;
+
+// Gate
+Texture textureGateTop;
+Texture textureGateMiddle;
+Texture textureGateBottom;
+Texture textureGateBottomMiddle;
+
+// Bridges
+Texture textureBridgeLeft;
+Texture textureBridgeMiddle;
+
+// Button
+Texture textureStoneMid;
+Texture textureButtonOn;
+Texture textureButtonOff;
+
+// Fireboy and watergirl
+Texture fireBoyTexture;
+Texture fireBoyTextureLeft;
+Texture fireBoyTextureRight;
+Texture waterGirlTexture;
+Texture waterGirlTextureLeft;
+Texture waterGirlTextureRight;
+
+// Background
+Texture textureBackground;
+
+// Pause background
+Texture texturePauseBackground;
+
+// Borders
+Texture textureTopBorder;
+Texture textureSideBorder;
+Texture textureBottomBorder;
+
+// Smoke
+Texture smoke1Text;
+Texture smoke2Text;
+
+// Stone
 Texture textureStoneLeft;
 Texture textureStoneRight;
 
+// Arrow
+Texture textureRedArrow;
+Texture textureWhiteArrow;
+
+// Door
+Texture textureDoor;
+
+// Gems
+Texture textureBlueGem;
+Texture textureRedGem;
+
+// Boxes
+Texture textureBox;
+
+// Enemy
+Texture enemyText;
+Texture enemyLeftText;
+Texture enemyRightText;
+
+// Fonts
+
+// Title
 Font fontTitle;
-Text textTitle;
+
+
+
+
+// Float rects
 FloatRect textRect;
 
 
+
+
+// Texts
+
+// Title
+Text textTitle;
+
+// Players
+Text player1Text;
+Text player2Text;
+
+// Name input box
 Text textEnterYourName;
-RectangleShape enterYourNameRectangle;
-Color color2(255, 255, 255, 0);
-RectangleShape enterYourNameRectangle2;
 
-
+// Intro
 Text textIntro;
-Texture texturePauseBackground;
-Sprite spritePauseBackground;
+
+// Paused
 Text textPaused;
+
+// Game over
 Text textGameOver;
+
+// Start
 Text textStart;
+
+// Main menu
 Text textMainMenu;
+
+// Retry level
 Text textRetryLevel;
+
+// Continue
 Text textContinue;
+
+// Continue intro
 Text textContinueIntro;
+
+// Exit
 Text textExit;
+
+// Guest
 Text textGuest;
+
+// Leaderboards
 Text textLeaderboards;
+
+// Leaderboard
 Text textLeaderboard;
 
+// Levels
 Text textLevels[10];
+
+// Main levels
 Text textMainLevels[10];
-Text textLevel1;
-Text textLevel2 = textLevel1;
+
+// Levels
+Text textLevelsTitle;
+
+// Settings
 Text textSettings;
+
+// On
 Text textOn;
+
+// Off
 Text textOff;
+
+// Music
 Text textMusic;
+
+// Sound
 Text textSoundFx;
 
 
-Texture textureWhiteArrow, textureRedArrow;
+
+
+// Colors
+Color color(0, 0, 0, 0);
+Color color2(255, 255, 255, 0);
+
+
+
+
+// Rectangle shapes
+
+// On
+RectangleShape buttonOn({80,60});
+
+// Off
+RectangleShape buttonOff({80,60});
+
+// Ground
+RectangleShape ground({1280, 1});
+
+// Background
+RectangleShape spriteBackground(Vector2f(80, 40));
+
+// Borders
+// 0 -> Top border, 1 -> Bottom border, 2 -> Left border, 3 -> Right border
+RectangleShape borders[4];
+
+// Stone
+RectangleShape spriteStoneMid(Vector2f(80.f, 40.f));
+RectangleShape spriteStoneLeft(Vector2f(80.f, 40.f));
+RectangleShape spriteStoneRight(Vector2f(80.f, 40.f));
+
+// Name input box
+RectangleShape enterYourNameRectangle;
+RectangleShape enterYourNameRectangle2;
+
+// Arrows
 RectangleShape arrow;
 RectangleShape arrowLevelInquire;
 RectangleShape arrowLeaderboards;
 RectangleShape arrowLevelLeaderboard;
-Texture textureDoor;
+
+
+
+
+// Strings
+
+// Player names
+string player1Name;
+string player2Name;
+
+
+
+
+// Sprites
+
+// Smoke
+Sprite smoke1;
+Sprite smoke2;
+
+// Pause background
+Sprite spritePauseBackground;
+
+// Door
 Sprite spriteDoor;
-SoundBuffer bufferFireboyJump, bufferWatergirlJump, bufferLevelComplete, bufferButtonHover, bufferPlayerDeath, bufferButtonSound;
 
+// Box
+Sprite spriteBox;
+
+
+
+
+// Music
+
+// Intro
+Music musicIntro;
+
+// Level
+Music musicLevel;
+
+
+
+
+// Sound buffer
+
+// Fireboy jump
+SoundBuffer bufferFireboyJump;
+
+// Watergirl jump
+SoundBuffer bufferWatergirlJump;
+
+// Level complete
+SoundBuffer bufferLevelComplete;
+
+// Player death
+SoundBuffer bufferPlayerDeath;
+
+// Button hover
+SoundBuffer bufferButtonHover;
+
+// Button
+SoundBuffer bufferButtonSound;
+
+// Gem
+SoundBuffer bufferGemSound;
+
+
+
+// Sound
+
+// Button hover
 Sound soundButtonHover(bufferButtonHover);
-Sound soundLevelComplete(bufferLevelComplete);
-Sound soundFireboyJump(bufferFireboyJump), soundWatergirlJump(bufferWatergirlJump);
-Sound soundPlayerDeath(bufferPlayerDeath);
-Sound buttonSound(bufferButtonSound);
-Music musicIntro, musicLevel;
 
+// Level complete
+Sound soundLevelComplete(bufferLevelComplete);
+
+// Fireboy jump
+Sound soundFireboyJump(bufferFireboyJump);
+
+// Watergirl jump
+Sound soundWatergirlJump(bufferWatergirlJump);
+
+// Player death
+Sound soundPlayerDeath(bufferPlayerDeath);
+
+// Button
+Sound buttonSound(bufferButtonSound);
+
+// Gem
+Sound soundGem(bufferGemSound);
+
+
+// Timer
 Text textTimer;
 stringstream ss;
 Chronometer chron;
 string stringTimer;
 
-//Gate and bridges
-Texture textureGateTop, textureGateMiddle, textureGateBottom, textureGateBottomMiddle;
-Texture textureBridgeLeft, textureBridgeMiddle;
-
 int currentLevelLeaderboardPage = 0;
 int continueFillColor = 255;
 int enterYourNameFillColor = 255;
-
 int callCounter = 0;
+
 void initVisuals()
 {
     callCounter++;
@@ -160,13 +367,14 @@ void initVisuals()
     textureGateMiddle.loadFromFile(m + "assets/graphics/gateMiddle.png");
     textureGateTop.loadFromFile(m + "assets/graphics/gateTop.png");
 
-    //Bridges
+    // Bridges
     textureBridgeLeft.loadFromFile(m + "assets/graphics/bridgeLeft.png");
     textureBridgeMiddle.loadFromFile(m + "assets/graphics/bridgeMiddle.png");
 
+    // Arrows
     textureRedArrow.loadFromFile(m + "assets/graphics/redArrow.png");
     textureWhiteArrow.loadFromFile(m + "assets/graphics/whiteArrow.png");
-    // Arrows
+
     arrow.setSize(Vector2f(150, 80));
     arrow.setPosition(30, 40);
     arrow.setTexture(&textureWhiteArrow);
@@ -180,6 +388,10 @@ void initVisuals()
 
     spriteDoor.setTexture(textureDoor);
 
+    // Gems
+    textureBlueGem.loadFromFile(m + "assets/graphics/blueGem.png");
+    textureRedGem.loadFromFile(m + "assets/graphics/redGem.png");
+
     // Sound effects
     bufferFireboyJump.loadFromFile(m + "assets/audio/fireboyJump.ogg");
     bufferButtonHover.loadFromFile(m + "assets/audio/buttonHover.ogg");
@@ -187,12 +399,16 @@ void initVisuals()
     bufferLevelComplete.loadFromFile(m + "assets/audio/levelComplete.ogg");
     bufferPlayerDeath.loadFromFile(m + "assets/audio/death.ogg");
     bufferButtonSound.loadFromFile(m + "assets/audio/buttonSound.wav");
+    bufferGemSound.loadFromFile(m + "assets/audio/coinCollect.ogg");
 
+    // Sound
+    soundGem.setVolume(30);
 
     // Music
     musicIntro.openFromFile(m + "assets/audio/intro.ogg");
     musicLevel.openFromFile(m + "assets/audio/level.ogg");
-    musicIntro.setLoop(true), musicLevel.setLoop(true);
+    musicIntro.setLoop(true);
+    musicLevel.setLoop(true);
 
     musicIntro.setVolume(50);
     musicLevel.setVolume(40);
@@ -235,23 +451,18 @@ void initVisuals()
         textMainLevels[i].setPosition(640, 100);
     }
 
-    // Level 1 (Test)
-    textLevel1.setFont(fontTitle);
-    textLevel1.setString("Level 1 (For testing)");
-    textLevel1.setCharacterSize(70);
-    textLevel1.setFillColor(Color::White);
+    // Levels
+    textLevelsTitle.setFont(fontTitle);
+    textLevelsTitle.setCharacterSize(70);
+    textLevelsTitle.setFillColor(Color::White);
+    textLevelsTitle.setString("Levels");
 
-    textRect = textLevel1.getLocalBounds();
-    textLevel1.setOrigin(textRect.left +
-        textRect.width / 2.0f,
-        textRect.top +
-        textRect.height / 2.0f);
-    textLevel1.setPosition(640, 300);
-
-    // Level 2 (Test)
-    textLevel2 = textLevel1;
-    textLevel2.setString("Level 2 (For testing)");
-    textLevel2.setPosition(640, 450);
+    textRect = textLevelsTitle.getLocalBounds();
+    textLevelsTitle.setOrigin(textRect.left +
+                         textRect.width / 2.0f,
+                         textRect.top +
+                         textRect.height / 2.0f);
+    textLevelsTitle.setPosition(640, 100);
 
     // Settings
     textSettings.setFont(fontTitle);
@@ -266,6 +477,7 @@ void initVisuals()
         textRect.height / 2.0f);
     textSettings.setPosition(640, 500);
 
+    // On
     textOn.setFont(fontTitle);
     textOn.setString("On");
     textOn.setCharacterSize(50);
@@ -277,6 +489,7 @@ void initVisuals()
         textRect.height / 2.0f);
     textOn.setPosition(640, 300);
 
+    // Off
     textOff.setFont(fontTitle);
     textOff.setString("Off");
     textOff.setCharacterSize(50);
@@ -288,6 +501,7 @@ void initVisuals()
         textRect.height / 2.0f);
     textOff.setPosition(640, 500);
 
+    // Music
     textMusic.setFont(fontTitle);
     textMusic.setString("Music: ");
     textMusic.setCharacterSize(50);
@@ -299,6 +513,7 @@ void initVisuals()
         textRect.height / 2.0f);
     textMusic.setPosition(620, 300);
 
+    // SoundFX
     textSoundFx.setFont(fontTitle);
     textSoundFx.setString("Sound Fx: ");
     textSoundFx.setCharacterSize(50);
@@ -311,7 +526,10 @@ void initVisuals()
     textSoundFx.setPosition(620, 400);
 
     // Intro text
-    if (callCounter < 2) { loadText(); }
+    if (callCounter < 2)
+    {
+        loadText();
+    }
     textIntro.setFont(fontTitle);
     textIntro.setCharacterSize(30);
     textIntro.setFillColor(Color::White);
@@ -468,7 +686,7 @@ void initVisuals()
         textRect.height / 2.0f);
     textLeaderboard.setPosition(640, 100);
 
-	//Enter your name guide
+	// Enter your name guide
 	textEnterYourName.setFont(fontTitle);
 	textEnterYourName.setFillColor(Color::White);
 
@@ -540,7 +758,6 @@ void initVisuals()
 	smoke2.setTexture(smoke2Text);
 
 	// Title
-
 	fontTitle.loadFromFile(m + "assets/fonts/KOMIKAP_.ttf");
 
 	textTitle.setFont(fontTitle);
@@ -566,8 +783,6 @@ void initVisuals()
 	textureSideBorder.loadFromFile(m + "assets/graphics/sideBorder.png");
 	textureBottomBorder.loadFromFile(m + "assets/graphics/bottomBorder.png");
 
-
-
 	borders[2].setSize(vec2), borders[3].setSize(vec2);
 	borders[0].setSize(vec1), borders[1].setSize(vec1);
 
@@ -577,7 +792,7 @@ void initVisuals()
 	borders[2].setTexture(&textureSideBorder), borders[3].setTexture(&textureSideBorder);
 	borders[0].setTexture(&textureTopBorder), borders[1].setTexture(&textureBottomBorder);
 
-	//Ground
+	// Ground
 	ground.setFillColor(color);
 	ground.setPosition({ 0, 680 });
 
@@ -589,7 +804,7 @@ void initVisuals()
 	waterGirlTextureLeft.loadFromFile(m + "assets/graphics/waterGirlLeft.png");
 	waterGirlTextureRight.loadFromFile(m + "assets/graphics/waterGirlRight.png");
 
-	//Pools Textures
+	// Pools Textures
 	waterLeftText.loadFromFile(m + "assets/graphics/waterLeft.png");
 	waterMidText.loadFromFile(m + "assets/graphics/waterMid.png");
 	waterRightText.loadFromFile(m + "assets/graphics/waterRight.png");
@@ -608,4 +823,13 @@ void initVisuals()
 	textureButtonOn.loadFromFile(m + "assets/graphics/btnon.png");
 	buttonOn.setTexture(&textureButtonOn);
 	buttonOff.setTexture(&textureButtonOff);
+
+    // Box
+    textureBox.loadFromFile(m + "assets/graphics/box.png");
+    spriteBox.setTexture(textureBox);
+
+    // Enemy
+    enemyText.loadFromFile(m + "assets/graphics/enemy.png");
+    enemyRightText.loadFromFile(m + "assets/graphics/enemyRight.png");
+    enemyLeftText.loadFromFile(m + "assets/graphics/enemyLeft.png");
 }
