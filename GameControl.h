@@ -657,7 +657,7 @@ void enemyMotionAndCollision(Player& fireBoy, Player& waterGirl)
     for (int i = 0; i < enemies.size(); i++) {
         float startPos = enemies[i].second.first;
         float endPos = startPos + 320;
-        if (fireBoy.dx >= enemies[i].second.first && fireBoy.dx <= enemies[i].second.first + 320) {
+        if (fireBoy.dx >= enemies[i].second.first && fireBoy.dx <= enemies[i].second.first + 320 && fireBoy.dy < enemies[i].second.second && fireBoy.dy+200 > enemies[i].second.second) {
             if (fireBoy.dx < enemies[i].first.getPosition().x) {
                 enemies[i].first.setTexture(&enemyLeftText);
                 enemies[i].first.move({ -0.8,0 });
@@ -668,7 +668,7 @@ void enemyMotionAndCollision(Player& fireBoy, Player& waterGirl)
             }
         }
             // Enemy motion WaterGirl
-        else if (waterGirl.dx >= enemies[i].second.first && waterGirl.dx <= enemies[i].second.first + 320) {
+        else if (waterGirl.dx >= enemies[i].second.first && waterGirl.dx <= enemies[i].second.first + 320 && waterGirl.dy < enemies[i].second.second && waterGirl.dy + 200 > enemies[i].second.second) {
             if (waterGirl.dx < enemies[i].first.getPosition().x) {
                 enemies[i].first.setTexture(&enemyLeftText);
                 enemies[i].first.move({ -0.8,0 });
