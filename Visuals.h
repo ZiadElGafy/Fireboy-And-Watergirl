@@ -66,6 +66,19 @@ Texture acidRightText;
 Texture smallAcidText;
 Texture smallLavaText;
 Texture smallWaterText;
+Texture waterMidSandText;
+Texture waterLeftSandText;
+Texture waterRightSandText;
+Texture lavaMidSandText;
+Texture lavaLeftSandText;
+Texture lavaRightSandText;
+Texture acidMidSandText;
+Texture acidLeftSandText;
+Texture acidRightSandText;
+Texture smallAcidSandText;
+Texture smallLavaSandText;
+Texture smallWaterSandText;
+
 
 // Gate
 Texture textureGateTop;
@@ -78,9 +91,10 @@ Texture textureBridgeLeft;
 Texture textureBridgeMiddle;
 
 // Button
-Texture textureStoneMid;
 Texture textureButtonOn;
 Texture textureButtonOff;
+Texture textureButtonOnSand;
+Texture textureButtonOffSand;
 
 // Fireboy and watergirl
 Texture fireBoyTexture;
@@ -92,6 +106,7 @@ Texture waterGirlTextureRight;
 
 // Background
 Texture textureBackground;
+Texture textureBackgroundSand;
 
 // Pause background
 Texture texturePauseBackground;
@@ -100,6 +115,9 @@ Texture texturePauseBackground;
 Texture textureTopBorder;
 Texture textureSideBorder;
 Texture textureBottomBorder;
+Texture textureTopBorderSand;
+Texture textureSideBorderSand;
+Texture textureBottomBorderSand;
 
 // Smoke
 Texture smoke1Text;
@@ -107,7 +125,11 @@ Texture smoke2Text;
 
 // Stone
 Texture textureStoneLeft;
+Texture textureStoneMid;
 Texture textureStoneRight;
+Texture textureSandLeft;
+Texture textureSandMid;
+Texture textureSandRight;
 
 // Arrow
 Texture textureRedArrow;
@@ -200,7 +222,8 @@ Text textMainLevels[10];
 Text textLevelsTitle;
 
 // Settings
-Text textSettings;
+Text textSettingsButton;
+Text textSettingsTitle;
 
 // On
 Text textOn;
@@ -214,7 +237,11 @@ Text textMusic;
 // Sound
 Text textSoundFx;
 
-
+// Themes
+Text textThemesButton;
+Text textThemesTitle;
+Text textSand;
+Text textStone;
 
 
 // Colors
@@ -256,6 +283,7 @@ RectangleShape arrow;
 RectangleShape arrowLevelInquire;
 RectangleShape arrowLeaderboards;
 RectangleShape arrowLevelLeaderboard;
+RectangleShape arrowThemes;
 
 
 
@@ -382,6 +410,7 @@ void initVisuals()
     arrowLevelInquire = arrow;
     arrowLeaderboards = arrow;
     arrowLevelLeaderboard = arrow;
+    arrowThemes = arrow;
 
     // Door
     textureDoor.loadFromFile(m + "assets/graphics/door.png");
@@ -465,17 +494,78 @@ void initVisuals()
     textLevelsTitle.setPosition(640, 100);
 
     // Settings
-    textSettings.setFont(fontTitle);
-    textSettings.setString("Settings");
-    textSettings.setCharacterSize(50);
-    textSettings.setFillColor(Color::White);
+    textSettingsButton.setFont(fontTitle);
+    textSettingsButton.setString("Settings");
+    textSettingsButton.setCharacterSize(50);
+    textSettingsButton.setFillColor(Color::White);
 
-    textRect = textSettings.getLocalBounds();
-    textSettings.setOrigin(textRect.left +
+    textRect = textSettingsButton.getLocalBounds();
+    textSettingsButton.setOrigin(textRect.left +
         textRect.width / 2.0f,
         textRect.top +
         textRect.height / 2.0f);
-    textSettings.setPosition(640, 500);
+    textSettingsButton.setPosition(640, 500);
+
+    textSettingsTitle.setFont(fontTitle);
+    textSettingsTitle.setString("Settings");
+    textSettingsTitle.setCharacterSize(70);
+    textSettingsTitle.setFillColor(Color::White);
+
+    textRect = textSettingsTitle.getLocalBounds();
+    textSettingsTitle.setOrigin(textRect.left +
+                                 textRect.width / 2.0f,
+                                 textRect.top +
+                                 textRect.height / 2.0f);
+    textSettingsTitle.setPosition(640, 100);
+
+    // Theme Menu
+    textThemesButton.setFont(fontTitle);
+    textThemesButton.setString("Themes");
+    textThemesButton.setCharacterSize(50);
+    textThemesButton.setFillColor(Color::White);
+
+    textRect = textThemesButton.getLocalBounds();
+    textThemesButton.setOrigin(textRect.left +
+                           textRect.width / 2.0f,
+                           textRect.top +
+                           textRect.height / 2.0f);
+    textThemesButton.setPosition(640, 600);
+
+    textSand.setFont(fontTitle);
+    textSand.setString("Sand");
+    textSand.setCharacterSize(55);
+    textSand.setFillColor(Color::White);
+
+    textRect = textSand.getLocalBounds();
+    textSand.setOrigin(textRect.left +
+                               textRect.width / 2.0f,
+                               textRect.top +
+                               textRect.height / 2.0f);
+    textSand.setPosition(640, 300);
+
+    textStone.setFont(fontTitle);
+    textStone.setString("Stone");
+    textStone.setCharacterSize(55);
+    textStone.setFillColor(Color::White);
+
+    textRect = textStone.getLocalBounds();
+    textStone.setOrigin(textRect.left +
+                               textRect.width / 2.0f,
+                               textRect.top +
+                               textRect.height / 2.0f);
+    textStone.setPosition(640, 400);
+
+    textThemesTitle.setFont(fontTitle);
+    textThemesTitle.setString("Themes");
+    textThemesTitle.setCharacterSize(70);
+    textThemesTitle.setFillColor(Color::White);
+
+    textRect = textThemesTitle.getLocalBounds();
+    textThemesTitle.setOrigin(textRect.left +
+                               textRect.width / 2.0f,
+                               textRect.top +
+                               textRect.height / 2.0f);
+    textThemesTitle.setPosition(640, 100);
 
     // On
     textOn.setFont(fontTitle);
@@ -743,12 +833,15 @@ void initVisuals()
 
 	// Stones
 	textureStoneMid.loadFromFile(m + "assets/graphics/stoneMid.png");
+	textureSandMid.loadFromFile(m + "assets/graphics/sandMid.png");
 	spriteStoneMid.setTexture(&textureStoneMid);
 
 	textureStoneLeft.loadFromFile(m + "assets/graphics/stoneLeft.png");
+    textureSandLeft.loadFromFile(m + "assets/graphics/sandLeft.png");
 	spriteStoneLeft.setTexture(&textureStoneLeft);
 
 	textureStoneRight.loadFromFile(m + "assets/graphics/stoneRight.png");
+    textureSandRight.loadFromFile(m + "assets/graphics/sandRight.png");
 	spriteStoneRight.setTexture(&textureStoneRight);
 
 	// Smoke
@@ -775,6 +868,7 @@ void initVisuals()
 
 	// Background
 	textureBackground.loadFromFile(m + "assets/graphics/backGroundBrick.png");
+	textureBackgroundSand.loadFromFile(m + "assets/graphics/backgroundSand.png");
 
 	spriteBackground.setTexture(&textureBackground);
 
@@ -782,6 +876,10 @@ void initVisuals()
 	textureTopBorder.loadFromFile(m + "assets/graphics/topBorder.png");
 	textureSideBorder.loadFromFile(m + "assets/graphics/sideBorder.png");
 	textureBottomBorder.loadFromFile(m + "assets/graphics/bottomBorder.png");
+
+    textureTopBorderSand.loadFromFile(m + "assets/graphics/topBorderSand.png");
+    textureSideBorderSand.loadFromFile(m + "assets/graphics/sideBorderSand.png");
+    textureBottomBorderSand.loadFromFile(m + "assets/graphics/bottomBorderSand.png");
 
 	borders[2].setSize(vec2), borders[3].setSize(vec2);
 	borders[0].setSize(vec1), borders[1].setSize(vec1);
@@ -818,9 +916,26 @@ void initVisuals()
 	smallAcidText.loadFromFile(m + "assets/graphics/smallAcid.png");
 	smallLavaText.loadFromFile(m + "assets/graphics/smallLava.png");
 
+    waterLeftSandText.loadFromFile(m + "assets/graphics/waterLeftSand.png");
+    waterMidSandText.loadFromFile(m + "assets/graphics/waterMidSand.png");
+    waterRightSandText.loadFromFile(m + "assets/graphics/waterRightSand.png");
+    lavaLeftSandText.loadFromFile(m + "assets/graphics/lavaLeftSand.png");
+    lavaMidSandText.loadFromFile(m + "assets/graphics/lavaMidSand.png");
+    lavaRightSandText.loadFromFile(m + "assets/graphics/lavaRightSand.png");
+    acidLeftSandText.loadFromFile(m + "assets/graphics/acidLeftSand.png");
+    acidMidSandText.loadFromFile(m + "assets/graphics/acidMidSand.png");
+    acidRightSandText.loadFromFile(m + "assets/graphics/acidRightSand.png");
+    smallWaterSandText.loadFromFile(m + "assets/graphics/smallWaterSand.png");
+    smallAcidSandText.loadFromFile(m + "assets/graphics/smallAcidSand.png");
+    smallLavaSandText.loadFromFile(m + "assets/graphics/smallLavaSand.png");
+
 	// Button
 	textureButtonOff.loadFromFile(m + "assets/graphics/btnoff.png");
 	textureButtonOn.loadFromFile(m + "assets/graphics/btnon.png");
+
+    textureButtonOffSand.loadFromFile(m + "assets/graphics/btnoffSand.png");
+    textureButtonOnSand.loadFromFile(m + "assets/graphics/btnonSand.png");
+
 	buttonOn.setTexture(&textureButtonOn);
 	buttonOff.setTexture(&textureButtonOff);
 

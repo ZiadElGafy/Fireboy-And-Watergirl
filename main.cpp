@@ -263,6 +263,9 @@ int main()
         // Clearing current objects on the screen
         window.clear();
 
+        // Check theme
+        checkTheme();
+
         // Rendering background (Render)
         renderBackground();
 
@@ -355,6 +358,9 @@ int main()
 
         // Render main menu page (Render)
         renderMainMenu();
+
+        // render themes mune (Render)
+        renderTheme();
 
         // Render settings button (Render)
         renderSettingsButton();

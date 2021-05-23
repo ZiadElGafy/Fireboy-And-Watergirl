@@ -49,10 +49,13 @@ using namespace sftools;
 
 // Hover flags
 bool hoverExit = false;
+bool hoverSand = false;
 bool hoverStart = false;
+bool hoverStone = false;
 bool hoverGuest = false;
 bool hoverArrow = false;
 bool hoverRetry = false;
+bool hoverTheme = false;
 bool hoverLevel1 = false;
 bool hoverLevel2 = false;
 bool hoverContinue = false;
@@ -61,6 +64,7 @@ bool hoverMainMenu = false;
 bool hoverMusicMute = false;
 bool hoverTextLevels[10] = {};
 bool hoverSoundFxMute = false;
+bool hoverArrowThemes = false;
 bool hoverLeaderboards = false;
 bool hoverContinueIntro = false;
 bool hoverArrowLevelInquire = false;
@@ -72,6 +76,7 @@ bool guest = false;
 bool paused = false;
 bool started = false;
 bool mainMenu = false;
+bool themeMenu = false;
 bool gameStarted = false;
 bool levelInquire = false;
 bool leaderboards = false;
@@ -115,8 +120,9 @@ bool bridgeOpened[13];
 bool buttonBridgePressed[13];
 
 // Booleans for boxes
-bool boxWatergirlPushed[13], boxFireboyPushed[13];
 bool boxGroundCheck[13];
+bool boxWatergirlPushed[13], boxFireboyPushed[13];
+
 // Characters
 bool FBDead = 0;
 bool WGDead = 0;
@@ -247,7 +253,7 @@ void getMouseCoordinates()
 
 void fillBool()
 {
-    mainMenu = !gameStarted && !paused && !settingsMenu && started && bothPlayers && !levelInquire && !leaderboards && !currentLevelLeaderboardPage;
+    mainMenu = !gameStarted && !paused && !settingsMenu && started && bothPlayers && !levelInquire && !leaderboards && !currentLevelLeaderboardPage && !themeMenu;
     oneDead = FBDead || WGDead;
 }
 
@@ -805,5 +811,45 @@ void boxesMotionAndCollision(Player& fireBoy, Player& waterGirl, float pixelsPer
                 fireBoy.groundCheck = 1;
             }
         }
+    }
+}
+void checkTheme()
+{
+    if(sand)
+    {
+        // Platform
+        spriteStoneLeft.setTexture(&textureSandLeft);
+        spriteStoneRight.setTexture(&textureSandRight);
+        spriteStoneMid.setTexture(&textureSandMid);
+
+        // BackGround
+        spriteBackground.setTexture(&textureBackgroundSand);
+
+        // Borders
+        borders[2].setTexture(&textureSideBorderSand), borders[3].setTexture(&textureSideBorderSand);
+        borders[0].setTexture(&textureTopBorderSand), borders[1].setTexture(&textureBottomBorderSand);
+
+        // Button blocks
+        buttonOn.setTexture(&textureButtonOnSand);
+        buttonOff.setTexture(&textureButtonOffSand);
+
+    }
+    else if(stone)
+    {
+        // Platform
+        spriteStoneLeft.setTexture(&textureStoneLeft);
+        spriteStoneRight.setTexture(&textureStoneRight);
+        spriteStoneMid.setTexture(&textureStoneMid);
+
+        // BackGround
+        spriteBackground.setTexture(&textureBackground);
+
+        // Borders
+        borders[2].setTexture(&textureSideBorder), borders[3].setTexture(&textureSideBorder);
+        borders[0].setTexture(&textureTopBorder), borders[1].setTexture(&textureBottomBorder);
+
+        // Button blocks
+        buttonOn.setTexture(&textureButtonOn);
+        buttonOff.setTexture(&textureButtonOff);
     }
 }

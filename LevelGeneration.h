@@ -44,6 +44,10 @@ using namespace std;
 using namespace sf;
 using namespace sftools;
 
+
+// Theme
+bool sand = false, stone = true;
+
 // Enemies Vector
 vector <pair<RectangleShape, pair<float, float>>> enemies;
 
@@ -323,17 +327,31 @@ void fillPlatformObjects()
 
                 if (levelsMap[level][i][j] == 'f')
                 {
-                    obj.setTexture(&lavaLeftText);
+                    if(stone)
+                        obj.setTexture(&lavaLeftText);
+                    else if(sand)
+                        obj.setTexture(&lavaLeftSandText);
                 }
                 if (levelsMap[level][i][j] == 'i')
                 {
-                    obj.setTexture(&lavaMidText);
+                    if(stone)
+                        obj.setTexture(&lavaMidText);
+                    else if(sand)
+                        obj.setTexture(&lavaMidSandText);
                 }
-                if (levelsMap[level][i][j] == 'r') {
-                    obj.setTexture(&lavaRightText);
+                if (levelsMap[level][i][j] == 'r')
+                {
+                    if(stone)
+                        obj.setTexture(&lavaRightText);
+                    else if(sand)
+                        obj.setTexture(&lavaRightSandText);
                 }
-                if (levelsMap[level][i][j] == 'F') {
-                    obj.setTexture(&smallLavaText);
+                if (levelsMap[level][i][j] == 'F')
+                {
+                    if(stone)
+                        obj.setTexture(&smallLavaText);
+                    else if(sand)
+                        obj.setTexture(&smallLavaSandText);
                 }
                 platformObjects.push_back({ {obj, 1},0});
             }
@@ -346,19 +364,31 @@ void fillPlatformObjects()
 
                 if (levelsMap[level][i][j] == 'w')
                 {
-                    obj.setTexture(&waterLeftText);
+                    if(stone)
+                        obj.setTexture(&waterLeftText);
+                    else if(sand)
+                        obj.setTexture(&waterLeftSandText);
                 }
                 if (levelsMap[level][i][j] == 'a')
                 {
-                    obj.setTexture(&waterMidText);
+                    if(stone)
+                        obj.setTexture(&waterMidText);
+                    else if(sand)
+                        obj.setTexture(&waterMidSandText);
                 }
                 if (levelsMap[level][i][j] == 't')
                 {
-                    obj.setTexture(&waterRightText);
+                    if(stone)
+                        obj.setTexture(&waterRightText);
+                    else if(sand)
+                        obj.setTexture(&waterRightSandText);
                 }
                 if (levelsMap[level][i][j] == 'W')
                 {
-                    obj.setTexture(&smallWaterText);
+                    if(stone)
+                        obj.setTexture(&smallWaterText);
+                    else if(sand)
+                        obj.setTexture(&smallWaterSandText);
                 }
                 platformObjects.push_back({ {obj,2},0});
             }
@@ -371,19 +401,31 @@ void fillPlatformObjects()
 
                 if (levelsMap[level][i][j] == 'm')
                 {
-                    obj.setTexture(&acidLeftText);
+                    if(stone)
+                        obj.setTexture(&acidLeftText);
+                    else if(sand)
+                        obj.setTexture(&acidLeftSandText);
                 }
                 if (levelsMap[level][i][j] == 'u')
                 {
-                    obj.setTexture(&acidMidText);
+                    if(stone)
+                        obj.setTexture(&acidMidText);
+                    else if(sand)
+                        obj.setTexture(&acidMidSandText);
                 }
                 if (levelsMap[level][i][j] == 'd')
                 {
-                    obj.setTexture(&acidRightText);
+                    if(stone)
+                        obj.setTexture(&acidRightText);
+                    else if(sand)
+                        obj.setTexture(&acidRightSandText);
                 }
                 if (levelsMap[level][i][j] == 'A')
                 {
-                    obj.setTexture(&smallAcidText);
+                    if(stone)
+                        obj.setTexture(&smallAcidText);
+                    else if(sand)
+                        obj.setTexture(&smallAcidSandText);
                 }
                 platformObjects.push_back({ {obj, 3},0});
             }

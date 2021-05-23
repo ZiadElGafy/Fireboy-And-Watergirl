@@ -157,6 +157,28 @@ void renderMainMenu()
         // Render text title (Visuals)
         window.draw(textTitle);
 
+        // Theme button
+        window.draw(textThemesButton);
+        if(mouse_xAxis >= 550 && mouse_xAxis <= 740 && mouse_yAxis >= 570 && mouse_yAxis <= 620)
+        {
+            if(!hoverTheme)
+            {
+                soundButtonHover.play();
+                hoverTheme = true;
+                textThemesButton.setFillColor(Color::Green);
+            }
+            if(Mouse::isButtonPressed(Mouse::Left) && canClick)
+            {
+                themeMenu = true;
+                mainMenu = false;
+            }
+        }
+        else
+        {
+            textThemesButton.setFillColor(Color::White);
+            hoverTheme = false;
+        }
+
         // Start button
         if (!gameStarted && mouse_xAxis >= 561 && mouse_xAxis <= 719 && mouse_yAxis >= 279 && mouse_yAxis <= 321)
         {
@@ -274,6 +296,7 @@ void renderLevelInquire()
                 {
                     // Start the level
                     level = i;
+                    chron.resume();
                     gameStarted = true;
                     levelInquire = false;
 
@@ -502,7 +525,7 @@ void renderSettingsButton()
                 soundButtonHover.play();
                 hoverSettings = true;
             }
-            textSettings.setFillColor(Color::Green);
+            textSettingsButton.setFillColor(Color::Green);
             if (Mouse::isButtonPressed(Mouse::Left) && canClick)
             {
                 // Dont accept new input till released
@@ -514,15 +537,15 @@ void renderSettingsButton()
         }
         else {
             hoverSettings = false;
-            textSettings.setFillColor(Color::White);
+            textSettingsButton.setFillColor(Color::White);
         }
 
         // Different positions for settings text in different page
-        if (oneDead || !gameStarted) textSettings.setPosition(640, 400);
-        else textSettings.setPosition(640, 500);
+        if (oneDead || !gameStarted) textSettingsButton.setPosition(640, 400);
+        else textSettingsButton.setPosition(640, 500);
 
         // Render "Settings" text (Visuals)
-        window.draw(textSettings);
+        window.draw(textSettingsButton);
     }
 }
 
@@ -845,9 +868,90 @@ void renderSettings()
 
         // Render back arrow (Visuals)
         window.draw(arrow);
+
+        // Render Title
+        window.draw(textSettingsTitle);
     }
 }
 
+// Themes page
+void renderTheme()
+{
+    if(themeMenu)
+    {
+        // Title
+        window.draw(textThemesTitle);
+
+        if(stone)
+            textStone.setFillColor(Color::Green);
+        else
+            textStone.setFillColor(Color::White);
+
+        if(sand)
+            textSand.setFillColor(Color::Green);
+        else
+            textSand.setFillColor(Color::White);
+
+        if(mouse_xAxis >= 573 && mouse_xAxis <= 707 && mouse_yAxis >= 276.5 && mouse_yAxis <= 323.5) //Sand
+        {
+            if(!hoverSand)
+            {
+                hoverSand = true;
+                soundButtonHover.play();
+            }
+            if(Mouse::isButtonPressed(Mouse::Left) && canClick)
+            {
+                sand = true;
+                stone = false;
+                canClick = false;
+            }
+        }
+        else
+            hoverSand = false;
+
+        if(mouse_xAxis >= 552.5 && mouse_xAxis <= 727.5 && mouse_yAxis >= 378 && mouse_yAxis <= 422) //Stone
+        {
+            if(!hoverStone)
+            {
+                hoverStone = true;
+                soundButtonHover.play();
+            }
+            if(Mouse::isButtonPressed(Mouse::Left) && canClick)
+            {
+                sand = false;
+                stone = true;
+                canClick = false;
+            }
+        }
+        else
+            hoverStone = false;
+
+        window.draw(textSand);
+        window.draw(textStone);
+        // Back Arrow
+        if (mouse_xAxis >= 44 && mouse_xAxis <= 163 && mouse_yAxis >= 51 && mouse_yAxis <= 104)
+        {
+            if (!hoverArrowThemes)
+            {
+                soundButtonHover.play();
+                hoverArrowThemes = true;
+            }
+            arrowThemes.setTexture(&textureRedArrow);
+            if (Mouse::isButtonPressed(Mouse::Left) && canClick)
+            {
+                // Dont accept new input till released
+                canClick = false;
+                // Go back to the start menu
+                themeMenu = false;
+            }
+        }
+        else {
+            hoverArrowThemes = false;
+            arrowThemes.setTexture(&textureWhiteArrow);
+        }
+        window.draw(arrowThemes);
+    }
+}
 // Paused page
 void renderPaused(Player& fireBoy, Player& waterGirl)
 {
@@ -1175,6 +1279,7 @@ void renderLevelEnding(Player& fireBoy, Player& waterGirl)
 
             // Update scores with ending time (Game controls)
             getEndingTime();
+            chron.reset();
         }
     }
 }
