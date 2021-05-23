@@ -1,69 +1,70 @@
 ﻿  main.cpp
 C:\Users\heyth\Desktop\Fireboy-And-Watergirl\DataRetrieval.h(127,31): warning C4018: '<': signed/unsigned mismatch
 C:\Users\heyth\Desktop\Fireboy-And-Watergirl\DataRetrieval.h(231,31): warning C4018: '<': signed/unsigned mismatch
-C:\Users\heyth\Desktop\Fireboy-And-Watergirl\Visuals.h(436,61): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\heyth\Desktop\Fireboy-And-Watergirl\Visuals.h(436,39): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\heyth\Desktop\Fireboy-And-Watergirl\LevelGeneration.h(207,28): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-C:\Users\heyth\Desktop\Fireboy-And-Watergirl\LevelGeneration.h(207,50): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-C:\Users\heyth\Desktop\Fireboy-And-Watergirl\LevelGeneration.h(230,28): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-C:\Users\heyth\Desktop\Fireboy-And-Watergirl\LevelGeneration.h(230,50): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-C:\Users\heyth\Desktop\Fireboy-And-Watergirl\LevelGeneration.h(255,28): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-C:\Users\heyth\Desktop\Fireboy-And-Watergirl\LevelGeneration.h(255,50): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-C:\Users\heyth\Desktop\Fireboy-And-Watergirl\LevelGeneration.h(281,28): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-C:\Users\heyth\Desktop\Fireboy-And-Watergirl\LevelGeneration.h(281,50): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-C:\Users\heyth\Desktop\Fireboy-And-Watergirl\LevelGeneration.h(308,33): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-C:\Users\heyth\Desktop\Fireboy-And-Watergirl\LevelGeneration.h(319,25): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-C:\Users\heyth\Desktop\Fireboy-And-Watergirl\LevelGeneration.h(336,24): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-C:\Users\heyth\Desktop\Fireboy-And-Watergirl\LevelGeneration.h(336,46): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-C:\Users\heyth\Desktop\Fireboy-And-Watergirl\LevelGeneration.h(369,27): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-C:\Users\heyth\Desktop\Fireboy-And-Watergirl\LevelGeneration.h(369,49): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-C:\Users\heyth\Desktop\Fireboy-And-Watergirl\LevelGeneration.h(393,21): warning C4018: '<': signed/unsigned mismatch
-C:\Users\heyth\Desktop\Fireboy-And-Watergirl\LevelGeneration.h(406,24): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-C:\Users\heyth\Desktop\Fireboy-And-Watergirl\LevelGeneration.h(406,46): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-C:\Users\heyth\Desktop\Fireboy-And-Watergirl\GameControl.h(228,34): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-C:\Users\heyth\Desktop\Fireboy-And-Watergirl\GameControl.h(270,45): warning C4244: '=': conversion from 'T' to 'float', possible loss of data
+C:\Users\heyth\Desktop\Fireboy-And-Watergirl\Visuals.h(466,61): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\heyth\Desktop\Fireboy-And-Watergirl\Visuals.h(466,39): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\heyth\Desktop\Fireboy-And-Watergirl\LevelGeneration.h(325,28): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+C:\Users\heyth\Desktop\Fireboy-And-Watergirl\LevelGeneration.h(325,50): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+C:\Users\heyth\Desktop\Fireboy-And-Watergirl\LevelGeneration.h(362,28): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+C:\Users\heyth\Desktop\Fireboy-And-Watergirl\LevelGeneration.h(362,50): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+C:\Users\heyth\Desktop\Fireboy-And-Watergirl\LevelGeneration.h(399,28): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+C:\Users\heyth\Desktop\Fireboy-And-Watergirl\LevelGeneration.h(399,50): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+C:\Users\heyth\Desktop\Fireboy-And-Watergirl\LevelGeneration.h(437,28): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+C:\Users\heyth\Desktop\Fireboy-And-Watergirl\LevelGeneration.h(437,50): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+C:\Users\heyth\Desktop\Fireboy-And-Watergirl\LevelGeneration.h(464,33): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+C:\Users\heyth\Desktop\Fireboy-And-Watergirl\LevelGeneration.h(475,25): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+C:\Users\heyth\Desktop\Fireboy-And-Watergirl\LevelGeneration.h(492,24): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+C:\Users\heyth\Desktop\Fireboy-And-Watergirl\LevelGeneration.h(492,46): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+C:\Users\heyth\Desktop\Fireboy-And-Watergirl\LevelGeneration.h(525,27): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+C:\Users\heyth\Desktop\Fireboy-And-Watergirl\LevelGeneration.h(525,49): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+C:\Users\heyth\Desktop\Fireboy-And-Watergirl\LevelGeneration.h(550,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\heyth\Desktop\Fireboy-And-Watergirl\LevelGeneration.h(563,24): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+C:\Users\heyth\Desktop\Fireboy-And-Watergirl\LevelGeneration.h(563,46): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+C:\Users\heyth\Desktop\Fireboy-And-Watergirl\GameControl.h(207,34): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+C:\Users\heyth\Desktop\Fireboy-And-Watergirl\GameControl.h(251,45): warning C4244: '=': conversion from 'T' to 'float', possible loss of data
           with
           [
               T=int
           ]
-C:\Users\heyth\Desktop\Fireboy-And-Watergirl\GameControl.h(270,89): warning C4244: '=': conversion from 'T' to 'float', possible loss of data
+C:\Users\heyth\Desktop\Fireboy-And-Watergirl\GameControl.h(251,89): warning C4244: '=': conversion from 'T' to 'float', possible loss of data
           with
           [
               T=int
           ]
-C:\Users\heyth\Desktop\Fireboy-And-Watergirl\GameControl.h(647,23): warning C4018: '<': signed/unsigned mismatch
-C:\Users\heyth\Desktop\Fireboy-And-Watergirl\GameControl.h(657,23): warning C4018: '<': signed/unsigned mismatch
-C:\Users\heyth\Desktop\Fireboy-And-Watergirl\GameControl.h(663,49): warning C4305: 'argument': truncation from 'double' to 'T'
+C:\Users\heyth\Desktop\Fireboy-And-Watergirl\GameControl.h(316,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\heyth\Desktop\Fireboy-And-Watergirl\GameControl.h(653,23): warning C4018: '<': signed/unsigned mismatch
+C:\Users\heyth\Desktop\Fireboy-And-Watergirl\GameControl.h(663,23): warning C4018: '<': signed/unsigned mismatch
+C:\Users\heyth\Desktop\Fireboy-And-Watergirl\GameControl.h(669,49): warning C4305: 'argument': truncation from 'double' to 'T'
           with
           [
               T=float
           ]
-C:\Users\heyth\Desktop\Fireboy-And-Watergirl\GameControl.h(667,48): warning C4305: 'argument': truncation from 'double' to 'T'
+C:\Users\heyth\Desktop\Fireboy-And-Watergirl\GameControl.h(673,48): warning C4305: 'argument': truncation from 'double' to 'T'
           with
           [
               T=float
           ]
-C:\Users\heyth\Desktop\Fireboy-And-Watergirl\GameControl.h(674,49): warning C4305: 'argument': truncation from 'double' to 'T'
+C:\Users\heyth\Desktop\Fireboy-And-Watergirl\GameControl.h(680,49): warning C4305: 'argument': truncation from 'double' to 'T'
           with
           [
               T=float
           ]
-C:\Users\heyth\Desktop\Fireboy-And-Watergirl\GameControl.h(678,48): warning C4305: 'argument': truncation from 'double' to 'T'
+C:\Users\heyth\Desktop\Fireboy-And-Watergirl\GameControl.h(684,48): warning C4305: 'argument': truncation from 'double' to 'T'
           with
           [
               T=float
           ]
-C:\Users\heyth\Desktop\Fireboy-And-Watergirl\GameControl.h(684,49): warning C4305: 'argument': truncation from 'double' to 'T'
+C:\Users\heyth\Desktop\Fireboy-And-Watergirl\GameControl.h(690,49): warning C4305: 'argument': truncation from 'double' to 'T'
           with
           [
               T=float
           ]
-C:\Users\heyth\Desktop\Fireboy-And-Watergirl\GameControl.h(688,48): warning C4305: 'argument': truncation from 'double' to 'T'
+C:\Users\heyth\Desktop\Fireboy-And-Watergirl\GameControl.h(694,48): warning C4305: 'argument': truncation from 'double' to 'T'
           with
           [
               T=float
           ]
-C:\Users\heyth\Desktop\Fireboy-And-Watergirl\GameControl.h(715,23): warning C4018: '<': signed/unsigned mismatch
+C:\Users\heyth\Desktop\Fireboy-And-Watergirl\GameControl.h(722,23): warning C4018: '<': signed/unsigned mismatch
 C:\Users\heyth\Desktop\Fireboy-And-Watergirl\Render.h(57,45): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
 C:\Users\heyth\Desktop\Fireboy-And-Watergirl\Render.h(57,42): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
 C:\Users\heyth\Desktop\Fireboy-And-Watergirl\Render.h(74,43): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
@@ -72,10 +73,12 @@ C:\Users\heyth\Desktop\Fireboy-And-Watergirl\Render.h(75,45): warning C4244: 'ar
 C:\Users\heyth\Desktop\Fireboy-And-Watergirl\Render.h(75,42): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
 C:\Users\heyth\Desktop\Fireboy-And-Watergirl\Render.h(76,44): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
 C:\Users\heyth\Desktop\Fireboy-And-Watergirl\Render.h(76,41): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\heyth\Desktop\Fireboy-And-Watergirl\Render.h(265,75): warning C4018: '>=': signed/unsigned mismatch
-C:\Users\heyth\Desktop\Fireboy-And-Watergirl\Render.h(265,181): warning C4018: '>=': signed/unsigned mismatch
-C:\Users\heyth\Desktop\Fireboy-And-Watergirl\Render.h(665,63): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\heyth\Desktop\Fireboy-And-Watergirl\Render.h(1212,23): warning C4018: '<': signed/unsigned mismatch
+C:\Users\heyth\Desktop\Fireboy-And-Watergirl\Render.h(290,75): warning C4018: '>=': signed/unsigned mismatch
+C:\Users\heyth\Desktop\Fireboy-And-Watergirl\Render.h(290,181): warning C4018: '>=': signed/unsigned mismatch
+C:\Users\heyth\Desktop\Fireboy-And-Watergirl\Render.h(692,63): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\heyth\Desktop\Fireboy-And-Watergirl\Render.h(1125,33): warning C4018: '<': signed/unsigned mismatch
+C:\Users\heyth\Desktop\Fireboy-And-Watergirl\Render.h(1173,33): warning C4018: '<': signed/unsigned mismatch
+C:\Users\heyth\Desktop\Fireboy-And-Watergirl\Render.h(1351,23): warning C4018: '<': signed/unsigned mismatch
 C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29910\include\utility(193,16): warning C4244: 'initializing': conversion from '_Ty' to '_Ty1', possible loss of data
           with
           [
@@ -85,13 +88,13 @@ C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.2
           [
               _Ty1=float
           ]
-C:\Users\heyth\Desktop\Fireboy-And-Watergirl\GameControl.h(325): message : see reference to function template instantiation 'std::pair<float,float>::pair<int,float&,0>(_Other1 &&,_Other2) noexcept' being compiled
+C:\Users\heyth\Desktop\Fireboy-And-Watergirl\GameControl.h(309): message : see reference to function template instantiation 'std::pair<float,float>::pair<int,float&,0>(_Other1 &&,_Other2) noexcept' being compiled
           with
           [
               _Other1=int,
               _Other2=float &
           ]
-C:\Users\heyth\Desktop\Fireboy-And-Watergirl\GameControl.h(325): message : see reference to function template instantiation 'std::pair<float,float>::pair<int,float&,0>(_Other1 &&,_Other2) noexcept' being compiled
+C:\Users\heyth\Desktop\Fireboy-And-Watergirl\GameControl.h(309): message : see reference to function template instantiation 'std::pair<float,float>::pair<int,float&,0>(_Other1 &&,_Other2) noexcept' being compiled
           with
           [
               _Other1=int,
@@ -115,13 +118,13 @@ C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.2
           [
               _Ty1=float
           ]
-C:\Users\heyth\Desktop\Fireboy-And-Watergirl\GameControl.h(381): message : see reference to function template instantiation 'std::pair<float,float>::pair<double,int,0>(_Other1 &&,_Other2 &&) noexcept' being compiled
+C:\Users\heyth\Desktop\Fireboy-And-Watergirl\GameControl.h(387): message : see reference to function template instantiation 'std::pair<float,float>::pair<double,int,0>(_Other1 &&,_Other2 &&) noexcept' being compiled
           with
           [
               _Other1=double,
               _Other2=int
           ]
-C:\Users\heyth\Desktop\Fireboy-And-Watergirl\GameControl.h(381): message : see reference to function template instantiation 'std::pair<float,float>::pair<double,int,0>(_Other1 &&,_Other2 &&) noexcept' being compiled
+C:\Users\heyth\Desktop\Fireboy-And-Watergirl\GameControl.h(387): message : see reference to function template instantiation 'std::pair<float,float>::pair<double,int,0>(_Other1 &&,_Other2 &&) noexcept' being compiled
           with
           [
               _Other1=double,

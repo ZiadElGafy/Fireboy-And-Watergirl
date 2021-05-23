@@ -299,6 +299,7 @@ void renderLevelInquire()
                 {
                     // Start the level
                     level = i;
+                    chron.reset();
                     chron.resume();
                     gameStarted = true;
                     levelInquire = false;

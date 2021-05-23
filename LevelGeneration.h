@@ -54,7 +54,7 @@ vector <pair<RectangleShape, pair<float, float>>> enemies;
 // Current level
 int level = 0;
 // Levels map
-String levelsMap[10][9] =
+String levelsMap[100][90] =
         {
                 /*
                     MAP KEY
@@ -136,7 +136,7 @@ String levelsMap[10][9] =
     g: red gem
     G: blue gem
 */
-String objectsMap[10][36] =
+String objectsMap[100][360] =
         {
                 // Level 1 (Hazem)
                 {
