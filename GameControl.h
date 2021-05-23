@@ -153,10 +153,10 @@ void gamePolling()
 
         if (event.type == Event::KeyPressed && event.key.code == Keyboard::Escape && gameStarted) {
             // Resume
-            if (paused)
+            if (paused && !FBDead && !WGDead)
                 paused = false, chron.resume();
             // Pause
-            else
+            else if (!FBDead && !WGDead)
                 paused = true, chron.pause();
         }
     }

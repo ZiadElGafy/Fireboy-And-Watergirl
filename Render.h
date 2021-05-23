@@ -907,6 +907,7 @@ void renderPaused(Player& fireBoy, Player& waterGirl)
                 // Restart both characters
                 fireBoy.Restart();
                 waterGirl.Restart();
+                FBDead = 0, WGDead = 0;
 
                 // Restart enemies
                 restartEnemies();
@@ -968,6 +969,7 @@ void renderPaused(Player& fireBoy, Player& waterGirl)
                 // Restart both characters (Players)
                 fireBoy.Restart();
                 waterGirl.Restart();
+                FBDead = 0, WGDead = 0;
 
                 // Restart enemies
                 restartEnemies();
