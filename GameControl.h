@@ -159,33 +159,6 @@ void gamePolling()
             else
                 paused = true, chron.pause();
         }
-
-        // Remove if the game works fine
-        /*if (event.type == Event::KeyReleased && event.key.code == Keyboard::Return) {
-            if (!started)
-            {
-                started = true;
-                player1Input = true;
-                textContinueIntro.setFillColor(Color::White);
-            }
-            else if (!gameStarted && !levelInquire && !player1Input && !player2Input)
-            {
-                chron.reset();
-                chron.resume();
-                gameStarted = true;
-                musicIntro.stop();
-                if (musicLevel.getStatus() != Music::Status::Playing)
-                {
-                    musicLevel.play();
-                }
-            }
-        }
-        if (event.type == event.MouseButtonReleased && event.mouseButton.button == Mouse::Left && canClick)
-        {
-            canClick = false;
-            pressedMusicMute = false;
-            pressedSoundFxMute = false;
-        }*/
     }
 }
 
@@ -288,6 +261,9 @@ void checkCurrentLevelOnScreen(Player& fireBoy, Player& waterGirl)
         platformObjects.clear();
         gatesObjects.clear();
         gemObjects.clear();
+        boxes.clear();
+        boxesPositions.clear();
+        enemies.clear();
 
         // Pushing all platforms from the new level
         platformObjects.push_back({{ground,0},0});
@@ -325,6 +301,7 @@ void fall(Player& player, float gravity)
     player.move({0, gravity});
     
 }
+
 // Letting boxes fall due to gravity
 void boxesFall(float gravity)
 {
@@ -700,11 +677,11 @@ void enemyMotionAndCollision(Player& fireBoy, Player& waterGirl)
             }
         }
         else {
-            if (!enemyMoveRight[i]) {
+            if (!enemyMoveRight[i] && !paused) {
                 enemies[i].first.setTexture(&enemyLeftText);
                 enemies[i].first.move({ -0.8,0 });
             }
-            else if (enemyMoveRight[i]) {
+            else if (enemyMoveRight[i] && !paused) {
                 enemies[i].first.setTexture(&enemyRightText);
                 enemies[i].first.move({ 0.8,0 });
             }

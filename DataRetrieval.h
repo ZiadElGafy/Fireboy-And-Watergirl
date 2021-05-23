@@ -253,7 +253,7 @@ void getTopTenOfLevel(int level)
     map<pair<string, string>, vector<int>>::iterator it;
     for (it = currentRecords.begin(); it != currentRecords.end(); it++)
     {
-        if (it->second[level - 1] != 0)
+        if (it->second.size() > 0 && it->second[level - 1] != 0)
         {
             topTen.push_back({ it->second[level - 1],{it->first.first,it->first.second} });
         }

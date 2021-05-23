@@ -49,41 +49,52 @@ vector <pair<RectangleShape, pair<float, float>>> enemies;
 
 // Current level
 int level = 0;
-
 // Levels map
 String levelsMap[10][9] =
-{
-    /*
-        MAP KEY
-        G: gate button
-        B: bridge button
-    */
-    // Level 1
-    {
+        {
+                /*
+                    MAP KEY
+                    G: gate button
+                    B: bridge button
+                */
+                // Level 1 (Shahd)
+                {
 
-        "                ",
-        "                ",
-        "    M       LMMR",
-        "      M   M     ",
-        "LMMWMMMR      LR",
-        "                ",
-        "    LMMMMMMBMRB ",
-        "  M             ",
-        "                ",
-    },
-    // Level 2
-    {
-            "                ",
-            "                ",
-            "LMMR            ",
-            "     M          ",
-            "       M        ",
-            "         M      ",
-            "           M    ",
-            "             M  ",
-            "                ",
-    },
-};
+                        "                ",
+                        "                ",
+                        "         LMMMMM ",
+                        "MMMMMMR         ",
+                        "       M        ",
+                        "          LFR   ",
+                        "      LMR       ",
+                        " LWR            ",
+                        "                ",
+                },
+                // Level 2 (Jana)
+                {
+                        "                ",
+                        "                ",
+                        "          LBMMMR",
+                        "       M        ",
+                        "LBMR        LMMR",
+                        "      LMMR      ",
+                        " fir        wat ",
+                        "      LMMR      ",
+                        "                ",
+                },
+                // Level 3 (Beevo)
+                {
+                        "                ",
+                        "                ",
+                        "LMBR    BMG     ",
+                        "                ",
+                        "   GMMMMMBMMMmu ",
+                        "                ",
+                        "                ",
+                        " LMMMMMMfiiirMB ",
+                        "                ",
+                },
+        };
 
 
 /*
@@ -96,87 +107,126 @@ String levelsMap[10][9] =
     E: enemy
 */
 String objectsMap[10][36] =
-{
-    // Level 1
-    {
-        
-        "                                                                ",
-        "                                                                ",
-        "                                                                ",
-        "                                                                ",
-        "                                                                ",
-        "                                                                ",
-        "                                                                ",
-        "                                                                ",
-        "                                                                ",
-        "                                                                ",
-        "                                                                ",
-        "                                                                ",
-        "                                                                ",
-        "                                                                ",
-        "                                                                ",
-        "                                                                ",
-        "                                                                ",
-        "                                                                ",
-        "                                                                ",
-        "                                                                ",
-        "                                                                ",
-        "                      O                                         ",
-        "                                                                ",
-        "                                                                ",
-        "                                    LWWWWWWWWWWWWWWWW           ",
-        "                                                                ",
-        "                                                                ",
-        "                                                                ",
-        "                                                                ",
-        "                                                                ",
-        "                                                                ",
-        "                                                                ",
-        "                                                                ",
-        "                                                                ",
-        "                                                                ",
-        "                                                                "
-    },
-    // Level 2
-    {
-        "                                                                ",
-        "                                                                ",
-        "    M       LMMR                                                ",
-        "      M   M                                                     ",
-        "LMMWMMMR      LR                                                ",
-        "            LR                                                  ",
-        "    LMMMBMFMR                                                   ",
-        "  M                                                             ",
-        "                                                                ",
-        "                                                                ",
-        "                                                                ",
-        "    M       LMMR                                                ",
-        "      M   M                                                     ",
-        "LMMWMMMR      LR                                                ",
-        "            LR                                                  ",
-        "    LMMMBMFMR                                                   ",
-        "  M                                                             ",
-        "                                                                ",
-        "                                                                ",
-        "                                                                ",
-        "    M       LMMR                                                ",
-        "      M   M                                                     ",
-        "LMMWMMMR      LR                                                ",
-        "            LR                                                  ",
-        "    LMMMBMFMR                                                   ",
-        "  M                                                             ",
-        "                                                                ",
-        "                                                                ",
-        "                                                                ",
-        "    M       LMMR                                                ",
-        "      M   M                                                     ",
-        "LMMWMMMR      LR                                                ",
-        "            LR                                                  ",
-        "    LMMMBMFMR                                                   ",
-        "  M                                                             ",
-        "                                                                "
-    },
-};
+        {
+                // Level 1 (Shahd)
+                {
+
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                      D         ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                     E                          ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "   G   g  E                                                     ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                             g                  ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "         G                                                      ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                "
+                },
+                // Level 2 (Jana)
+                {
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                       D        ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                LWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "         g                                           G          ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                "
+                },
+                // Level 3 (Beevo)
+                {
+                        "                                                                ",
+                        "                                                                ",
+                        "    D                                                           ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                LWWWWWWWWWWWWWWWW                               ",
+                        "                        G                                       ",
+                        "                                           T                    ",
+                        "                                           M                    ",
+                        "                                           M                    ",
+                        "                                        O  M                    ",
+                        "              E                            M                    ",
+                        "  g                                        B                    ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                         g                      ",
+                        "LWWWW                                                           ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "               E                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                "
+                },
+        };
 
 //Drawing platforms
 vector<pair<pair<RectangleShape, int>, int> > platformObjects;

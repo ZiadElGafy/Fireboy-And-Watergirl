@@ -272,13 +272,10 @@ void renderLevelInquire()
                 textLevels[i].setFillColor(Color::Green);
                 if (Mouse::isButtonPressed(Mouse::Left) && canClick)
                 {
-                    // Send him to the level leaderboard page
+                    // Start the level
                     level = i;
                     gameStarted = true;
                     levelInquire = false;
-
-                    // Set door position
-
 
                     if (!musicMute)
                     {
