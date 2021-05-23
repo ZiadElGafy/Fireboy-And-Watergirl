@@ -61,15 +61,15 @@ String levelsMap[10][9] =
     // Level 1
     {
 
-            "                ",
-            "                ",
-            "           LMMR ",
-            "                ",
-            " LMMMMMMR       ",
-            "          L     ",
-            "            L   ",
-            " LMMMMMMMMMMMMR ",
-            "                ",
+        "                ",
+        "                ",
+        "    M       LMMR",
+        "      M   M     ",
+        "LMMWMMMR      LR",
+        "                ",
+        "    LMMMMMMBMRB ",
+        "  M             ",
+        "                ",
     },
     // Level 2
     {
@@ -99,43 +99,43 @@ String objectsMap[10][36] =
 {
     // Level 1
     {
-
-            "                                                                ",
-            "                                                                ",
-            "                                                                ",
-            "                                                      D         ",
-            "                                                                ",
-            "                                                                ",
-            "                                                                ",
-            "                                                                ",
-            "                                                                ",
-            "                                                                ",
-            "                                                                ",
-            "                                                                ",
-            "                                                                ",
-            "                                                                ",
-            "         E                                                      ",
-            "                                                                ",
-            "                                                                ",
-            "                                                                ",
-            "                                                                ",
-            "                                                                ",
-            "                                                                ",
-            "                                                                ",
-            "                                                                ",
-            "                                                                ",
-            "                                                                ",
-            "                                                                ",
-            "         E                                                      ",
-            "                                                                ",
-            "                                                                ",
-            "           O                                                    ",
-            "                                                                ",
-            "                                                                ",
-            "                                                                ",
-            "                                                                ",
-            "                                                                ",
-            "                                                                "
+        
+        "                                                                ",
+        "                                                                ",
+        "                                                                ",
+        "                                                                ",
+        "                                                                ",
+        "                                                                ",
+        "                                                                ",
+        "                                                                ",
+        "                                                                ",
+        "                                                                ",
+        "                                                                ",
+        "                                                                ",
+        "                                                                ",
+        "                                                                ",
+        "                                                                ",
+        "                                                                ",
+        "                                                                ",
+        "                                                                ",
+        "                                                                ",
+        "                                                                ",
+        "                                                                ",
+        "                      O                                         ",
+        "                                                                ",
+        "                                                                ",
+        "                                    LWWWWWWWWWWWWWWWW           ",
+        "                                                                ",
+        "                                                                ",
+        "                                                                ",
+        "                                                                ",
+        "                                                                ",
+        "                                                                ",
+        "                                                                ",
+        "                                                                ",
+        "                                                                ",
+        "                                                                ",
+        "                                                                "
     },
     // Level 2
     {
@@ -368,6 +368,7 @@ void fillGateObjects()
             {
                 posX = 40 + (20 * j), posY = 40 + (20 * i);
                 spriteBox.setPosition(posX, posY);
+                
                 boxes.push_back(spriteBox);
                 boxesPositions.push_back({posX,posY});
             }

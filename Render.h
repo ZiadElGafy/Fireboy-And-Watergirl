@@ -1008,19 +1008,33 @@ void renderPools(Player& fireBoy, Player& waterGirl)
         {
             // Gate
             // Not interacting with current button
+            bool boxButtonGatePressed = false;
             if (!waterGirl.bounds.intersects(i.first.first.getGlobalBounds()) && !fireBoy.bounds.intersects(i.first.first.getGlobalBounds()) && i.first.second == 4)
             {
-                buttonGatePressed[i.second] = false;
-
-                // Checking the other gate button
-                if (i.second % 2 == 1 && !buttonGatePressed[i.second + 1])
+               
+                for(int j = 0;j < boxes.size();++j)
                 {
-                    gateOpened[((i.second - 1) / 2) + 1] = false;
+                    if (abs(i.first.first.getPosition().y - boxes[j].getPosition().y) <= 82 && abs(boxes[j].getPosition().x - i.first.first.getPosition().x) <= 42)
+                    {
+                            boxButtonGatePressed = true;
+                            buttonGatePressed[i.second] = true;
+                            break;
+                    }
                 }
-                if (i.second % 2 == 0 && !buttonGatePressed[i.second - 1])
+                if(!boxButtonGatePressed)
                 {
-                    gateOpened[((i.second - 1) / 2) + 1] = false;
+                    buttonGatePressed[i.second] = false;
+                    // Checking the other gate button
+                    if (i.second % 2 == 1 && !buttonGatePressed[i.second + 1])
+                    {
+                        gateOpened[((i.second - 1) / 2) + 1] = false;
+                    }
+                    if (i.second % 2 == 0 && !buttonGatePressed[i.second - 1])
+                    {
+                        gateOpened[((i.second - 1) / 2) + 1] = false;
+                    }
                 }
+                
             }
 
             // Opens Gate if the gate's button is pressed
@@ -1042,18 +1056,32 @@ void renderPools(Player& fireBoy, Player& waterGirl)
                 buttonOff.setPosition(i.first.first.getPosition().x, i.first.first.getPosition().y - 20);
                 window.draw(buttonOff);
             }
-
+            // Buttons for bridges
             if (!waterGirl.bounds.intersects(i.first.first.getGlobalBounds()) && !fireBoy.bounds.intersects(i.first.first.getGlobalBounds()) && i.first.second == 5)
             {
-                buttonBridgePressed[i.second] = false;
-                if (i.second % 2 == 1 && !buttonBridgePressed[i.second + 1])
+                bool boxButtonBridgePressed = false;
+                for(int j = 0;j < boxes.size();++j)
                 {
-                    bridgeOpened[((i.second - 1) / 2) + 1] = false;
+                    if (abs(i.first.first.getPosition().y - boxes[j].getPosition().y) <= 82 && abs(boxes[j].getPosition().x - i.first.first.getPosition().x) <= 42)
+                    {
+                        boxButtonBridgePressed = true;
+                        buttonBridgePressed[i.second] = true;
+                        break;
+                    }
                 }
-                else if (i.second % 2 == 0 && !buttonBridgePressed[i.second - 1])
+                if(!boxButtonBridgePressed)
                 {
-                    bridgeOpened[((i.second - 1) / 2) + 1] = false;
+                    buttonBridgePressed[i.second] = false;
+                    if (i.second % 2 == 1 && !buttonBridgePressed[i.second + 1])
+                    {
+                        bridgeOpened[((i.second - 1) / 2) + 1] = false;
+                    }
+                    else if (i.second % 2 == 0 && !buttonBridgePressed[i.second - 1])
+                    {
+                        bridgeOpened[((i.second - 1) / 2) + 1] = false;
+                    }
                 }
+               
             }
 
             if (i.first.second == 5 && buttonBridgePressed[i.second])

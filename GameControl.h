@@ -116,7 +116,7 @@ bool buttonBridgePressed[13];
 
 // Booleans for boxes
 bool boxWatergirlPushed[13], boxFireboyPushed[13];
-
+bool boxGroundCheck[13];
 // Characters
 bool FBDead = 0;
 bool WGDead = 0;
@@ -323,8 +323,29 @@ void initWaterGirlIdle(Player& waterGirl)
 void fall(Player& player, float gravity)
 {
     player.move({0, gravity});
+    
 }
-
+// Letting boxes fall due to gravity
+void boxesFall(float gravity)
+{
+    for(int i = 0;i < boxes.size();++i)
+    {
+        boxes[i].move({0,gravity});
+        for(auto j : platformObjects)
+        {
+            if (j.first.first.getPosition().y - boxes[i].getPosition().y <= 55 && j.first.first.getPosition().y - boxes[i].getPosition().y >= 0 )
+            {
+                if(boxes[i].getGlobalBounds().intersects(j.first.first.getGlobalBounds()))
+                {
+                 boxes[i].move({0, -gravity});
+                }
+            }
+        }
+        
+    }
+   
+}
+    
 // jump mechanics
 void jumpMechanics(Player& player, float gravity)
 {

@@ -202,7 +202,9 @@ int main()
             if (i.first.second == 1)
                 gemCollision(waterGirl, i);
         }
-
+        // Letting the boxes fall
+        boxesFall(gravity);
+        
         // Loading idle textures into fireboy (Game control)
         initFireBoyIdle(fireBoy);
 
@@ -214,7 +216,7 @@ int main()
 
         // Letting the watergirl fall due to gravity (Game control)
         fall(waterGirl, gravity);
-
+        
         // Watergirl moving right (Game control)
         waterGirlMovingRight(waterGirl, pixelsPerIteration);
 
