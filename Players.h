@@ -82,9 +82,9 @@ struct Player
             playerSprite.setPosition({40, dy});
 
     }
-    void Restart()
+    void Restart(float startPosX, float startPosY)
     {
-        playerSprite.setPosition({41.f, 599.f});
+        playerSprite.setPosition({startPosX, startPosY});
         isDead = 0;
     }
     void move(pair<float, float> coordinates)

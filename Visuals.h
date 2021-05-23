@@ -387,6 +387,9 @@ int continueFillColor = 255;
 int enterYourNameFillColor = 255;
 int callCounter = 0;
 
+//Filer Blocks
+Texture sandFillingText, stoneFillingText;
+
 void initVisuals()
 {
     callCounter++;
@@ -949,4 +952,8 @@ void initVisuals()
     enemyText.loadFromFile(m + "assets/graphics/enemy.png");
     enemyRightText.loadFromFile(m + "assets/graphics/enemyRight.png");
     enemyLeftText.loadFromFile(m + "assets/graphics/enemyLeft.png");
+    
+    //Filler Blocks
+    sandFillingText.loadFromFile(m + "assets/graphics/sandFilling.png");
+    stoneFillingText.loadFromFile(m + "assets/graphics/stoneFilling.png");
 }

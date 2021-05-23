@@ -44,7 +44,7 @@ using namespace sf;
 using namespace sftools;
 
 string mHolder = "/Users/pluto/Desktop/Fireboy-And-Watergirl/";
-string m = "";
+string m =  "";
 
 // Declaring intro text
 string introText = "";
@@ -98,7 +98,7 @@ void writeData(string data)
     string temp;
 
     fstream csvData;
-    csvData.open("assets/scores.csv");
+    csvData.open(m + "assets/scores.csv");
 
     vector<string> newRecord;
     split_to_string(newRecord, data, ',');
@@ -182,7 +182,7 @@ void writeData(string data)
     // The file was initially  opened in read mode
     // We should close it and open it again in write mode
     csvData.close();
-    csvData.open("assets/scores.csv");
+    csvData.open(m + "assets/scores.csv");
 
     csvData << newData;
     csvData.close();
@@ -213,7 +213,7 @@ void initializeCurrentRecords()
 {
     fstream csvData;
     string temp;
-    csvData.open("assets/scores.csv");
+    csvData.open(m + "assets/scores.csv");
     pair<string, string> names;
     while (getline(csvData, temp))
     {

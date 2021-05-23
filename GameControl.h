@@ -45,6 +45,21 @@ using namespace std;
 using namespace sf;
 using namespace sftools;
 
+// Players Positions for each level
+vector< pair< pair<int,int>,pair<int,int> > > initialPosition =
+{   // Level 1
+    {{41.f,599.f},{41.f,599.f}},
+    // Level 2
+    {{41.f,599.f},{41.f,599.f}},
+    // Level 3
+    {{41.f,599.f},{41.f,599.f}},
+    // Level 4
+    {{41.f,599.f},{41.f,599.f}},
+    // Level 5
+    {{200.f,599.f},{200.f,599.f}},
+    {{41.f,599.f},{41.f,599.f}}
+};
+
 // Flags
 
 // Hover flags
@@ -262,8 +277,8 @@ void checkCurrentLevelOnScreen(Player& fireBoy, Player& waterGirl)
     if (level != curPlatformObjectLevel)
     {
         // Reset characters (Players)
-        fireBoy.Restart();
-        waterGirl.Restart();
+        fireBoy.Restart(initialPosition[level].first.first,initialPosition[level].first.second);
+        waterGirl.Restart(initialPosition[level].second.first,initialPosition[level].second.second);
 
         // Clearing all platforms from the old level
         platformObjects.clear();
@@ -325,8 +340,18 @@ void boxesFall(float gravity)
                  boxes[i].move({0, -gravity});
                 }
             }
+            
         }
-        
+        for(auto j : gatesObjects)
+        {
+            if (j.first.first.getPosition().y - boxes[i].getPosition().y <= 55 && j.first.first.getPosition().y - boxes[i].getPosition().y >= 0 && (j.first.second == 3 || j.first.second == 4) && bridgeOpened[j.second])
+            {
+                if(boxes[i].getGlobalBounds().intersects(j.first.first.getGlobalBounds()))
+                {
+                    boxes[i].move({0, -gravity});
+                }
+            }
+        }
     }
    
 }
@@ -719,19 +744,31 @@ void boxesMotionAndCollision(Player& fireBoy, Player& waterGirl, float pixelsPer
 {
     bool gateBoxCollision[13] = { false };
     bool BridgeBoxCollision[13] = { false };
+    bool platformBoxCollision[13] = {};
     for (int i = 0; i < boxes.size(); ++i)
     {
 
         // Box and Gate Collision
         for(auto j:gatesObjects)
         {
-            if(boxes[i].getGlobalBounds().intersects(j.first.first.getGlobalBounds()) && !gateOpened[j.second])
+            if(boxes[i].getGlobalBounds().intersects(j.first.first.getGlobalBounds()) && !gateOpened[j.second] && j.first.second <= 2)
             {
                 gateBoxCollision[i] = true;
             }
         }
-
-        // X-axis
+        // X-axis with platform objects
+        for(auto j:platformObjects)
+        {
+            if(boxes[i].getGlobalBounds().intersects(j.first.first.getGlobalBounds()) && j.first.second == 0)
+            {
+                platformBoxCollision[i] = true;
+            }
+            if(boxes[i].getPosition().x <= 41.f || boxes[i].getPosition().x >= 1180.f)
+            {
+                platformBoxCollision[i] = true;
+            }
+        }
+        // X-axis with players
         fireBoy.Inquire();
         waterGirl.Inquire();
         if ((waterGirl.bounds.intersects(boxes[i].getGlobalBounds()) && waterGirl.dy + 60 - safe >= boxes[i].getPosition().y && waterGirl.dx + 75 <= boxes[i].getPosition().x))
@@ -739,7 +776,7 @@ void boxesMotionAndCollision(Player& fireBoy, Player& waterGirl, float pixelsPer
 
             pushedWaterGirl = true;
             boxWatergirlPushed[i] = true;
-            if(!boxFireboyPushed[i] && !gateBoxCollision[i])
+            if(!boxFireboyPushed[i] && !gateBoxCollision[i] && !platformBoxCollision[i])
             {
 
                 waterGirl.move({- pixelsPerIteration/20, 0 });
@@ -755,7 +792,7 @@ void boxesMotionAndCollision(Player& fireBoy, Player& waterGirl, float pixelsPer
 
             pushedWaterGirl = true;
             boxWatergirlPushed[i] = true;
-            if(!boxFireboyPushed[i] && !gateBoxCollision[i])
+            if(!boxFireboyPushed[i] && !gateBoxCollision[i] && !platformBoxCollision[i])
             {
                 waterGirl.move({ pixelsPerIteration/20, 0 });
                 boxes[i].move({ -pixelsPerIteration, 0 });
@@ -775,7 +812,7 @@ void boxesMotionAndCollision(Player& fireBoy, Player& waterGirl, float pixelsPer
 
             pushedFireBoy = true;
             boxFireboyPushed[i] = true;
-            if(!boxWatergirlPushed[i] && !gateBoxCollision[i])
+            if(!boxWatergirlPushed[i] && !gateBoxCollision[i] && !platformBoxCollision[i])
             {
                 fireBoy.move({- pixelsPerIteration/20, 0 });
                 boxes[i].move({ pixelsPerIteration, 0 });
@@ -789,7 +826,7 @@ void boxesMotionAndCollision(Player& fireBoy, Player& waterGirl, float pixelsPer
 
             pushedFireBoy = true;
             boxFireboyPushed[i] = true;
-            if(!boxWatergirlPushed[i] && !gateBoxCollision[i])
+            if(!boxWatergirlPushed[i] && !gateBoxCollision[i] && !platformBoxCollision[i])
             {
                 fireBoy.move({ pixelsPerIteration/20, 0 });
                 boxes[i].move({ -pixelsPerIteration, 0 });
@@ -803,7 +840,7 @@ void boxesMotionAndCollision(Player& fireBoy, Player& waterGirl, float pixelsPer
         {
             boxFireboyPushed[i] = false;
         }
-        //Y-axis
+        //Y-axis waterGirl and fireBoy collision on box
 
         if ( waterGirl.bounds.intersects(boxes[i].getGlobalBounds()))
         {

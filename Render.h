@@ -1017,8 +1017,8 @@ void renderPaused(Player& fireBoy, Player& waterGirl)
                 canClick = false;
 
                 // Restart both characters
-                fireBoy.Restart();
-                waterGirl.Restart();
+                fireBoy.Restart(initialPosition[level].first.first,initialPosition[level].first.second);
+                waterGirl.Restart(initialPosition[level].second.first,initialPosition[level].second.second);
                 FBDead = 0, WGDead = 0;
 
                 // Restart enemies
@@ -1079,8 +1079,8 @@ void renderPaused(Player& fireBoy, Player& waterGirl)
                 paused = false;
 
                 // Restart both characters (Players)
-                fireBoy.Restart();
-                waterGirl.Restart();
+                fireBoy.Restart(initialPosition[level].first.first,initialPosition[level].first.second);
+                waterGirl.Restart(initialPosition[level].second.first,initialPosition[level].second.second);
                 FBDead = 0, WGDead = 0;
 
                 // Restart enemies
@@ -1275,8 +1275,8 @@ void renderLevelEnding(Player& fireBoy, Player& waterGirl)
             if (!soundFxMute) soundLevelComplete.play();
 
             // Reset characters (Players)
-            fireBoy.Restart();
-            waterGirl.Restart();
+            fireBoy.Restart(initialPosition[level].first.first,initialPosition[level].first.second);
+            waterGirl.Restart(initialPosition[level].second.first,initialPosition[level].second.second);
 
             // Restart enemies
             restartEnemies();
@@ -1317,6 +1317,10 @@ void renderGates()
                 window.draw(i.first.first);
             else if (bridgeOpened[i.second])
                 window.draw(i.first.first);
+        }
+        else if (i.first.second == 6)
+        {
+            window.draw(i.first.first);
         }
     }
 }

@@ -54,7 +54,7 @@ vector <pair<RectangleShape, pair<float, float>>> enemies;
 // Current level
 int level = 0;
 // Levels map
-String levelsMap[100][90] =
+String levelsMap[10][9] =
         {
                 /*
                     MAP KEY
@@ -120,7 +120,19 @@ String levelsMap[100][90] =
                         "                ",
                         " LMMMMMMfiiirMB ",
                         "                ",
-                }
+                },
+                {
+                        "                ",
+                        "                ",
+                        " firR     GWR   ",
+                        " M     M   M  LR",
+                        " M  M      M    ",
+                        " M              ",
+                        " MMMMMMMR  M    ",
+                        "                ",
+                        "                ",
+                },
+            
         };
 
 
@@ -136,7 +148,7 @@ String levelsMap[100][90] =
     g: red gem
     G: blue gem
 */
-String objectsMap[100][360] =
+String objectsMap[10][36] =
         {
                 // Level 1 (Hazem)
                 {
@@ -293,7 +305,47 @@ String objectsMap[100][360] =
                         "                                                                ",
                         "                                                                ",
                         "                                                                ",
-                }
+                },
+
+                {
+
+                        "                  T                                             ",
+                        "                  M                                             ",
+                        "                  M                                             ",
+                        "                  M                                             ",
+                        "       O          M                                             ",
+                        "                  M                                             ",
+                        "                  M                                             ",
+                        "                  M                                             ",
+                        "                                                                ",
+                        "                                                                ",
+                        "    Q                                                           ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "    Q                                                   D       ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "    Q                                                           ",
+                        "                                                                ",
+                        "                                                                ",
+                        "        O                                                       ",
+                        "    Q                                                           ",
+                        "                                                                ",
+                        "                                               LWWWWWWWWWWWWWWW ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                   O                            ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                "
+                },
         };
 
 //Drawing platforms
@@ -534,12 +586,28 @@ void fillGateObjects()
                 spriteDoor.setPosition({posX, posY});
             }
             // Enemy
-            RectangleShape enemyObj({ 40,40 });
+            
             if (objectsMap[level][i][j] == 'E')
             {
+                RectangleShape enemyObj({ 40,40 });
                 enemyObj.setTexture(&enemyText);
                 enemyObj.setPosition({ posX,posY });
                 enemies.push_back({ enemyObj,{posX,posY} });
+            }
+            if (objectsMap[level][i][j] == 'Q')
+            {
+                RectangleShape obj5({ 80, 40 });
+                float posX = 40 + (20 * j), posY = 40 + (20 * i);
+                obj5.setPosition({ posX, posY });
+                if (sand)
+                {
+                    obj5.setTexture(&sandFillingText);
+                }
+                else if(stone)
+                {
+                    obj5.setTexture(&stoneFillingText);
+                }
+                gatesObjects.push_back({ {obj5, 6},-1 });
             }
         }
     }
