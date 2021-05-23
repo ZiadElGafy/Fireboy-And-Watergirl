@@ -328,6 +328,10 @@ void renderEnterYourName()
 {
     if (started && !bothPlayers)
     {
+        Sprite menuBackGround;
+        menuBackGround.setTexture(textureMenuBackground);
+        window.draw(menuBackGround);
+
         // Guest button
         if (mouse_xAxis >= 412.5 && mouse_xAxis <= 867.5 && mouse_yAxis >= 554 && mouse_yAxis <= 596)
         {
