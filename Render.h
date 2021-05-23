@@ -933,7 +933,7 @@ void renderPaused(Player& fireBoy, Player& waterGirl)
                 deathCounter = 0;
 
                 // Clear gems boolean array
-                memset(gemsTaken, false, 11);
+                restartGems();
             }
         }
         else {

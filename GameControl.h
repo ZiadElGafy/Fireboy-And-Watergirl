@@ -153,7 +153,7 @@ void gamePolling()
 
         if (event.type == Event::KeyPressed && event.key.code == Keyboard::Escape && gameStarted) {
             // Resume
-            if (paused && !FBDead && !WGDead)
+            if (paused && !FBDead && !WGDead && !settingsMenu)
                 paused = false, chron.resume();
             // Pause
             else if (!FBDead && !WGDead)
@@ -235,9 +235,11 @@ void initButtonSound()
 {
     memset(bridgeButtonSoundPlayed, false, 13);
     memset(gateButtonSoundPlayed, false, 13);
-    memset(gemsTaken, false, 11);
 }
-
+void restartGems()
+{
+    memset(gemsTaken, false, sizeof gemsTaken);
+}
 void getMouseCoordinates()
 {
     mouse_xAxis = Mouse::getPosition(window).x, mouse_yAxis = Mouse::getPosition(window).y;

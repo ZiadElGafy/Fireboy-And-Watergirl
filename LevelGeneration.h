@@ -56,18 +56,29 @@ String levelsMap[10][9] =
                     MAP KEY
                     G: gate button
                     B: bridge button
-                */
-                // Level 1 (Shahd)
-                {
+                    M: Mid block
+                    L: left block
+                    R: right block
+                    W: small water
+                    F: small lava
+                    f: left lava
+                    i: mid lava
+                    r: right lava
+                    w:left water
+                    a: mid water
+                    t: right water
 
+                */
+                // Level 1 (Hazem)
+                {
                         "                ",
                         "                ",
-                        "         LMMMMM ",
-                        "MMMMMMR         ",
-                        "       M        ",
-                        "          LFR   ",
-                        "      LMR       ",
-                        " LWR            ",
+                        "         LMMMMMM",
+                        "                ",
+                        "GR       LMMGMMM",
+                        "    LMBR        ",
+                        "           LBR  ",
+                        "    LfirR       ",
                         "                ",
                 },
                 // Level 2 (Jana)
@@ -82,7 +93,19 @@ String levelsMap[10][9] =
                         "      LMMR      ",
                         "                ",
                 },
-                // Level 3 (Beevo)
+                // Level 3 (shahd)
+                {
+                        "                ",
+                        "                ",
+                        "         LMMMMM ",
+                        "MMMMMMR         ",
+                        "       M        ",
+                        "          LFR   ",
+                        "      LMR       ",
+                        " LWR            ",
+                        "                ",
+                },
+                // Level 4 (beevo)
                 {
                         "                ",
                         "                ",
@@ -93,7 +116,7 @@ String levelsMap[10][9] =
                         "                ",
                         " LMMMMMMfiiirMB ",
                         "                ",
-                },
+                }
         };
 
 
@@ -105,30 +128,18 @@ String levelsMap[10][9] =
     L: bridge start
     W: bridge mid
     E: enemy
+    D: door
+    g: red gem
+    G: blue gem
 */
 String objectsMap[10][36] =
         {
-                // Level 1 (Shahd)
+                // Level 1 (Hazem)
                 {
 
                         "                                                                ",
                         "                                                                ",
                         "                                                                ",
-                        "                                                      D         ",
-                        "                                                                ",
-                        "                                                                ",
-                        "                                     E                          ",
-                        "                                                                ",
-                        "                                                                ",
-                        "                                                                ",
-                        "   G   g  E                                                     ",
-                        "                                                                ",
-                        "                                                                ",
-                        "                                                                ",
-                        "                                                                ",
-                        "                                                                ",
-                        "                                                                ",
-                        "                                             g                  ",
                         "                                                                ",
                         "                                                                ",
                         "                                                                ",
@@ -136,7 +147,22 @@ String objectsMap[10][36] =
                         "                                                                ",
                         "                                                                ",
                         "                                                                ",
-                        "         G                                                      ",
+                        "                                      T                D        ",
+                        "                                      M                         ",
+                        "                                      M      g                  ",
+                        "                                      M                         ",
+                        "                                      M                         ",
+                        "                                      M                         ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "    G                                                           ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "LWWWWWWWW                                                       ",
+                        "                         g                                      ",
                         "                                                                ",
                         "                                                                ",
                         "                                                                ",
@@ -187,7 +213,46 @@ String objectsMap[10][36] =
                         "                                                                ",
                         "                                                                "
                 },
-                // Level 3 (Beevo)
+                // Level 3 (Shahd)
+                {
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                      D         ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                     E                          ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "   G   g  E                                                     ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                             g                  ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "         G                                                      ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                "
+                },
+                // Level 4 (beevo)
                 {
                         "                                                                ",
                         "                                                                ",
@@ -224,8 +289,7 @@ String objectsMap[10][36] =
                         "                                                                ",
                         "                                                                ",
                         "                                                                ",
-                        "                                                                "
-                },
+                }
         };
 
 //Drawing platforms
