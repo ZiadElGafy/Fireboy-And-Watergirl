@@ -1008,7 +1008,10 @@ void renderPaused(Player& fireBoy, Player& waterGirl)
         if (mouse_xAxis >= 476.5 && mouse_xAxis <= 803.5 && mouse_yAxis >= ((oneDead) ? 279 : 379) && mouse_yAxis <= ((oneDead) ? 321 : 421))
         {
             if (!hoverRetry)
+            {
+                soundButtonHover.play();
                 hoverRetry = true;
+            }
 
             textRetryLevel.setFillColor(Color::Green);
             if (Mouse::isButtonPressed(Mouse::Left) && canClick)
@@ -1107,14 +1110,143 @@ void renderPaused(Player& fireBoy, Player& waterGirl)
         window.draw(textMainMenu);
     }
 }
-
+void themeSwitch(Texture texture, Sprite sprite)
+{
+    Sprite temp;
+    temp.setTexture(texture);
+    temp.setPosition(sprite.getPosition());
+    window.draw(temp);
+}
 // Pools
 void renderPools(Player& fireBoy, Player& waterGirl)
 {
+    for(int i = 0; i < pools.size(); i++)
+    {
+        if(stone)
+        {
+            if(pools[i].second.first == 1)
+            {
+                if(pools[i].second.second == 3)
+                {
+                    themeSwitch(smallLavaText, pools[i].first);
+                }
+                if(pools[i].second.second == 0)
+                {
+                    themeSwitch(lavaLeftText, pools[i].first);
+                }
+                if(pools[i].second.second == 1)
+                {
+                    themeSwitch(lavaMidText, pools[i].first);
+                }
+                if(pools[i].second.second == 2)
+                {
+                    themeSwitch(lavaRightText, pools[i].first);
+                }
+            }
+            else if(pools[i].second.first == 2)
+            {
+                if(pools[i].second.second == 3)
+                {
+                    themeSwitch(smallWaterText, pools[i].first);
+                }
+                if(pools[i].second.second == 0)
+                {
+                    themeSwitch(waterLeftText, pools[i].first);
+                }
+                if(pools[i].second.second == 1)
+                {
+                    themeSwitch(waterMidText, pools[i].first);
+                }
+                if(pools[i].second.second == 2)
+                {
+                    themeSwitch(waterRightText, pools[i].first);
+                }
+            }
+            else if(pools[i].second.first == 3)
+            {
+                if(pools[i].second.second == 3)
+                {
+                    themeSwitch(smallAcidText, pools[i].first);
+                }
+                if(pools[i].second.second == 0)
+                {
+                    themeSwitch(acidLeftText, pools[i].first);
+                }
+                if(pools[i].second.second == 1)
+                {
+                    themeSwitch(acidMidText, pools[i].first);
+                }
+                if(pools[i].second.second == 2)
+                {
+                    themeSwitch(acidRightText, pools[i].first);
+                }
+            }
+        }
+        else if(sand)
+        {
+            if(pools[i].second.first == 1)
+            {
+                if(pools[i].second.second == 3)
+                {
+                    themeSwitch(smallLavaSandText, pools[i].first);
+                }
+                if(pools[i].second.second == 0)
+                {
+                    themeSwitch(lavaLeftSandText, pools[i].first);
+                }
+                if(pools[i].second.second == 1)
+                {
+                    themeSwitch(lavaMidSandText, pools[i].first);
+                }
+                if(pools[i].second.second == 2)
+                {
+                    themeSwitch(lavaRightSandText, pools[i].first);
+                }
+            }
+            else if(pools[i].second.first == 2)
+            {
+                if(pools[i].second.second == 3)
+                {
+                    themeSwitch(smallWaterSandText, pools[i].first);
+                }
+                if(pools[i].second.second == 0)
+                {
+                    themeSwitch(waterLeftSandText, pools[i].first);
+                }
+                if(pools[i].second.second == 1)
+                {
+                    themeSwitch(waterMidSandText, pools[i].first);
+                }
+                if(pools[i].second.second == 2)
+                {
+                    themeSwitch(waterRightSandText, pools[i].first);
+                }
+            }
+            else if(pools[i].second.first == 3)
+            {
+                if(pools[i].second.second == 3)
+                {
+                    themeSwitch(smallAcidSandText, pools[i].first);
+                }
+                if(pools[i].second.second == 0)
+                {
+                    themeSwitch(acidLeftSandText, pools[i].first);
+                }
+                if(pools[i].second.second == 1)
+                {
+                    themeSwitch(acidMidSandText, pools[i].first);
+                }
+                if(pools[i].second.second == 2)
+                {
+                    themeSwitch(acidRightSandText, pools[i].first);
+                }
+            }
+        }
+    }
     for (auto i : platformObjects)
     {
         if (!i.second)
-            window.draw(i.first.first);
+            continue;
         else // Button block
         {
             // Gate

@@ -121,14 +121,27 @@ String levelsMap[10][9] =
                         " LMMMMMMfiiirMB ",
                         "                ",
                 },
+                // Level 5 (Ziad)
                 {
                         "                ",
                         "                ",
-                        " firR     GWR   ",
-                        " M     M   M  LR",
+                        " firR     GWR LR",
+                        " M     M   M    ",
                         " M  M      M    ",
                         " M              ",
                         " MMMMMMMR  M    ",
+                        " M         Mmud ",
+                        "B               ",
+                },
+                // Level 6 (Beevo)
+                {
+                        "               G",
+                        "               G",
+                        " LGMBM   WMMMMRB",
+                        "               G",
+                        "   LMMMMMMMMR  G",
+                        "                ",
+                        " FMGmudMMMMBMMR ",
                         "                ",
                         "                ",
                 },
@@ -306,45 +319,83 @@ String objectsMap[10][36] =
                         "                                                                ",
                         "                                                                ",
                 },
-
+                // Level 5 (Ziad)
                 {
 
-                        "                  T                                             ",
-                        "                  M                                             ",
-                        "                  M                                             ",
-                        "                  M                                             ",
-                        "       O          M                                             ",
-                        "                  M                                             ",
-                        "                  M                                             ",
-                        "                  M                                             ",
+                        "                   T                                            ",
+                        "        G          M                                            ",
+                        "                   M                                            ",
+                        "                   M                         g                  ",
+                        "          O        M                                            ",
+                        "                   M                                            ",
+                        "                   M                                            ",
+                        "                   M                                            ",
+                        " g                                                              ",
+                        "                                                                ",
+                        "    Q                                       Q           D       ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "    Q                                       Q                   ",
+                        "                                                                ",
                         "                                                                ",
                         "                                                                ",
                         "    Q                                                           ",
-                        "                                                                ",
-                        "                                                                ",
-                        "                                                                ",
-                        "    Q                                                   D       ",
-                        "                                                                ",
-                        "                                                                ",
-                        "                                                                ",
-                        "    Q                                                           ",
-                        "                                                                ",
+                        "                                                   G            ",
                         "                                                                ",
                         "        O                                                       ",
-                        "    Q                                                           ",
+                        "    Q       E                                                   ",
                         "                                                                ",
-                        "                                               LWWWWWWWWWWWWWWW ",
+                        "                                                LWWWWWWWWWWWWWW ",
                         "                                                                ",
-                        "                                                                ",
+                        "    Q                                       Q                   ",
                         "                                                                ",
                         "                                                                ",
                         "                                   O                            ",
-                        "                                                                ",
+                        "    Q                                       Q   Q   Q   Q   Q   ",
                         "                                                                ",
                         "                                                                ",
                         "                                                                ",
                         "                                                                ",
                         "                                                                "
+                },
+                // Level 6 (beevo)
+                {
+                        "                       T                                        ",
+                        "                       M                                        ",
+                        " G                     M             g                          ",
+                        "                       M                                        ",
+                        "                       M                                        ",
+                        "               O       M                                        ",
+                        "     E                 M                 E                      ",
+                        "                       M                                        ",
+                        "LWWWWWW                                                         ",
+                        "                                                                ",
+                        "            T                                                   ",
+                        "            M                                        g          ",
+                        "            M                                                   ",
+                        "            M O                                                 ",
+                        "            M           E                                       ",
+                        "            M                                                   ",
+                        "                                                                ",
+                        "                                                                ",
+                        "       G                                       T                ",
+                        "                                               M                ",
+                        "                                               M                ",
+                        "                                           O   M        O       ",
+                        "                             E                 M                ",
+                        "                                               M                ",
+                        "LWWWW                                                           ",
+                        "                                                                ",
+                        "                                                        D       ",
+                        "       g           G            g            G                  ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
                 },
         };
 
@@ -355,6 +406,7 @@ int buttonCnt = 10;
 int gateCnt = 0, bridgeCnt = 0;
 vector<pair<pair<RectangleShape, int>, int>> gatesObjects;
 vector<pair<pair<RectangleShape, int>, int>> gemObjects;
+vector<pair<Sprite, pair<int,int>>>pools;
 int buttonGateCnt = 0, buttonBridgeCnt = 0;
 int gemCnt = 0;
 
@@ -379,31 +431,23 @@ void fillPlatformObjects()
 
                 if (levelsMap[level][i][j] == 'f')
                 {
-                    if(stone)
-                        obj.setTexture(&lavaLeftText);
-                    else if(sand)
-                        obj.setTexture(&lavaLeftSandText);
+                    spriteLavaLeft.setPosition({posX, posY});
+                    pools.push_back({spriteLavaLeft,{1,0}});
                 }
                 if (levelsMap[level][i][j] == 'i')
                 {
-                    if(stone)
-                        obj.setTexture(&lavaMidText);
-                    else if(sand)
-                        obj.setTexture(&lavaMidSandText);
+                    spriteLavaMid.setPosition({posX, posY});
+                    pools.push_back({spriteLavaMid,{1,1}});
                 }
                 if (levelsMap[level][i][j] == 'r')
                 {
-                    if(stone)
-                        obj.setTexture(&lavaRightText);
-                    else if(sand)
-                        obj.setTexture(&lavaRightSandText);
+                    spriteLavaRight.setPosition({posX, posY});
+                    pools.push_back({spriteLavaRight,{1,2}});
                 }
                 if (levelsMap[level][i][j] == 'F')
                 {
-                    if(stone)
-                        obj.setTexture(&smallLavaText);
-                    else if(sand)
-                        obj.setTexture(&smallLavaSandText);
+                    spriteSmallLava.setPosition({posX, posY});
+                   pools.push_back({spriteSmallLava,{1,3}});
                 }
                 platformObjects.push_back({ {obj, 1},0});
             }
@@ -416,31 +460,23 @@ void fillPlatformObjects()
 
                 if (levelsMap[level][i][j] == 'w')
                 {
-                    if(stone)
-                        obj.setTexture(&waterLeftText);
-                    else if(sand)
-                        obj.setTexture(&waterLeftSandText);
+                    spriteWaterLeft.setPosition({posX, posY});
+                    pools.push_back({spriteWaterLeft,{2,0}});
                 }
                 if (levelsMap[level][i][j] == 'a')
                 {
-                    if(stone)
-                        obj.setTexture(&waterMidText);
-                    else if(sand)
-                        obj.setTexture(&waterMidSandText);
+                    spriteWaterMid.setPosition({posX, posY});
+                    pools.push_back({spriteWaterMid,{2,1}});
                 }
                 if (levelsMap[level][i][j] == 't')
                 {
-                    if(stone)
-                        obj.setTexture(&waterRightText);
-                    else if(sand)
-                        obj.setTexture(&waterRightSandText);
+                    spriteWaterRight.setPosition({posX, posY});
+                    pools.push_back({spriteWaterRight,{2,2}});
                 }
                 if (levelsMap[level][i][j] == 'W')
                 {
-                    if(stone)
-                        obj.setTexture(&smallWaterText);
-                    else if(sand)
-                        obj.setTexture(&smallWaterSandText);
+                    spriteSmallWater.setPosition({posX, posY});
+                    pools.push_back({spriteSmallWater,{2,3}});
                 }
                 platformObjects.push_back({ {obj,2},0});
             }
@@ -453,31 +489,23 @@ void fillPlatformObjects()
 
                 if (levelsMap[level][i][j] == 'm')
                 {
-                    if(stone)
-                        obj.setTexture(&acidLeftText);
-                    else if(sand)
-                        obj.setTexture(&acidLeftSandText);
+                    spriteAcidLeft.setPosition({posX, posY});
+                    pools.push_back({spriteAcidLeft,{3,0}});
                 }
                 if (levelsMap[level][i][j] == 'u')
                 {
-                    if(stone)
-                        obj.setTexture(&acidMidText);
-                    else if(sand)
-                        obj.setTexture(&acidMidSandText);
+                    spriteAcidMid.setPosition({posX, posY});
+                    pools.push_back({spriteAcidMid,{3,1}});
                 }
                 if (levelsMap[level][i][j] == 'd')
                 {
-                    if(stone)
-                        obj.setTexture(&acidRightText);
-                    else if(sand)
-                        obj.setTexture(&acidRightSandText);
+                    spriteAcidRight.setPosition({posX, posY});
+                    pools.push_back({spriteAcidRight,{3,2}});
                 }
                 if (levelsMap[level][i][j] == 'A')
                 {
-                    if(stone)
-                        obj.setTexture(&smallAcidText);
-                    else if(sand)
-                        obj.setTexture(&smallAcidSandText);
+                    spriteSmallAcid.setPosition({posX, posY});
+                    pools.push_back({spriteSmallAcid, {3,3}});
                 }
                 platformObjects.push_back({ {obj, 3},0});
             }
@@ -597,7 +625,7 @@ void fillGateObjects()
             if (objectsMap[level][i][j] == 'Q')
             {
                 RectangleShape obj5({ 80, 40 });
-                float posX = 40 + (20 * j), posY = 40 + (20 * i);
+                posX = 40 + (20 * j), posY = 40 + (20 * i);
                 obj5.setPosition({ posX, posY });
                 if (sand)
                 {

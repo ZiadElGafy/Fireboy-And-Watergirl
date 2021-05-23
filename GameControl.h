@@ -57,7 +57,8 @@ vector< pair< pair<int,int>,pair<int,int> > > initialPosition =
     {{41.f,599.f},{41.f,599.f}},
     // Level 5
     {{200.f,599.f},{200.f,599.f}},
-    {{41.f,599.f},{41.f,599.f}}
+    // Level 6
+    {{1150.f,120.f},{250.f,120.f}}
 };
 
 // Flags
@@ -162,6 +163,79 @@ void initWindow()
 
 // Event
 Event event;
+
+void checkTheme()
+{
+    if(sand)
+    {
+        // Platform
+        spriteStoneLeft.setTexture(&textureSandLeft);
+        spriteStoneRight.setTexture(&textureSandRight);
+        spriteStoneMid.setTexture(&textureSandMid);
+
+        // BackGround
+        spriteBackground.setTexture(&textureBackgroundSand);
+
+        // Borders
+        borders[2].setTexture(&textureSideBorderSand), borders[3].setTexture(&textureSideBorderSand);
+        borders[0].setTexture(&textureTopBorderSand), borders[1].setTexture(&textureBottomBorderSand);
+
+        // Button blocks
+        buttonOn.setTexture(&textureButtonOnSand);
+        buttonOff.setTexture(&textureButtonOffSand);
+
+        // pools
+        spriteLavaLeft.setTexture(lavaLeftSandText);
+        spriteLavaMid.setTexture(lavaMidSandText);
+        spriteLavaRight.setTexture(lavaRightSandText);
+        spriteSmallLava.setTexture(smallLavaSandText);
+
+        spriteWaterLeft.setTexture(waterLeftSandText);
+        spriteWaterMid.setTexture(waterMidSandText);
+        spriteWaterRight.setTexture(waterRightSandText);
+        spriteSmallWater.setTexture(smallWaterSandText);
+
+        spriteAcidLeft.setTexture(acidLeftSandText);
+        spriteAcidMid.setTexture(acidMidSandText);
+        spriteAcidRight.setTexture(acidRightSandText);
+        spriteSmallAcid.setTexture(smallAcidSandText);
+
+    }
+    else if(stone)
+    {
+        // Platform
+        spriteStoneLeft.setTexture(&textureStoneLeft);
+        spriteStoneRight.setTexture(&textureStoneRight);
+        spriteStoneMid.setTexture(&textureStoneMid);
+
+        // BackGround
+        spriteBackground.setTexture(&textureBackground);
+
+        // Borders
+        borders[2].setTexture(&textureSideBorder), borders[3].setTexture(&textureSideBorder);
+        borders[0].setTexture(&textureTopBorder), borders[1].setTexture(&textureBottomBorder);
+
+        // Button blocks
+        buttonOn.setTexture(&textureButtonOn);
+        buttonOff.setTexture(&textureButtonOff);
+
+        // pools
+        spriteLavaLeft.setTexture(lavaLeftText);
+        spriteLavaMid.setTexture(lavaMidText);
+        spriteLavaRight.setTexture(lavaRightText);
+        spriteSmallLava.setTexture(smallLavaText);
+
+        spriteWaterLeft.setTexture(waterLeftText);
+        spriteWaterMid.setTexture(waterMidText);
+        spriteWaterRight.setTexture(waterRightText);
+        spriteSmallWater.setTexture(smallWaterText);
+
+        spriteAcidLeft.setTexture(acidLeftText);
+        spriteAcidMid.setTexture(acidMidText);
+        spriteAcidRight.setTexture(acidRightText);
+        spriteSmallAcid.setTexture(smallAcidText);
+    }
+}
 
 void gamePolling()
 {
@@ -290,6 +364,7 @@ void checkCurrentLevelOnScreen(Player& fireBoy, Player& waterGirl)
 
         // Pushing all platforms from the new level
         platformObjects.push_back({{ground,0},0});
+        checkTheme();
         fillPlatformObjects();
         fillGateObjects();
         fillGemObjects();
@@ -688,7 +763,9 @@ void enemyMotionAndCollision(Player& fireBoy, Player& waterGirl)
     for (int i = 0; i < enemies.size(); i++) {
         float startPos = enemies[i].second.first;
         float endPos = startPos + 320;
-        if (fireBoy.dx >= enemies[i].second.first && fireBoy.dx <= enemies[i].second.first + 320 && fireBoy.dy < enemies[i].second.second && fireBoy.dy+200 > enemies[i].second.second) {
+        if(paused)
+            continue;
+        if (fireBoy.dx >= enemies[i].second.first && fireBoy.dx <= enemies[i].second.first + 320 && fireBoy.dy < enemies[i].second.second && fireBoy.dy+170 > enemies[i].second.second) {
             if (fireBoy.dx < enemies[i].first.getPosition().x) {
                 enemies[i].first.setTexture(&enemyLeftText);
                 enemies[i].first.move({ -0.8,0 });
@@ -699,7 +776,7 @@ void enemyMotionAndCollision(Player& fireBoy, Player& waterGirl)
             }
         }
             // Enemy motion WaterGirl
-        else if (waterGirl.dx >= enemies[i].second.first && waterGirl.dx <= enemies[i].second.first + 320 && waterGirl.dy < enemies[i].second.second && waterGirl.dy + 200 > enemies[i].second.second) {
+        else if (waterGirl.dx >= enemies[i].second.first && waterGirl.dx <= enemies[i].second.first + 320 && waterGirl.dy < enemies[i].second.second && waterGirl.dy + 170 > enemies[i].second.second) {
             if (waterGirl.dx < enemies[i].first.getPosition().x) {
                 enemies[i].first.setTexture(&enemyLeftText);
                 enemies[i].first.move({ -0.8,0 });
@@ -861,45 +938,5 @@ void boxesMotionAndCollision(Player& fireBoy, Player& waterGirl, float pixelsPer
             }
         }
 
-    }
-}
-void checkTheme()
-{
-    if(sand)
-    {
-        // Platform
-        spriteStoneLeft.setTexture(&textureSandLeft);
-        spriteStoneRight.setTexture(&textureSandRight);
-        spriteStoneMid.setTexture(&textureSandMid);
-
-        // BackGround
-        spriteBackground.setTexture(&textureBackgroundSand);
-
-        // Borders
-        borders[2].setTexture(&textureSideBorderSand), borders[3].setTexture(&textureSideBorderSand);
-        borders[0].setTexture(&textureTopBorderSand), borders[1].setTexture(&textureBottomBorderSand);
-
-        // Button blocks
-        buttonOn.setTexture(&textureButtonOnSand);
-        buttonOff.setTexture(&textureButtonOffSand);
-
-    }
-    else if(stone)
-    {
-        // Platform
-        spriteStoneLeft.setTexture(&textureStoneLeft);
-        spriteStoneRight.setTexture(&textureStoneRight);
-        spriteStoneMid.setTexture(&textureStoneMid);
-
-        // BackGround
-        spriteBackground.setTexture(&textureBackground);
-
-        // Borders
-        borders[2].setTexture(&textureSideBorder), borders[3].setTexture(&textureSideBorder);
-        borders[0].setTexture(&textureTopBorder), borders[1].setTexture(&textureBottomBorder);
-
-        // Button blocks
-        buttonOn.setTexture(&textureButtonOn);
-        buttonOff.setTexture(&textureButtonOff);
     }
 }

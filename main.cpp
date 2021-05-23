@@ -81,6 +81,9 @@ int main()
         // Check if on one of the level leaderboard pages (Game control)
         leaderboardAndTextFlickering();
 
+        // Check theme
+        checkTheme();
+
         // Jump cnt increments (Game control)
         incrementJumpCnts(fireBoy, waterGirl);
 
@@ -262,9 +265,6 @@ int main()
 
         // Clearing current objects on the screen
         window.clear();
-
-        // Check theme
-        checkTheme();
 
         // Rendering background (Render)
         renderBackground();

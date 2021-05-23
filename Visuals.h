@@ -313,6 +313,22 @@ Sprite spriteDoor;
 // Box
 Sprite spriteBox;
 
+// pools
+
+Sprite spriteLavaLeft;
+Sprite spriteLavaRight;
+Sprite spriteLavaMid;
+Sprite spriteSmallLava;
+
+Sprite spriteWaterLeft;
+Sprite spriteWaterRight;
+Sprite spriteWaterMid;
+Sprite spriteSmallWater;
+
+Sprite spriteAcidLeft;
+Sprite spriteAcidRight;
+Sprite spriteAcidMid;
+Sprite spriteSmallAcid;
 
 
 
