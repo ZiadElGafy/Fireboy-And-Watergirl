@@ -107,6 +107,7 @@ Texture waterGirlTextureRight;
 // Background
 Texture textureBackground;
 Texture textureBackgroundSand;
+Texture textureMenuBackground;
 
 // Pause background
 Texture texturePauseBackground;
@@ -869,6 +870,7 @@ void initVisuals()
 	// Background
 	textureBackground.loadFromFile(m + "assets/graphics/backGroundBrick.png");
 	textureBackgroundSand.loadFromFile(m + "assets/graphics/backgroundSand.png");
+	textureMenuBackground.loadFromFile(m + "assets/graphics/newBackground.png");
 
 	spriteBackground.setTexture(&textureBackground);
 

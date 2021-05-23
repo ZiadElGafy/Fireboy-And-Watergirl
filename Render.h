@@ -156,6 +156,9 @@ void renderMainMenu()
     {
         // Render text title (Visuals)
         window.draw(textTitle);
+        Sprite menuBackGround;
+        menuBackGround.setTexture(textureMenuBackground);
+        window.draw(menuBackGround);
 
         // Theme button
         window.draw(textThemesButton);
