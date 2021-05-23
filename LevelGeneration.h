@@ -97,7 +97,7 @@ String levelsMap[10][9] =
                         "      LMMR      ",
                         "                ",
                 },
-                // Level 3 (shahd)
+                // Level 3 (Shahd)
                 {
                         "                ",
                         "                ",
@@ -109,7 +109,7 @@ String levelsMap[10][9] =
                         " LWR            ",
                         "                ",
                 },
-                // Level 4 (beevo)
+                // Level 4 (Beevo)
                 {
                         "                ",
                         "                ",
@@ -145,7 +145,6 @@ String levelsMap[10][9] =
                         "                ",
                         "                ",
                 },
-            
         };
 
 
@@ -281,7 +280,7 @@ String objectsMap[10][36] =
                         "                                                                ",
                         "                                                                "
                 },
-                // Level 4 (beevo)
+                // Level 4 (Beevo)
                 {
                         "                                                                ",
                         "                                                                ",
@@ -359,14 +358,14 @@ String objectsMap[10][36] =
                         "                                                                ",
                         "                                                                "
                 },
-                // Level 6 (beevo)
+                // Level 6 (Beevo)
                 {
                         "                       T                                        ",
                         "                       M                                        ",
                         " G                     M             g                          ",
                         "                       M                                        ",
                         "                       M                                        ",
-                        "               O       M                                        ",
+                        "                O      M                                        ",
                         "     E                 M                 E                      ",
                         "                       M                                        ",
                         "LWWWWWW                                                         ",

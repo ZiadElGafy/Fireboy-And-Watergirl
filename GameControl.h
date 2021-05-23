@@ -58,7 +58,15 @@ vector< pair< pair<int,int>,pair<int,int> > > initialPosition =
     // Level 5
     {{200.f,599.f},{200.f,599.f}},
     // Level 6
-    {{1150.f,120.f},{250.f,120.f}}
+    {{1150.f,120.f},{280.f,120.f}},
+    // Level 7
+    {{41.f,599.f},{41.f,599.f}},
+    // Level 8
+    {{41.f,599.f},{41.f,599.f}},
+    // Level 9
+    {{41.f,599.f},{41.f,599.f}},
+    // Level 10
+    {{41.f,599.f},{41.f,599.f}},
 };
 
 // Flags
@@ -361,6 +369,7 @@ void checkCurrentLevelOnScreen(Player& fireBoy, Player& waterGirl)
         boxes.clear();
         boxesPositions.clear();
         enemies.clear();
+        pools.clear();
 
         // Pushing all platforms from the new level
         platformObjects.push_back({{ground,0},0});
@@ -369,10 +378,28 @@ void checkCurrentLevelOnScreen(Player& fireBoy, Player& waterGirl)
         fillGateObjects();
         fillGemObjects();
 
+        boxesRestart();
+
         // Reset boolean arrays
         memset(gateOpened, 0, sizeof(gateOpened));
         memset(buttonGatePressed, 0, sizeof(bridgeOpened));
         memset(buttonGatePressed, 0, sizeof(buttonGatePressed));
+        memset(buttonBridgePressed, 0, sizeof(buttonBridgePressed));
+        memset(gemsTaken, 0, sizeof(gemsTaken));
+        memset(bridgeOpened, 0, sizeof(bridgeOpened));
+        memset(boxGroundCheck, 0, sizeof(boxGroundCheck));
+        memset(boxWatergirlPushed, 0, sizeof(boxWatergirlPushed));
+        memset(boxFireboyPushed, 0, sizeof(boxFireboyPushed));
+        memset(bridgeButtonSoundPlayed, 0, sizeof(bridgeButtonSoundPlayed));
+        memset(enemyMoveRight, 0, sizeof(enemyMoveRight));
+
+        // Reset counters
+        buttonCnt = 10;
+        gateCnt = 0;
+        bridgeCnt = 0;
+        buttonGateCnt = 0;
+        buttonBridgeCnt = 0;
+        gemCnt = 0;
 
         // Assign new level to current level
         curPlatformObjectLevel = level;
@@ -763,7 +790,7 @@ void enemyMotionAndCollision(Player& fireBoy, Player& waterGirl)
     for (int i = 0; i < enemies.size(); i++) {
         float startPos = enemies[i].second.first;
         float endPos = startPos + 320;
-        if(paused)
+        if(!gameStarted || paused)
             continue;
         if (fireBoy.dx >= enemies[i].second.first && fireBoy.dx <= enemies[i].second.first + 320 && fireBoy.dy < enemies[i].second.second && fireBoy.dy+170 > enemies[i].second.second) {
             if (fireBoy.dx < enemies[i].first.getPosition().x) {
