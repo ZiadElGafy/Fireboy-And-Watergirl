@@ -64,7 +64,7 @@ vector< pair< pair<int,int>,pair<int,int> > > initialPosition =
     // Level 8
     {{41.f,599.f},{41.f,599.f}},
     // Level 9
-    {{41.f,599.f},{41.f,599.f}},
+    {{1000.f,41.f},{600.f,41.f}},
     // Level 10
     {{41.f,599.f},{41.f,599.f}},
 };
@@ -339,10 +339,12 @@ void initButtonSound()
     memset(bridgeButtonSoundPlayed, false, 13);
     memset(gateButtonSoundPlayed, false, 13);
 }
+
 void restartGems()
 {
     memset(gemsTaken, false, sizeof gemsTaken);
 }
+
 void getMouseCoordinates()
 {
     mouse_xAxis = Mouse::getPosition(window).x, mouse_yAxis = Mouse::getPosition(window).y;
@@ -570,7 +572,7 @@ void incrementJumpCnts(Player& fireBoy, Player& waterGirl)
 // Watergirl Y-axis platform collision
 void waterGirlPlatformCollision(Player& waterGirl, pair<pair<RectangleShape, int>, int> i, float gravity)
 {
-    if (waterGirl.bounds.intersects(i.first.first.getGlobalBounds()))
+    if (waterGirl.bounds.intersects(i.first.first.getGlobalBounds()) || (int)i.first.first.getPosition().y / 80 == 8 && levelsMap[level][8][(int)i.first.first.getPosition().x / 80] == 'u' && waterGirl.dy + 80 + 10 > i.first.first.getPosition().y)
     {
         waterGirl.jumpCnt = jumpFactor + 1;
         if (waterGirl.dy < i.first.first.getPosition().y)
@@ -585,8 +587,11 @@ void waterGirlPlatformCollision(Player& waterGirl, pair<pair<RectangleShape, int
                 waterGirl.die();
                 if (!soundFxMute) soundPlayerDeath.play();
                 deathX = i.first.first.getPosition().x; deathY = i.first.first.getPosition().y - 40;
-                smoke1.setPosition({deathX, deathY});
-                smoke2.setPosition({deathX, deathY});
+                if (i.first.second == 1)
+                {
+                    smoke1.setPosition({deathX, deathY});
+                    smoke2.setPosition({deathX, deathY});
+                }
             }
 
             // Gate opening (Game control)
@@ -607,7 +612,7 @@ void waterGirlPlatformCollision(Player& waterGirl, pair<pair<RectangleShape, int
 // Fireboy Y-axis platform collision
 void fireBoyPlatformCollision(Player& fireBoy, pair<pair<RectangleShape, int>, int> i, float gravity)
 {
-    if (fireBoy.bounds.intersects(i.first.first.getGlobalBounds()))
+    if (fireBoy.bounds.intersects(i.first.first.getGlobalBounds()) || (int)i.first.first.getPosition().y / 80 == 8 && levelsMap[level][8][(int)i.first.first.getPosition().x / 80] == 'u' && fireBoy.dy + 80 + 10 > i.first.first.getPosition().y)
     {
         fireBoy.jumpCnt = jumpFactor + 1;
         if (fireBoy.dy < i.first.first.getPosition().y)
@@ -622,8 +627,11 @@ void fireBoyPlatformCollision(Player& fireBoy, pair<pair<RectangleShape, int>, i
                 fireBoy.die();
                 if (!soundFxMute)soundPlayerDeath.play();
                 deathX = i.first.first.getPosition().x; deathY = i.first.first.getPosition().y - 40;
-                smoke1.setPosition({deathX, deathY});
-                smoke2.setPosition({deathX, deathY});
+                if (i.first.second == 2)
+                {
+                    smoke1.setPosition({deathX, deathY});
+                    smoke2.setPosition({deathX, deathY});
+                }
             }
             // Gate opening (Game control)
             if (i.first.second == 4)
@@ -843,6 +851,7 @@ void enemyMotionAndCollision(Player& fireBoy, Player& waterGirl)
         }
     }
 }
+
 // Boxes motion and collision
 void boxesMotionAndCollision(Player& fireBoy, Player& waterGirl, float pixelsPerIteration, float gravity)
 {

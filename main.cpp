@@ -300,11 +300,17 @@ int main()
             // Render boxes (Render)
             renderBoxes();
 
-            // Render pools (Render)
-            renderPools(fireBoy, waterGirl);
+            // Render buttons
+            renderButtons(fireBoy, waterGirl);
 
             // Render borders (Render)
             renderBorders();
+
+            // Render pools (Render)
+            renderPools(fireBoy, waterGirl);
+
+            // Render timer (Render)
+            renderTimer();
 
             // Render characters (Render)
             renderCharacters(fireBoy, waterGirl);
@@ -314,9 +320,6 @@ int main()
 
             // Render smoke (Render)
             renderSmoke();
-
-            // Render timer (Render)
-            renderTimer();
 
             // Render level ending (Render)
             renderLevelEnding(fireBoy, waterGirl);

@@ -960,6 +960,7 @@ void renderTheme()
         window.draw(arrowThemes);
     }
 }
+
 // Paused page
 void renderPaused(Player& fireBoy, Player& waterGirl)
 {
@@ -1110,6 +1111,7 @@ void renderPaused(Player& fireBoy, Player& waterGirl)
         window.draw(textMainMenu);
     }
 }
+
 void themeSwitch(Texture texture, Sprite sprite)
 {
     Sprite temp;
@@ -1117,6 +1119,7 @@ void themeSwitch(Texture texture, Sprite sprite)
     temp.setPosition(sprite.getPosition());
     window.draw(temp);
 }
+
 // Pools
 void renderPools(Player& fireBoy, Player& waterGirl)
 {
@@ -1243,6 +1246,11 @@ void renderPools(Player& fireBoy, Player& waterGirl)
             }
         }
     }
+}
+
+// Buttons
+void renderButtons(Player& fireBoy, Player& waterGirl)
+{
     for (auto i : platformObjects)
     {
         if (!i.second)
@@ -1254,14 +1262,14 @@ void renderPools(Player& fireBoy, Player& waterGirl)
             bool boxButtonGatePressed = false;
             if (!waterGirl.bounds.intersects(i.first.first.getGlobalBounds()) && !fireBoy.bounds.intersects(i.first.first.getGlobalBounds()) && i.first.second == 4)
             {
-               
+
                 for(int j = 0;j < boxes.size();++j)
                 {
                     if (abs(i.first.first.getPosition().y - boxes[j].getPosition().y) <= 82 && abs(boxes[j].getPosition().x - i.first.first.getPosition().x) <= 42)
                     {
-                            boxButtonGatePressed = true;
-                            buttonGatePressed[i.second] = true;
-                            break;
+                        boxButtonGatePressed = true;
+                        buttonGatePressed[i.second] = true;
+                        break;
                     }
                 }
                 if(!boxButtonGatePressed)
@@ -1277,7 +1285,7 @@ void renderPools(Player& fireBoy, Player& waterGirl)
                         gateOpened[((i.second - 1) / 2) + 1] = false;
                     }
                 }
-                
+
             }
 
             // Opens Gate if the gate's button is pressed
@@ -1324,7 +1332,7 @@ void renderPools(Player& fireBoy, Player& waterGirl)
                         bridgeOpened[((i.second - 1) / 2) + 1] = false;
                     }
                 }
-               
+
             }
 
             if (i.first.second == 5 && buttonBridgePressed[i.second])
@@ -1358,6 +1366,7 @@ void renderBorders()
 // Smoke
 void renderSmoke()
 {
+    if (smoke1.getPosition().x != deathX || smoke2.getPosition().y != deathY) return;
     if (deathCounter && deathX > 0)
     {
         if (deathCounter < 30)
