@@ -369,23 +369,23 @@ String objectsMap[10][36] =
                         "                                                                ",
                         "    Q                                       Q           D       ",
                         "                                                                ",
-                        "                                                                ",
+                        "    Q                                       Q                   ",
                         "                                                                ",
                         "    Q                                       Q                   ",
                         "                                                                ",
-                        "                                                                ",
+                        "    Q                                       Q                   ",
                         "                                                                ",
                         "    Q                                                           ",
-                        "                                                   G            ",
-                        "                                                                ",
+                        "                                                  G             ",
+                        "    Q                                                           ",
                         "        O                                                       ",
                         "    Q       E                                                   ",
                         "                                                                ",
-                        "                                                LWWWWWWWWWWWWWW ",
+                        "    Q                                           LWWWWWWWWWWWWWW ",
                         "                                                                ",
                         "    Q                                       Q                   ",
                         "                                                                ",
-                        "                                                                ",
+                        "    Q                                       Q                   ",
                         "                                   O                            ",
                         "    Q                                       Q   Q   Q   Q   Q   ",
                         "                                                                ",
@@ -489,7 +489,7 @@ String objectsMap[10][36] =
                         "                                                                ",
                         "                                                        Q       ",
                         "                                                                ",
-                        "                                                                ",
+                        "                                                        Q       ",
                         "                                                                ",
                         "                                                                ",
                         "                                                                ",
@@ -497,11 +497,11 @@ String objectsMap[10][36] =
                         "                                                                ",
                         "Q                                                               ",
                         "                                                                ",
-                        "                                            LWWWWWWWW           ",
+                        "Q                                           LWWWWWWWW           ",
                         "                                                                ",
                         "                                                    Q           ",
                         "                                                                ",
-                        "                                                                ",
+                        "                                                    Q           ",
                         "                                                                ",
                         "                                                Q   Q           ",
                         "                                                                ",
@@ -560,6 +560,7 @@ int gateCnt = 0, bridgeCnt = 0;
 vector<pair<pair<RectangleShape, int>, int>> gatesObjects;
 vector<pair<pair<RectangleShape, int>, int>> gemObjects;
 vector<pair<Sprite, pair<int,int>>>pools;
+vector<pair<Sprite, int>>fillings;
 int buttonGateCnt = 0, buttonBridgeCnt = 0;
 int gemCnt = 0;
 
@@ -782,10 +783,16 @@ void fillGateObjects()
                 obj5.setPosition({ posX, posY });
                 if (sand)
                 {
+                    Sprite temp;
+                    temp.setPosition({posX, posY});
+                    fillings.push_back({temp,1});
                     obj5.setTexture(&sandFillingText);
                 }
                 else if(stone)
                 {
+                    Sprite temp;
+                    temp.setPosition({posX, posY});
+                    fillings.push_back({temp,0});
                     obj5.setTexture(&stoneFillingText);
                 }
                 gatesObjects.push_back({ {obj5, 6},-1 });

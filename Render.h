@@ -48,6 +48,13 @@ using namespace sftools;
 
 const int H = 9, W = 16;
 
+void themeSwitch(Texture texture, Sprite sprite)
+{
+    Sprite temp;
+    temp.setTexture(texture);
+    temp.setPosition(sprite.getPosition());
+    window.draw(temp);
+}
 void renderBackground()
 {
     // Render background
@@ -80,6 +87,19 @@ void renderLevel()
                 window.draw(spriteStoneRight);
             else if (levelsMap[level][i][j] == 'L')
                 window.draw(spriteStoneLeft);
+        }
+    }
+    for(auto j:fillings)
+    {
+        if(sand)
+        {
+            themeSwitch(sandFillingText, j.first);
+            window.draw(j.first);
+        }
+        else if(stone)
+        {
+            themeSwitch(stoneFillingText, j.first);
+            window.draw(j.first);
         }
     }
 }
@@ -1112,14 +1132,6 @@ void renderPaused(Player& fireBoy, Player& waterGirl)
     }
 }
 
-void themeSwitch(Texture texture, Sprite sprite)
-{
-    Sprite temp;
-    temp.setTexture(texture);
-    temp.setPosition(sprite.getPosition());
-    window.draw(temp);
-}
-
 // Pools
 void renderPools(Player& fireBoy, Player& waterGirl)
 {
@@ -1458,10 +1470,6 @@ void renderGates()
                 window.draw(i.first.first);
             else if (bridgeOpened[i.second])
                 window.draw(i.first.first);
-        }
-        else if (i.first.second == 6)
-        {
-            window.draw(i.first.first);
         }
     }
 }
