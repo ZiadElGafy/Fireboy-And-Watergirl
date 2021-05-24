@@ -273,7 +273,7 @@ int main()
         if (gameStarted && !levelInquire && !leaderboards && !currentLevelLeaderboardPage)
         {
             // Check if on mute
-            if (musicMute) musicLevel.stop();
+            if (musicMute) musicLevel.stop(), musicFinalLevel.stop();
 
             // Render door (Render)
             renderDoor();

@@ -327,7 +327,8 @@ void renderLevelInquire()
                     if (!musicMute)
                     {
                         musicIntro.stop();
-                        musicLevel.play();
+                        if (level == 9) musicFinalLevel.play();
+                        else musicLevel.play();
                     }
 
                     // Dont accept new input till released
@@ -789,13 +790,21 @@ void renderSettings()
                 // If it was muted and got turned on
                 if (musicMute)
                 {
-                    if (gameStarted) musicLevel.play();
+                    if (gameStarted)
+                    {
+                        if (level == 9) musicFinalLevel.play();
+                        else musicLevel.play();
+                    }
                     else musicIntro.play();
                     musicMute = false;
                 }
                 else
                 {
-                    if (gameStarted) musicLevel.stop();
+                    if (gameStarted)
+                    {
+                        if (level == 9) musicFinalLevel.stop();
+                        else musicLevel.stop();
+                    }
                     else musicIntro.stop();
                     musicMute = true;
                 }
@@ -1058,8 +1067,16 @@ void renderPaused(Player& fireBoy, Player& waterGirl)
                 paused = false;
 
                 // Restart level music
-                musicLevel.stop();
-                musicLevel.play();
+                if (level == 9)
+                {
+                    musicFinalLevel.stop();
+                    musicFinalLevel.play();
+                }
+                else
+                {
+                    musicLevel.stop();
+                    musicLevel.play();
+                }
 
                 // Restart boxes
                 boxesRestart();
@@ -1112,6 +1129,7 @@ void renderPaused(Player& fireBoy, Player& waterGirl)
 
                 // Stop level music
                 musicLevel.stop();
+                musicFinalLevel.stop();
 
                 // Reset death counter
                 deathX = deathY = -100.f;
@@ -1423,6 +1441,7 @@ void renderLevelEnding(Player& fireBoy, Player& waterGirl)
 
             // Stop level music (Visuals)
             musicLevel.stop();
+            musicFinalLevel.stop();
 
             // Check if not on mute to play level complete sound effect (Visuals)
             if (!soundFxMute) soundLevelComplete.play();

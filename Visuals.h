@@ -340,6 +340,9 @@ Music musicIntro;
 // Level
 Music musicLevel;
 
+// Final level
+Music musicFinalLevel;
+
 
 
 
@@ -456,10 +459,13 @@ void initVisuals()
     // Music
     musicIntro.openFromFile(m + "assets/audio/intro.ogg");
     musicLevel.openFromFile(m + "assets/audio/level.ogg");
+    musicFinalLevel.openFromFile(m + "assets/audio/finalLevel.ogg");
     musicIntro.setLoop(true);
     musicLevel.setLoop(true);
+    musicFinalLevel.setLoop(true);
 
     musicIntro.setVolume(50);
+    musicLevel.setVolume(40);
     musicLevel.setVolume(40);
     soundButtonHover.setVolume(1000);
 
