@@ -165,7 +165,7 @@ String levelsMap[11][9] =
                         "                ",
                         "LBfirR    BMMMMR",
                         "                ",
-                        "LGMMMR     LMMMR",
+                        "LMMMMR     LMMMR",
                         "                ",
                         "                ",
                 },
@@ -197,13 +197,13 @@ String levelsMap[11][9] =
                 {
                     "                ",
                     "                ",
-                    "LMMMGR   LMMMWMG",
+                    "LMGMMR   LMMMWMG",
                     "                ",
                     "                ",
                     "                ",
                     "LMMFBR     LMGMR",
                     "                ",
-                    "            B   ",
+                    "              B ",
                 },
                 
         };
@@ -503,7 +503,7 @@ String objectsMap[11][36] =
                         "                                                                ",
                         "                                                                ",
                         "                                                                ",
-                        "                                                                ",
+                        "                                                 O              ",
                         "                                                                ",
                         "                                                                ",
                         "                                                   g            ",

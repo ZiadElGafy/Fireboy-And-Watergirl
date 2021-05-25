@@ -302,6 +302,10 @@ int main()
 
             // Render buttons
             renderButtons(fireBoy, waterGirl);
+            
+            // Render enemies (Render)
+            renderEnemies();
+
 
             // Render borders (Render)
             renderBorders();
@@ -314,9 +318,6 @@ int main()
 
             // Render characters (Render)
             renderCharacters(fireBoy, waterGirl);
-
-            // Render enemies (Render)
-            renderEnemies();
 
             // Render smoke (Render)
             renderSmoke();
