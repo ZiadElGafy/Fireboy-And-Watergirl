@@ -55,6 +55,7 @@ void themeSwitch(Texture texture, Sprite sprite)
     temp.setPosition(sprite.getPosition());
     window.draw(temp);
 }
+
 void renderBackground()
 {
     // Render background
@@ -1455,6 +1456,9 @@ void renderLevelEnding(Player& fireBoy, Player& waterGirl)
 
             // Restart enemies
             restartEnemies();
+
+            // Change current level on screen
+            curPlatformObjectLevel = 100;
 
             // Reset death counter
             deathX = deathY = -100.f;
