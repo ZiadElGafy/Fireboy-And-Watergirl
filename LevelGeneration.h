@@ -133,7 +133,7 @@ String levelsMap[11][9] =
                         " M         Mmud ",
                         "B               ",
                 },
-                // Level 6 (Beevo)
+                /*// Level 6 (Beevo)
                 {
                         "               G",
                         "               G",
@@ -143,6 +143,18 @@ String levelsMap[11][9] =
                         "                ",
                         " FMGmudMMMMBMMR ",
                         "                ",
+                        "                ",
+                },*/
+                // Level 6 (Youssif)
+                {
+                        "                ",
+                        "                ",
+                        "                ",
+                        "LG              ",
+                        "    L    R      ",
+                        "BMMMfiiiirMR    ",
+                        "              M ",
+                        "   G  B         ",
                         "                ",
                 },
                 // Level 7 (Maram)
@@ -408,7 +420,7 @@ String objectsMap[11][36] =
                         "                                                                ",
                         "                                                                "
                 },
-                // Level 6 (Beevo)
+                /*// Level 6 (Beevo)
                 {
                         "                       T                                        ",
                         "                       M                                        ",
@@ -445,6 +457,46 @@ String objectsMap[11][36] =
                         "                                                                ",
                         "                                                                ",
                         "                                                                ",
+                },*/
+                // Level 6 (Youssif)
+                {
+
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "D                                                               ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "      T                                                         ",
+                        "      M                                                         ",
+                        "      M             LWWWWWWWWWWWWWWW                            ",
+                        "      M                                      O                  ",
+                        "      M                                                         ",
+                        "      B                                                         ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                "
                 },
                 // Level 7 (Maram)
                 {

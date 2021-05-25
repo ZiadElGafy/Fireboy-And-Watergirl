@@ -54,11 +54,11 @@ vector< pair< pair<int,int>,pair<int,int> > > initialPosition =
     // Level 3
     {{41.f,599.f},{41.f,599.f}},
     // Level 4
-    {{41.f,599.f},{41.f,599.f}},
+    {{120.f,500.f},{41.f,599.f}},
     // Level 5
     {{200.f,599.f},{200.f,599.f}},
     // Level 6
-    {{1150.f,120.f},{280.f,120.f}},
+    {{41.f,599.f},{41.f,359.f}},
     // Level 7
     {{41.f,80.f},{1140.f,599.f}},
     // Level 8
