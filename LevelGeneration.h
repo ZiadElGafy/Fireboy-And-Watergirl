@@ -54,7 +54,7 @@ vector <pair<RectangleShape, pair<float, float>>> enemies;
 // Current level
 int level = 0;
 // Levels map
-String levelsMap[10][9] =
+String levelsMap[11][9] =
         {
                 /*
                     MAP KEY
@@ -149,11 +149,11 @@ String levelsMap[10][9] =
                 {
                         "                ",
                         "                ",
-                        "LMMR      LMGMMR",
+                        "LMR         LMGR",
                         "                ",
-                        "LMMMBR    LBMMMR",
+                        "LBfirR    BMMMMR",
                         "                ",
-                        "LMMMGR     LMMMR",
+                        "LGMMMR     LMMMR",
                         "                ",
                         "                ",
                 },
@@ -183,16 +183,17 @@ String levelsMap[10][9] =
                 },
                 // Level 10 (Maram)
                 {
-                        "                ",
-                        "                ",
-                        "                ",
-                        "                ",
-                        "                ",
-                        "                ",
-                        "                ",
-                        "                ",
-                        "                ",
+                    "                ",
+                    "                ",
+                    "LMMMGR   LMMMWMG",
+                    "                ",
+                    "                ",
+                    "                ",
+                    "LMMFBR     LMGMR",
+                    "                ",
+                    "            B   ",
                 },
+                
         };
 
 
@@ -207,8 +208,9 @@ String levelsMap[10][9] =
     D: door
     g: red gem
     G: blue gem
+    O: box
 */
-String objectsMap[10][36] =
+String objectsMap[11][36] =
         {
                 // Level 1 (Hazem)
                 {
@@ -452,31 +454,31 @@ String objectsMap[10][36] =
                         "                                                                ",
                         "                                                                ",
                         "                                                                ",
-                        "                                                         g      ",
+                        "                                                   g            ",
                         "                                                                ",
                         "                                                                ",
                         "                                                                ",
                         "                                                                ",
                         "                                                                ",
-                        "    g                                                           ",
-                        "         O                                             O        ",
                         "                                                                ",
+                        "                    O                      O                    ",
+                        "  g                                                             ",
                         "                                                                ",
                         "                        LWWWWWWWWWWWWWWW                        ",
                         "                                                                ",
                         "                                                                ",
                         "                                                                ",
                         "                                                                ",
-                        "                                                                ",
-                        "                                                     G          ",
+                        "             O                                                  ",
+                        "                                                  E  G          ",
                         "                                                                ",
                         "                                                                ",
                         "                                                                ",
                         "                                                T      D        ",
                         "                                                M               ",
                         "                                                M               ",
-                        "          O                                     M               ",
-                        "                                                M               ",
+                        "                   E           O                M               ",
+                        "                                                M      g        ",
                         "                                                B               ",
                         "                                                                ",
                         "                                                                ",
@@ -565,38 +567,38 @@ String objectsMap[10][36] =
                 // Level 10 (Maram)
                 {
 
+                        "                     T                                          ",
+                        "                     M                                          ",
+                        "                     M                                          ",
+                        "                     M                                          ",
+                        "       O             M                                          ",
+                        "                     M       D             O                    ",
+                        "                     M                                          ",
+                        "                     B                                      g   ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                            G    g                              ",
+                        "                                                                ",
+                        "                                                                ",
+                        "                        LWWWWWWWWWWWWW                          ",
                         "                                                                ",
                         "                                                                ",
                         "                                                                ",
                         "                                                                ",
                         "                                                                ",
+                        "         O                                    O                 ",
+                        "                                                                ",
+                        "      G                                            E   g        ",
                         "                                                                ",
                         "                                                                ",
                         "                                                                ",
-                        "                                                                ",
-                        "                                                                ",
-                        "                                                                ",
-                        "                                                                ",
-                        "                                                                ",
-                        "                                                                ",
-                        "                                                                ",
-                        "                                                                ",
-                        "                                                                ",
-                        "                                                                ",
-                        "                                                                ",
-                        "                                                                ",
-                        "                                                                ",
-                        "                                                                ",
-                        "                                                                ",
-                        "                                                                ",
-                        "                                                                ",
-                        "                                                                ",
-                        "                                                                ",
-                        "                                                                ",
-                        "                                                                ",
-                        "                                                                ",
-                        "                                                                ",
-                        "                                                                ",
+                        "                                            T                   ",
+                        "                                            M                   ",
+                        "                                            M                   ",
+                        "                                            M       O           ",
+                        "    G              E                        M                   ",
+                        "                                            B                   ",
                         "                                                                ",
                         "                                                                ",
                         "                                                                ",

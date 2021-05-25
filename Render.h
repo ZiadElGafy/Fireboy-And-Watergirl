@@ -1123,7 +1123,10 @@ void renderPaused(Player& fireBoy, Player& waterGirl)
                 fireBoy.Restart(initialPosition[level].first.first,initialPosition[level].first.second);
                 waterGirl.Restart(initialPosition[level].second.first,initialPosition[level].second.second);
                 FBDead = 0, WGDead = 0;
-
+                
+                // Change current platform level to restart everything
+                curPlatformObjectLevel = 100;
+                
                 // Restart enemies
                 restartEnemies();
 

@@ -60,13 +60,13 @@ vector< pair< pair<int,int>,pair<int,int> > > initialPosition =
     // Level 6
     {{1150.f,120.f},{280.f,120.f}},
     // Level 7
-    {{41.f,599.f},{41.f,599.f}},
+    {{41.f,80.f},{1140.f,599.f}},
     // Level 8
     {{41.f,599.f},{41.f,599.f}},
     // Level 9
     {{1000.f,41.f},{600.f,41.f}},
     // Level 10
-    {{41.f,599.f},{41.f,599.f}},
+    {{41.f,80.f},{1140.f,599.f}},
 };
 
 // Flags
@@ -372,7 +372,7 @@ void checkCurrentLevelOnScreen(Player& fireBoy, Player& waterGirl)
         boxesPositions.clear();
         enemies.clear();
         pools.clear();
-
+        fillings.clear();
         // Pushing all platforms from the new level
         platformObjects.push_back({{ground,0},0});
         checkTheme();
@@ -953,7 +953,7 @@ void boxesMotionAndCollision(Player& fireBoy, Player& waterGirl, float pixelsPer
         {
             if (waterGirl.dy < boxes[i].getPosition().y )
             {
-                pushedFireBoy = false;
+                pushedWaterGirl = false;
                 waterGirl.move({ 0, -gravity });
                 waterGirl.groundCheck = 1;
             }
