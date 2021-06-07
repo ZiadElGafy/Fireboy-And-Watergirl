@@ -179,7 +179,7 @@ String levelsMap[11][9] =
                     "                ",
                     "LMMFBR     LMGMR",
                     "                ",
-                    "              B ",
+                    "             B  ",
                 },
                 // Level 10 (Beevo)
                 {
