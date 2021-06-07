@@ -91,6 +91,10 @@ bool hoverSoundFxMute = false;
 bool hoverArrowThemes = false;
 bool hoverLeaderboards = false;
 bool hoverContinueIntro = false;
+bool hoverArrowMainMenu = false;
+bool hoverContinueToGame = false;
+bool hoverPlayer1InputBox = false;
+bool hoverPlayer2InputBox = false;
 bool hoverArrowLevelInquire = false;
 bool hoverArrowLeaderboards = false;
 bool hoverArrowLevelLeaderboard = false;
@@ -123,6 +127,8 @@ bool player2Input = false;
 // Coloring
 bool continueFillColorInc = false;
 bool enterYourNameFillColorInc = false;
+bool player1InputBoxFillColorInc = false;
+bool player2InputBoxFillColorInc = false;
 
 // Event handling
 bool canType = true;
@@ -262,6 +268,76 @@ void gamePolling()
             else if (!FBDead && !WGDead)
                 paused = true, chron.pause();
         }
+
+        // Player 1 input
+        if (player1Input && !bothPlayers)
+        {
+            // Detect backspace key pressed
+            if (event.type == sf::Event::TextEntered && event.text.unicode == 8 && !player1Name.empty() && canType)
+            {
+                // Remove the last character
+                player1Name.pop_back();
+
+                // Set the name as player one name
+                player1Text.setString(player1Name);
+
+                // Render player one name
+                window.draw(player1Text);
+            }
+                // Max name size is 10 characters
+            else if (player1Name.size() >= 10) {}
+                // Adding new characters to the player's name
+            else if (event.type == sf::Event::TextEntered && event.text.unicode <= 128 && event.text.unicode != 8 && !Keyboard::isKeyPressed(Keyboard::Key::Return) && canType)
+            {
+
+                // Add the new entered characters to the name
+                player1Name += tolower(event.text.unicode);
+
+                // Set the name as player one name
+                player1Text.setString(player1Name);
+            }
+            else if (event.type == Event::KeyPressed && event.key.code == Keyboard::Return && !player1Name.empty())
+            {
+                // Select player 1 input box
+                player1Input = 0;
+                player2Input = 1;
+            }
+        }
+
+        // Player 2 input
+        if (player2Input && !bothPlayers)
+        {
+            // Detect backspace key pressed
+            if (event.type == sf::Event::TextEntered && event.text.unicode == 8 && !player2Name.empty() && canType)
+            {
+                // Remove the last character
+                player2Name.pop_back();
+
+                // Set the name as player two name
+                player2Text.setString(player2Name);
+
+                // Render player two name
+                window.draw(player2Text);
+            }
+                // Max name size is 10 characters
+            else if (player2Name.size() >= 10) {}
+                // Adding new characters to the player's name
+            else if (event.type == sf::Event::TextEntered && event.text.unicode <= 128 && event.text.unicode != 8 && !Keyboard::isKeyPressed(Keyboard::Key::Return) && canType)
+            {
+                // Add the new entered characters to the name
+                player2Name += tolower(event.text.unicode);
+
+                // Set the name as player two name
+                player2Text.setString(player2Name);
+            }
+            else if (event.type == Event::KeyPressed && event.key.code == Keyboard::Return && !player2Name.empty())
+            {
+                // Select player 2 input box
+                player1Input = 0;
+                player2Input = 0;
+                bothPlayers = 1;
+            }
+        }
     }
 }
 
@@ -285,6 +361,14 @@ void leaderboardAndTextFlickering()
     // Check enter names fill color increasing
     if (!enterYourNameFillColor) enterYourNameFillColorInc = true;
     else if (enterYourNameFillColor == 255) enterYourNameFillColorInc = false;
+
+    // Check player 1 fill color increasing
+    if (!player1InputBoxFillColor) player1InputBoxFillColorInc = true;
+    else if (player1InputBoxFillColor == 255) player1InputBoxFillColorInc = false;
+
+    // Check player 1 fill color increasing
+    if (!player2InputBoxFillColor) player2InputBoxFillColorInc = true;
+    else if (player2InputBoxFillColor == 255) player2InputBoxFillColorInc = false;
 }
 
 void checkMusic()

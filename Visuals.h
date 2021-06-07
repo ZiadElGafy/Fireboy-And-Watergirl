@@ -207,6 +207,9 @@ Text textExit;
 // Guest
 Text textGuest;
 
+// Continue intro
+Text textContinueToGame;
+
 // Leaderboards
 Text textLeaderboards;
 
@@ -279,13 +282,17 @@ RectangleShape spriteStoneRight(Vector2f(80.f, 40.f));
 RectangleShape enterYourNameRectangle;
 RectangleShape enterYourNameRectangle2;
 
+// Name input box fade
+RectangleShape enterYourNameRectangleFade;
+RectangleShape enterYourNameRectangleFade2;
+
 // Arrows
 RectangleShape arrow;
 RectangleShape arrowLevelInquire;
 RectangleShape arrowLeaderboards;
 RectangleShape arrowLevelLeaderboard;
 RectangleShape arrowThemes;
-
+RectangleShape arrowMainMenu;
 
 
 
@@ -401,10 +408,12 @@ stringstream ss;
 Chronometer chron;
 string stringTimer;
 
-int currentLevelLeaderboardPage = 0;
+int callCounter = 0;
 int continueFillColor = 255;
 int enterYourNameFillColor = 255;
-int callCounter = 0;
+int player1InputBoxFillColor = 255;
+int player2InputBoxFillColor = 255;
+int currentLevelLeaderboardPage = 0;
 
 //Filer Blocks
 Texture sandFillingText, stoneFillingText;
@@ -434,6 +443,7 @@ void initVisuals()
     arrowLeaderboards = arrow;
     arrowLevelLeaderboard = arrow;
     arrowThemes = arrow;
+    arrowMainMenu = arrow;
 
     // Door
     textureDoor.loadFromFile(m + "assets/graphics/door.png");
@@ -775,7 +785,20 @@ void initVisuals()
         textRect.width / 2.0f,
         textRect.top +
         textRect.height / 2.0f);
-    textGuest.setPosition(640, 575);
+    textGuest.setPosition(640, 640);
+
+    // Continue to game
+    textContinueToGame.setFont(fontTitle);
+    textContinueToGame.setString("Continue");
+    textContinueToGame.setCharacterSize(50);
+    textContinueToGame.setFillColor(Color::White);
+
+    textRect = textContinueToGame.getLocalBounds();
+    textContinueToGame.setOrigin(textRect.left +
+                        textRect.width / 2.0f,
+                        textRect.top +
+                        textRect.height / 2.0f);
+    textContinueToGame.setPosition(640, 540);
 
     // Leaderboards
     textLeaderboards.setFont(fontTitle);
@@ -855,6 +878,22 @@ void initVisuals()
 
 	enterYourNameRectangle2 = enterYourNameRectangle;
 	enterYourNameRectangle2.setPosition(640, 450);
+
+    // Players name input boxes fade
+    enterYourNameRectangleFade.setSize(Vector2f(400, 45));
+
+    enterYourNameRectangleFade.setFillColor(color2);
+    enterYourNameRectangleFade.setOutlineThickness(5);
+    enterYourNameRectangleFade.setOutlineColor(Color::White);
+    textRect = enterYourNameRectangleFade.getLocalBounds();
+    enterYourNameRectangleFade.setOrigin(textRect.left +
+                                     textRect.width / 2.0f,
+                                     textRect.top +
+                                     textRect.height / 2.0f);
+    enterYourNameRectangleFade.setPosition(640, 350);
+
+    enterYourNameRectangleFade2 = enterYourNameRectangle;
+    enterYourNameRectangleFade2.setPosition(640, 450);
 
 
 	// Stones

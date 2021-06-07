@@ -1,17 +1,17 @@
-"C:\Program Files\JetBrains\CLion 2020.3\bin\cmake\win\bin\cmake.exe" -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - MinGW Makefiles" D:\Projects\C++\Fireboy-And-Watergirl
--- The C compiler identification is GNU 6.3.0
--- The CXX compiler identification is GNU 6.3.0
+"/Life/Jetbrains Toolbox/Apps/apps/CLion/ch-0/211.6693.114/bin/cmake/linux/bin/cmake" -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_COMPILER=/usr/bin/c++ -G "CodeBlocks - Unix Makefiles" "/Life/CLion/CLion projects/Fireboy-And-Watergirl"
+-- The C compiler identification is GNU 9.3.0
+-- The CXX compiler identification is GNU 9.3.0
 -- Detecting C compiler ABI info
 -- Detecting C compiler ABI info - done
--- Check for working C compiler: C:/MinGW/bin/gcc.exe - skipped
+-- Check for working C compiler: /usr/bin/cc - skipped
 -- Detecting C compile features
 -- Detecting C compile features - done
 -- Detecting CXX compiler ABI info
 -- Detecting CXX compiler ABI info - done
--- Check for working CXX compiler: C:/MinGW/bin/g++.exe - skipped
+-- Check for working CXX compiler: /usr/bin/c++ - skipped
 -- Detecting CXX compile features
 -- Detecting CXX compile features - done
--- Found SFML .. in C:/SFML/include
+-- Found SFML .. in /usr/include
 -- Configuring done
 -- Generating done
--- Build files have been written to: D:/Projects/C++/Fireboy-And-Watergirl/cmake-build-debug
+-- Build files have been written to: /Life/CLion/CLion projects/Fireboy-And-Watergirl/cmake-build-debug

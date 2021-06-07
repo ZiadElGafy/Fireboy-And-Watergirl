@@ -175,6 +175,34 @@ void renderMainMenu()
 {
     if (mainMenu)
     {
+        // Back arrow
+        if (mouse_xAxis >= 44 && mouse_xAxis <= 163 && mouse_yAxis >= 51 && mouse_yAxis <= 104)
+        {
+            if (!hoverArrowMainMenu)
+            {
+                soundButtonHover.play();
+                hoverArrowMainMenu = true;
+            }
+            arrowMainMenu.setTexture(&textureRedArrow);
+            if (Mouse::isButtonPressed(Mouse::Left) && canClick)
+            {
+                // Dont accept new input till released
+                canClick = false;
+
+                // Go back to the enter your name page
+                mainMenu = false;
+                player1Input = true;
+                player2Input = false;
+                bothPlayers = false;
+            }
+        }
+        else {
+            hoverArrowMainMenu = false;
+            arrowMainMenu.setTexture(&textureWhiteArrow);
+        }
+        // Render back arrow
+        window.draw(arrowMainMenu);
+
         // Render text title (Visuals)
         window.draw(textTitle);
         Sprite menuBackGround;
@@ -356,7 +384,7 @@ void renderEnterYourName()
         window.draw(menuBackGround);
 
         // Guest button
-        if (mouse_xAxis >= 412.5 && mouse_xAxis <= 867.5 && mouse_yAxis >= 554 && mouse_yAxis <= 596)
+        if (mouse_xAxis >= 412.5 && mouse_xAxis <= 867.5 && mouse_yAxis >= 619 && mouse_yAxis <= 661)
         {
             if (!hoverGuest)
             {
@@ -372,6 +400,12 @@ void renderEnterYourName()
                 player2Input = true;
                 bothPlayers = true;
 
+                // Remove anything in players name input box
+                player1Name.clear();
+                player2Name.clear();
+                player1Text.setString(player1Name);
+                player2Text.setString(player2Name);
+
                 // Move the player through the game as a guest
                 guest = true;
 
@@ -384,59 +418,72 @@ void renderEnterYourName()
             textGuest.setFillColor(Color::White);
         }
 
+        // Continue to game button
+
+        // Add new names to text
+        if (player1Name.size() && player2Name.size())
+            textContinueToGame.setString("Continue as " + player1Name + " and " + player2Name);
+        else
+            textContinueToGame.setString("Continue");
+
+        // Adjust position according to new input
+        textRect = textContinueToGame.getLocalBounds();
+        textContinueToGame.setOrigin(textRect.left +
+                                     textRect.width / 2.0f,
+                                     textRect.top +
+                                     textRect.height / 2.0f);
+        textContinueToGame.setPosition(640, 540);
+
+        // Start and end position of text rectangle
+        float continueX = textContinueToGame.getLocalBounds().width;
+        float continueY = textContinueToGame.getLocalBounds().height;
+        float continueXStart = 640 - continueX / 2, continueXEnd = 640 + continueX / 2;
+        float continueYStart = 540 - continueY / 2, continueYEnd = 540 + continueY / 2;
+
+        if (mouse_xAxis >= continueXStart && mouse_xAxis <= continueXEnd && mouse_yAxis >= continueYStart && mouse_yAxis <= continueYEnd && player1Name.size() && player2Name.size())
+        {
+            if (!hoverContinueToGame)
+            {
+                soundButtonHover.play();
+                hoverContinueToGame = true;
+            }
+            textContinueToGame.setFillColor(Color::Green);
+            // Play as a guest is pressed
+            if (Mouse::isButtonPressed(Mouse::Left) && canClick)
+            {
+                // Mark player input as done
+                player1Input = true;
+                player2Input = true;
+                bothPlayers = true;
+
+                // Dont accept new input till released
+                canClick = false;
+            }
+        }
+        else {
+            hoverContinueToGame = false;
+            textContinueToGame.setFillColor(Color::White);
+        }
+
         // Draw "Play as a guest" text (Visuals)
         window.draw(textGuest);
+
+        // Draw "Continue as player1 & player2" text (Visuals)
+        window.draw(textContinueToGame);
     }
 }
 
 // Taking first player name
 void renderFirstPlayerName()
 {
-    if (player1Input && !bothPlayers)
+    if (player1Input && !bothPlayers && started)
     {
         // Render input boxes (Visuals)
         window.draw(enterYourNameRectangle);
         window.draw(enterYourNameRectangle2);
 
-        // Detect backspace key pressed
-        if (event.type == sf::Event::TextEntered && event.text.unicode == 8 && !player1Name.empty() && canType)
-        {
-            // Dont accept new input till released
-            canType = false;
-
-            // Remove the last character
-            player1Name.pop_back();
-
-            // Set the name as player one name
-            player1Text.setString(player1Name);
-
-            // Render player one name
-            window.draw(player1Text);
-        }
-            // Max name size is 10 characters
-        else if (player1Name.size() >= 10) {}
-            // Adding new characters to the player's name
-        else if (event.type == sf::Event::TextEntered && event.text.unicode <= 128 && event.text.unicode != 8 && !Keyboard::isKeyPressed(Keyboard::Key::Return) && canType)
-        {
-            // Dont accept new input till released
-            canType = false;
-
-            // Add the new entered characters to the name
-            player1Name += tolower(event.text.unicode);
-
-            // Set the name as player one name
-            player1Text.setString(player1Name);
-
-        }
-        // Player one name is entered
-        if (Keyboard::isKeyPressed(Keyboard::Key::Return) && !player1Name.empty())
-        {
-            // Disable input to player one input box
-            player1Input = false;
-
-            // Enable input to player two input box
-            player2Input = true;
-        }
+        // Setting new text to enter player's name text
+        textEnterYourName.setString("Enter player 1 name:");
 
         // Setting origin to the middle of the text
         textRect = player1Text.getLocalBounds();
@@ -454,62 +501,33 @@ void renderFirstPlayerName()
         // Rendering player one name (Visuals)
         window.draw(player1Text);
 
+        // Rendering player two name (Visuals)
+        window.draw(player2Text);
+
         // Applying fade to the text
         Color colorEnterYourName(255, 255, 255, enterYourNameFillColor -= ((enterYourNameFillColorInc) ? -5 : 5));
         textEnterYourName.setFillColor(colorEnterYourName);
 
         // Rendering "Enter player 1 name" text (Visuals)
         window.draw(textEnterYourName);
+
+        // Applying fade to the box
+        Color colorPlayer1InputBox(255, 0, 0, player1InputBoxFillColor -= ((player1InputBoxFillColorInc) ? -5 : 5));
+        enterYourNameRectangleFade.setOutlineColor(colorPlayer1InputBox);
+
+        // Render player 1 input box fade
+        window.draw(enterYourNameRectangleFade);
     }
 }
 
 // Taking second player name
 void renderSecondPlayerName()
 {
-    if (player2Input && !bothPlayers)
+    if (player2Input && !bothPlayers && started)
     {
         // Render input boxes (Visuals)
         window.draw(enterYourNameRectangle);
         window.draw(enterYourNameRectangle2);
-
-        // Detect backspace key pressed
-        if (event.type == sf::Event::TextEntered && event.text.unicode == 8 && !player2Name.empty() && canType)
-        {
-            // Dont accept new input till released
-            canType = false;
-
-            // Remove the last character
-            player2Name.pop_back();
-
-            // Set the name as player two name
-            player2Text.setString(player2Name);
-
-            // Render player two name
-            window.draw(player2Text);
-        }
-            // Max name size is 10 characters
-        else if (player2Name.size() >= 10) {}
-            // Adding new characters to the player's name
-        else if (event.type == sf::Event::TextEntered && event.text.unicode <= 128 && event.text.unicode != 8 && !Keyboard::isKeyPressed(Keyboard::Key::Return) && canType)
-        {
-            // Dont accept new input till released
-            canType = false;
-
-            // Add the new entered characters to the name
-            player2Name += tolower(event.text.unicode);
-
-            // Set the name as player two name
-            player2Text.setString(player2Name);
-        }
-        // Player two name is entered
-        if (Keyboard::isKeyPressed(Keyboard::Key::Return) && !player2Name.empty())
-        {
-            // Disable input to player two input box
-            player2Input = false;
-
-            // Flag both names as accepted
-            bothPlayers = true;
-        }
 
         // Render title (Visuals)
         window.draw(textTitle);
@@ -539,6 +557,68 @@ void renderSecondPlayerName()
 
         // Rendering "Enter player 2 name" text (Visuals)
         window.draw(textEnterYourName);
+
+        // Applying fade to the box
+        Color colorPlayer2InputBox(255, 0, 0, player2InputBoxFillColor -= ((player2InputBoxFillColorInc) ? -5 : 5));
+        enterYourNameRectangleFade2.setOutlineColor(colorPlayer2InputBox);
+
+        // Render player 2 input box fade
+        window.draw(enterYourNameRectangleFade2);
+    }
+}
+
+// Change between name input boxes
+void renderChangesBetweenNameBoxes()
+{
+    if (started && !bothPlayers)
+    {
+        // Player 1 box selected
+        if (mouse_xAxis >= 435 && mouse_xAxis <= 845 && mouse_yAxis >= 322.5 && mouse_yAxis <= 377.5)
+        {
+            if (!hoverPlayer1InputBox)
+            {
+                soundButtonHover.play();
+                hoverPlayer1InputBox = true;
+            }
+            enterYourNameRectangle.setOutlineColor(Color::Green);
+            if (Mouse::isButtonPressed(Mouse::Left) && canClick)
+            {
+                // Dont accept new input till released
+                canClick = false;
+
+                // Select player 1 input box
+                player1Input = 1;
+                player2Input = 0;
+            }
+        }
+        else {
+            hoverPlayer1InputBox = false;
+            enterYourNameRectangle.setOutlineColor(Color::White);
+        }
+
+        // Player 2 box selected
+        if (mouse_xAxis >= 435 && mouse_xAxis <= 845 && mouse_yAxis >= 422.5 && mouse_yAxis <= 477.5)
+        {
+            if (!hoverPlayer2InputBox)
+            {
+                soundButtonHover.play();
+                hoverPlayer2InputBox = true;
+            }
+            enterYourNameRectangle2.setOutlineColor(Color::Green);
+            if (Mouse::isButtonPressed(Mouse::Left) && canClick)
+            {
+                // Dont accept new input till released
+                canClick = false;
+
+                // Select player 1 input box
+                player1Input = 0;
+                player2Input = 1;
+            }
+        }
+        else {
+            hoverPlayer2InputBox = false;
+            enterYourNameRectangle2.setOutlineColor(Color::White);
+        }
     }
 }
 

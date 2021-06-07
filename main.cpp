@@ -351,14 +351,17 @@ int main()
         // Render exit button (Render)
         renderExit();
 
-        // Render enter your name and play as a guest page (Render)
-        renderEnterYourName();
+        // Render selection between name input boxes (Render)
+        renderChangesBetweenNameBoxes();
 
         // Render first player name (Render)
         renderFirstPlayerName();
 
         // Render second player name (Render)
         renderSecondPlayerName();
+
+        // Render enter your name and play as a guest page (Render)
+        renderEnterYourName();
 
         // Render main menu page (Render)
         renderMainMenu();
