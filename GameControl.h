@@ -70,7 +70,6 @@ vector< pair< pair<int,int>,pair<int,int> > > initialPosition =
 };
 
 // Flags
-
 // Hover flags
 bool hoverExit = false;
 bool hoverSand = false;
@@ -156,7 +155,7 @@ bool boxWatergirlPushed[13], boxFireboyPushed[13];
 // Characters
 bool FBDead = 0;
 bool WGDead = 0;
-bool oneDead = false;
+bool oneDead = 0;
 
 // Mouse coordinate
 float mouse_xAxis, mouse_yAxis;
@@ -289,7 +288,6 @@ void gamePolling()
                 // Adding new characters to the player's name
             else if (event.type == sf::Event::TextEntered && event.text.unicode <= 128 && event.text.unicode != 8 && !Keyboard::isKeyPressed(Keyboard::Key::Return) && canType)
             {
-
                 // Add the new entered characters to the name
                 player1Name += tolower(event.text.unicode);
 
@@ -330,7 +328,7 @@ void gamePolling()
                 // Set the name as player two name
                 player2Text.setString(player2Name);
             }
-            else if (event.type == Event::KeyPressed && event.key.code == Keyboard::Return && !player2Name.empty())
+            else if (event.type == Event::KeyPressed && event.key.code == Keyboard::Return && !player2Name.empty() && !player1Name.empty())
             {
                 // Select player 2 input box
                 player1Input = 0;
@@ -402,11 +400,6 @@ void gameTimer()
 
 void getEndingTime()
 {
-    int gemsCollected = 0;
-    for (auto i : gemsTaken)
-    {
-        gemsCollected += i;
-    }
     if (!guest)
     {
         updateData(player1Name, player2Name, level, (secondst + minutes * 60));
@@ -510,7 +503,6 @@ void initWaterGirlIdle(Player& waterGirl)
 void fall(Player& player, float gravity)
 {
     player.move({0, gravity});
-    
 }
 
 // Letting boxes fall due to gravity
@@ -810,7 +802,7 @@ void fireBoyBridgeCollision(Player& fireBoy, pair<pair<RectangleShape, int>, int
     }
 }
 
-// Watergirl pushed right bridge
+// Watergirl pushed right gate
 void waterGirlPushedRightBridge(Player& waterGirl, pair<pair<RectangleShape, int>, int> i, float pixelsPerIteration)
 {
     if (waterGirl.bounds.intersects(i.first.first.getGlobalBounds()) && waterGirl.dy + 80 - safe >= i.first.first.getPosition().y && waterGirl.dx + 20 - safe >= i.first.first.getPosition().x && !gateOpened[i.second] && i.first.second != 3 && i.first.second != 4)
@@ -820,7 +812,7 @@ void waterGirlPushedRightBridge(Player& waterGirl, pair<pair<RectangleShape, int
     }
 }
 
-// Watergirl pushed left bridge
+// Watergirl pushed left gate
 void waterGirlPushedLeftBridge(Player& waterGirl, pair<pair<RectangleShape, int>, int> i, float pixelsPerIteration)
 {
     if (waterGirl.bounds.intersects(i.first.first.getGlobalBounds()) && waterGirl.dy + 80 - safe >= i.first.first.getPosition().y && waterGirl.dx + safe <= i.first.first.getPosition().x + i.first.first.getGlobalBounds().width && !gateOpened[i.second] && i.first.second != 3 && i.first.second != 4)
@@ -830,7 +822,7 @@ void waterGirlPushedLeftBridge(Player& waterGirl, pair<pair<RectangleShape, int>
     }
 }
 
-// Fireboy pushed right bridge
+// Fireboy pushed right gate
 void fireBoyPushedRightBridge(Player& fireBoy, pair<pair<RectangleShape, int>, int> i, float pixelsPerIteration)
 {
     if (fireBoy.bounds.intersects(i.first.first.getGlobalBounds()) && fireBoy.dy + 80 - safe >= i.first.first.getPosition().y && fireBoy.dx + 20 - safe >= i.first.first.getPosition().x && !gateOpened[i.second] && i.first.second != 3 && i.first.second != 4)
@@ -840,7 +832,7 @@ void fireBoyPushedRightBridge(Player& fireBoy, pair<pair<RectangleShape, int>, i
     }
 }
 
-// Fireboy pushed left bridge
+// Fireboy pushed left gate
 void fireBoyPushedLeftBridge(Player& fireBoy, pair<pair<RectangleShape, int>, int> i, float pixelsPerIteration)
 {
     if (fireBoy.bounds.intersects(i.first.first.getGlobalBounds()) && fireBoy.dy + 80 - safe >= i.first.first.getPosition().y && fireBoy.dx + safe <= i.first.first.getPosition().x + i.first.first.getGlobalBounds().width && !gateOpened[i.second] && i.first.second != 3 && i.first.second != 4)
@@ -913,7 +905,6 @@ void enemyMotionAndCollision(Player& fireBoy, Player& waterGirl)
                 enemies[i].first.setTexture(&enemyRightText);
                 enemies[i].first.move({ 0.8,0 });
             }
-
         }
         if (enemies[i].first.getPosition().x <= startPos) {
             enemyMoveRight[i] = 1;

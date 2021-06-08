@@ -208,6 +208,7 @@ String levelsMap[11][9] =
     g: red gem
     G: blue gem
     O: box
+    Q: filling
 */
 String objectsMap[11][36] =
         {
